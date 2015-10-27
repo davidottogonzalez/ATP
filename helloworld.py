@@ -1,13 +1,23 @@
 from flask import Flask, send_from_directory, url_for, redirect, json, request
-import pyhs2
+import pyhs2, atp_classes
 
 app = Flask(__name__)
 
 def get_attributes_from_db():
+    attribute_list = []
+
     with open('db.json') as data_file:
         data = json.load(data_file)
 
-    return data
+    for attribute in data['attributes']:
+        attribute_obj = atp_classes.Attribute(attribute)
+        attribute_list.append(attribute_obj)
+
+    return attribute_list
+
+@app.route('/test')
+def test():
+    return json.dumps(get_attributes_from_db(), default=atp_classes.JSONHandler.JSONHandler)
 
 @app.route('/app/<path:path>')
 def static_app(path):
@@ -27,9 +37,9 @@ def query_hive():
     result_row = []
     return_results = {}
 
-    for dbattribute in get_attributes_from_db()['attributes']:
+    for dbattribute in get_attributes_from_db():
         for cattribute in form_chosen_attributes:
-            if(dbattribute['id'] == cattribute['id']):
+            if(dbattribute.id == cattribute['id']):
                 chosen_attributes.append(dbattribute)
 
     with pyhs2.connect(host='aoabdlp00042.tfayd.com',
@@ -45,14 +55,17 @@ def query_hive():
                 query_string += ''',
                 SUM(CASE WHEN ({operand1} {operator} {operand2}) THEN 1 ELSE 0 END) total_{id},
                 SUM(CASE WHEN (({operand1} {operator} {operand2}) AND fwm_flag == '1') THEN 1 ELSE 0 END) total_{id}_fwm'''\
-                    .format(operand1=attribute['operand1'], operator=attribute['operator'], operand2=attribute['operand2'], id=attribute['id'])
+                    .format(operand1=attribute.logical_expression.operand1, operator=attribute.logical_expression.operator,
+                            operand2=attribute.logical_expression.operand2, id=attribute.id)
 
                 for index2, attribute2 in enumerate(chosen_attributes[(index+1):]):
                     query_string += ''',
                     SUM(CASE WHEN (({operand1} {operator1} {operand2}) AND ({operand3} {operator2} {operand4})) THEN 1 ELSE 0 END) total_{id1}_{id2},
                     SUM(CASE WHEN ((({operand1} {operator1} {operand2}) AND ({operand3} {operator2} {operand4})) AND fwm_flag == '1') THEN 1 ELSE 0 END) total_{id1}_{id2}_fwm'''\
-                        .format(operand1=attribute['operand1'], operator1=attribute['operator'], operand2=attribute['operand2'], id1=attribute['id'],
-                               operand3=attribute2['operand1'], operator2=attribute2['operator'], operand4=attribute2['operand2'], id2=attribute2['id'])
+                        .format(operand1=attribute.logical_expression.operand1, operator1=attribute.logical_expression.operator,
+                                operand2=attribute.logical_expression.operand2, id1=attribute.id,
+                                operand3=attribute2.logical_expression.operand1, operator2=attribute2.logical_expression.operator,
+                                operand4=attribute2.logical_expression.operand2, id2=attribute2.id)
 
             query_string += '''
                 FROM bhds_nopii'''
@@ -78,8 +91,8 @@ def get_attributes():
 
     attribute_list = []
 
-    for attribute in get_attributes_from_db()['attributes']:
-        attribute_list.append({"id": attribute['id'], "name": attribute['name']})
+    for attribute in get_attributes_from_db():
+        attribute_list.append({"id": attribute.id, "name": attribute.name})
 
     return json.dumps(attribute_list)
 
