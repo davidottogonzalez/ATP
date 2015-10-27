@@ -41,7 +41,6 @@
 }
 [ng-drag], .drag{
   width: 100px;
-  height: 20px;
   background: rgba(255,0,0, 0.5);
   color:white;
   text-align: center;
@@ -104,4 +103,10 @@ ul.draggable-objects:after{
 table.crosstab
 {
   margin-top: 10px;
+}
+div.coffeeBreak
+{
+  text-align: center;
+  clear: both;
+  margin-top: 5px;
 }
