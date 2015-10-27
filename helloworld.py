@@ -17,6 +17,9 @@ def get_attributes_from_db():
 
 @app.route('/test')
 def test():
+    for attribute in get_attributes_from_db():
+        print attribute.logical_expression.convert_to_string()
+
     return json.dumps(get_attributes_from_db(), default=atp_classes.JSONHandler.JSONHandler)
 
 @app.route('/app/<path:path>')
@@ -53,19 +56,16 @@ def query_hive():
 
             for index, attribute in enumerate(chosen_attributes):
                 query_string += ''',
-                SUM(CASE WHEN ({operand1} {operator} {operand2}) THEN 1 ELSE 0 END) total_{id},
-                SUM(CASE WHEN (({operand1} {operator} {operand2}) AND fwm_flag == '1') THEN 1 ELSE 0 END) total_{id}_fwm'''\
-                    .format(operand1=attribute.logical_expression.operand1, operator=attribute.logical_expression.operator,
-                            operand2=attribute.logical_expression.operand2, id=attribute.id)
+                SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_{id},
+                SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_{id}_fwm'''\
+                    .format(id=attribute.id, expression=attribute.logical_expression.convert_to_string())
 
                 for index2, attribute2 in enumerate(chosen_attributes[(index+1):]):
                     query_string += ''',
-                    SUM(CASE WHEN (({operand1} {operator1} {operand2}) AND ({operand3} {operator2} {operand4})) THEN 1 ELSE 0 END) total_{id1}_{id2},
-                    SUM(CASE WHEN ((({operand1} {operator1} {operand2}) AND ({operand3} {operator2} {operand4})) AND fwm_flag == '1') THEN 1 ELSE 0 END) total_{id1}_{id2}_fwm'''\
-                        .format(operand1=attribute.logical_expression.operand1, operator1=attribute.logical_expression.operator,
-                                operand2=attribute.logical_expression.operand2, id1=attribute.id,
-                                operand3=attribute2.logical_expression.operand1, operator2=attribute2.logical_expression.operator,
-                                operand4=attribute2.logical_expression.operand2, id2=attribute2.id)
+                    SUM(CASE WHEN ({expression} AND {expression2}) THEN 1 ELSE 0 END) total_{id1}_{id2},
+                    SUM(CASE WHEN (({expression} AND {expression2}) AND fwm_flag == '1') THEN 1 ELSE 0 END) total_{id1}_{id2}_fwm'''\
+                        .format(id1=attribute.id, id2=attribute2.id, expression=attribute.logical_expression.convert_to_string(),
+                                expression2=attribute2.logical_expression.convert_to_string())
 
             query_string += '''
                 FROM bhds_nopii'''

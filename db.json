@@ -26,6 +26,55 @@
         "operator" : ">=",
         "operand2" : "2"
       }
+    },
+    {
+      "id" : 4,
+      "name" : "Age 25+ HH",
+      "logical_expression" : {
+        "operand1" : {
+          "operand1" : {
+            "operand1" : {
+              "operand1" : "F061",
+              "operator" : ">=",
+              "operand2" : "25"
+            },
+            "operator" : "OR",
+            "operand2" : {
+              "operand1" : "F079",
+              "operator" : ">=",
+              "operand2" : "25"
+            }
+          },
+          "operator" : "OR",
+          "operand2" : {
+            "operand1" : "F097",
+            "operator" : ">=",
+            "operand2" : "25"
+          }
+        },
+        "operator" : "OR",
+        "operand2" : {
+          "operand1" : {
+            "operand1" : "F115",
+            "operator" : ">=",
+            "operand2" : "25"
+          },
+          "operator" : "OR",
+          "operand2" : {
+            "operand1" : {
+              "operand1" : "F133",
+              "operator" : ">=",
+              "operand2" : "25"
+            },
+            "operator" : "OR",
+            "operand2" : {
+              "operand1" : "F151",
+              "operator" : ">=",
+              "operand2" : "25"
+            }
+          }
+        }
+      }
     }
   ]
 }
