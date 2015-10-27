@@ -1,0 +1,78 @@
+<table class="table table-bordered crosstab">
+    <tr>
+        <th colspan="4">Attribute Crosstab</th>
+        <th ng-repeat="attribute in submittedAttributes track by $index">
+            {{attribute.name}}
+        </th>
+    </tr>
+    <tr>
+        <th rowspan="5">Total</th>
+    </tr>
+    <tr>
+        <td>Data source</td>
+        <td>BHDS (201507)</td>
+        <td>Count</td>
+        <td ng-repeat="attribute in submittedAttributes track by $index">
+            {{attribute.bhds_total}}
+        </td>
+    </tr>
+    <tr>
+        <td>Base</td>
+        <td>132,966,083</td>
+        <td>Row % of Base</td>
+        <td ng-repeat="attribute in submittedAttributes track by $index">
+            {{attribute.bhds_percent}}
+        </td>
+    </tr>
+    <tr>
+        <td>Data source</td>
+        <td>FWM (201507)</td>
+        <td>Count</td>
+        <td ng-repeat="attribute in submittedAttributes track by $index">
+            {{attribute.fwm_total}}
+        </td>
+    </tr>
+    <tr>
+        <td>Base</td>
+        <td>910,593</td>
+        <td>Row % of Base</td>
+        <td ng-repeat="attribute in submittedAttributes track by $index">
+            {{attribute.fwm_percent}}
+        </td>
+    </tr>
+    <tr ng-repeat-start="attribute in submittedAttributes">
+        <th rowspan="5">{{attribute.name}}</th>
+    </tr>
+    <tr>
+        <td>Data source</td>
+        <td>BHDS (201507)</td>
+        <td>Count</td>
+        <td ng-repeat="attribute in submittedAttributes track by $index">
+            <span>{{getAssociatedAttribute(attribute, $parent.$index).bhds_total}}</span>
+        </td>
+    </tr>
+    <tr>
+        <td>Base</td>
+        <td>{{attribute.bhds_total}}</td>
+        <td>Row % of Base</td>
+        <td ng-repeat="attribute in submittedAttributes track by $index">
+            <span>{{getAssociatedAttribute(attribute, $parent.$index).bhds_percent}}</span>
+        </td>
+    </tr>
+    <tr>
+        <td>Data source</td>
+        <td>FWM (201507)</td>
+        <td>Count</td>
+        <td ng-repeat="attribute in submittedAttributes track by $index">
+            <span>{{getAssociatedAttribute(attribute, $parent.$index).fwm_total}}</span>
+        </td>
+    </tr>
+    <tr ng-repeat-end>
+        <td>Base</td>
+        <td>{{attribute.fwm_total}}</td>
+        <td>Row % of Base</td>
+        <td ng-repeat="attribute in submittedAttributes track by $index">
+            <span>{{getAssociatedAttribute(attribute, $parent.$index).fwm_percent}}</span>
+        </td>
+    </tr>
+</table>

@@ -1,0 +1,29 @@
+<div class="col-md-12">
+    <div class="col-md-2">
+        <span class="ddTitle">Attributes List</span>
+        <div ng-repeat="attribute in queryAttributes track by $index">
+            <div ng-drag="true" ng-drag-data="attribute" ng-drag-success="onDragComplete($data,$event)" ng-center-anchor="true">
+                {{attribute.name}}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-10">
+        <div class="ddTitle">Query Builder</div>
+        <div class="col-md-10" ng-drop="true" ng-drop-success="onDropComplete($data,$event)">
+            <span ng-repeat="attribute in chosenAttributes track by $index">
+                <span class="drag" ng-drag-data="attribute" ng-drag-success="onDragComplete($data,$event)" ng-center-anchor="true">
+                    {{attribute.name}}
+                    <span class="glyphicon glyphicon-remove" ng-click="removeQueryAttr(attribute)"></span>
+                </span>
+            </span>
+        </div>
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-primary" ng-click="search()">{{ searchButtonText }}
+            </button>
+        </div>
+        <div class="col-md-10" ng-show="showCrossTab">
+            <ng-include src="'crosstab/crosstab.html'"></ng-include>
+        </div>
+    </div>
+</div>
