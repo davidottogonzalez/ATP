@@ -1,0 +1,46 @@
+<table class="table table-bordered crosstab">
+    <tr>
+        <th>
+            BHDS TOTAL
+        </th>
+        <th>
+            SEGMENT TOTAL
+        </th>
+        <th>
+            PERCENT%
+        </th>
+    </tr>
+    <tr>
+        <th>
+            {{formatNumber(totals.total_bhds)}}
+        </th>
+        <th>
+            {{formatNumber(totals.total_seg_bhds)}}
+        </th>
+        <th>
+            {{formatPercentage(totals.seg_bhds_percent)}}
+        </th>
+    </tr>
+    <tr>
+        <th>
+            FWM TOTAL
+        </th>
+        <th>
+            SEGMENT TOTAL
+        </th>
+        <th>
+            PERCENT%
+        </th>
+    </tr>
+    <tr>
+        <th>
+            {{formatNumber(totals.total_fwm)}}
+        </th>
+        <th>
+            {{formatNumber(totals.total_seg_fwm)}}
+        </th>
+        <th>
+            {{formatPercentage(totals.seg_fwm_percent)}}
+        </th>
+    </tr>
+</table>

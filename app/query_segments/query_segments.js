@@ -35,7 +35,16 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
 
       $scope.searchButtonText = 'Query!';
       $scope.isQuerying = false;
+      $scope.showResults = false;
       $scope.topLogicalExpression = LogicalExpressionService.createNew();
+      $scope.totals = {
+        total_bhds: 0,
+        total_fwm: 0,
+        total_seg_bhds: 0,
+        total_seg_fwm: 0,
+        seg_bhds_percent: 0,
+        seg_fwm_percent: 0
+      }
 
       $scope.onDragComplete=function(data,evt){
         var hierarchy = evt.event.srcElement.classList[0].split('_');
@@ -100,14 +109,28 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
 
         $http.post('/queryHive/segments',{logical_expression: $scope.topLogicalExpression}).then(function(res){
             $scope.searchButtonText = 'Query!';
-            console.log(res.data);
+            $scope.totals.total_bhds = res.data.total_bhds;
+            $scope.totals.total_seg_bhds = res.data.total_seg_bhds;
+            $scope.totals.total_fwm = res.data.total_fwm;
+            $scope.totals.total_seg_fwm = res.data.total_seg_fwm;
+            $scope.totals.seg_bhds_percent = (parseInt($scope.totals.total_seg_bhds) / parseInt($scope.totals.total_bhds));
+            $scope.totals.seg_fwm_percent = (parseInt($scope.totals.total_seg_fwm) / parseInt($scope.totals.total_fwm));
             $scope.isQuerying = false;
+            $scope.showResults = true;
         });
       };
 
       $scope.clear = function() {
         $scope.topLogicalExpression = LogicalExpressionService.createNew();
       };
+
+      $scope.formatNumber = function(intNum) {
+        return intNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+
+      $scope.formatPercentage = function(floNum) {
+        return (floNum * 100).toFixed(2) + "%"
+      }
 
       $scope.init();
 }]);
