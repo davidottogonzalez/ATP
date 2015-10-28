@@ -10,77 +10,7 @@ angular.module('myApp.view1', ['ngRoute'])
 }])
 
 .controller('View1Ctrl', ['$scope', '$http', function($scope, $http) {
-      $scope.queryAttributes = [
-          /*{
-              name: '100K+',
-              bhds_total: '25,453,856',
-              bhds_percent: '19.14%',
-              fwm_total: '183,780',
-              fwm_percent: '20.18%',
-              joins: [
-                  {
-                      name: '25+ Age',
-                      bhds_total: '19,911,149',
-                      bhds_percent: '23.18%',
-                      fwm_total: '170,499',
-                      fwm_percent: '21.27%'
-                  },
-                  {
-                      name: '1+ home',
-                      bhds_total: '16,177,658',
-                      bhds_percent: '27.06%',
-                      fwm_total: '152,122',
-                      fwm_percent: '23.49%'
-                  }
-              ]
-          },
-          {
-              name: '25+ Age',
-              bhds_total: '85,911,672',
-              bhds_percent: '64.61%',
-              fwm_total: '801,768',
-              fwm_percent: '88.05%',
-              joins: [
-                  {
-                      name: '100K+',
-                      bhds_total: '19,911,149',
-                      bhds_percent: '78.22%',
-                      fwm_total: '170,499',
-                      fwm_percent: '92.77%'
-                  },
-                  {
-                      name: '1+ home',
-                      bhds_total: '54,452,258',
-                      bhds_percent: '91.08%',
-                      fwm_total: '616,760',
-                      fwm_percent: '95.23%'
-                  }
-              ]
-          },
-          {
-              name: '1+ home',
-              bhds_total: '59,788,123',
-              bhds_percent: '44.96%',
-              fwm_total: '647,648',
-              fwm_percent: '71.12%',
-              joins: [
-                  {
-                      name: '25+ Age',
-                      bhds_total: '54,452,258',
-                      bhds_percent: '63.38%',
-                      fwm_total: '616,760',
-                      fwm_percent: '76.92%'
-                  },
-                  {
-                      name: '100K+',
-                      bhds_total: '16,177,658',
-                      bhds_percent: '63.56%',
-                      fwm_total: '152,122',
-                      fwm_percent: '82.77%'
-                  }
-              ]
-          }*/
-      ];
+      $scope.queryAttributes = [];
 
       $scope.init = function() {
         $http.get('/getAttributesList/').then(function(res){
