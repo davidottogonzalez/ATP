@@ -104,9 +104,10 @@ def query_hive_segments():
         with conn.cursor() as cur:
             print "executing query"
 
-            query_string += '''SELECT
-                SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_bhds,
-                SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_fwm'''\
+            query_string += '''SELECT COUNT(*) total_bhds,
+                SUM(CASE WHEN fwm_flag == '1' THEN 1 ELSE 0 END) total_fwm,
+                SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_seg_bhds,
+                SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_seg_fwm'''\
                     .format(expression=query_logical_expression.convert_to_string())
 
             query_string += '''
