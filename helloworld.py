@@ -2,6 +2,7 @@ from flask import Flask, send_from_directory, url_for, redirect, json, request
 import pyhs2, atp_classes
 
 app = Flask(__name__)
+config = atp_classes.Config('config.json')
 
 def get_attributes_from_db():
     attribute_list = []
@@ -45,12 +46,12 @@ def query_hive():
             if(dbattribute.id == cattribute['id']):
                 chosen_attributes.append(dbattribute)
 
-    with pyhs2.connect(host='aoabdlp00042.tfayd.com',
-                   port=10001,
-                   authMechanism="LDAP",
-                   user='206438423',
-                   password='********',
-                   database='merkle') as conn:
+    with pyhs2.connect(host=config.get_config()['development']['database']['host'],
+                       port=config.get_config()['development']['database']['port'],
+                       authMechanism=config.get_config()['development']['database']['authMech'],
+                       user=config.get_config()['development']['database']['username'],
+                       password=config.get_config()['development']['database']['password'],
+                       database=config.get_config()['development']['database']['database']) as conn:
         with conn.cursor() as cur:
             print "executing query"
 
@@ -97,4 +98,5 @@ def get_attributes():
     return json.dumps(attribute_list)
 
 if __name__ == '__main__':
-    app.run(debug=True, host="3.23.115.251", threaded=True)
+    app.run(debug=True, host=config.get_config()['development']['host'], threaded=True,
+            port=config.get_config()['development']['port'])
