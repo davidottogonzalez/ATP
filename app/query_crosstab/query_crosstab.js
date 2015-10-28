@@ -1,15 +1,15 @@
 'use strict';
 
-angular.module('myApp.view1', ['ngRoute'])
+angular.module('myApp.query_crosstab', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/view1', {
-    templateUrl: 'view1/view1.html',
-    controller: 'View1Ctrl'
+  $routeProvider.when('/query_crosstab', {
+    templateUrl: 'query_crosstab/query_crosstab.html',
+    controller: 'QueryCrosstabCtrl'
   });
 }])
 
-.controller('View1Ctrl', ['$scope', '$http', function($scope, $http) {
+.controller('QueryCrosstabCtrl', ['$scope', '$http', function($scope, $http) {
       $scope.queryAttributes = [];
 
       $scope.init = function() {
