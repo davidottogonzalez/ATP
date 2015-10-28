@@ -33,7 +33,6 @@ def index():
 
 @app.route('/queryHive/', methods=['POST'])
 def query_hive():
-    hive_results = {}
     form_chosen_attributes = json.loads(request.data)['chosenAttributes']
     chosen_attributes = []
     query_string = '''SELECT COUNT(*) total_bhds,
@@ -67,6 +66,48 @@ def query_hive():
                     SUM(CASE WHEN (({expression} AND {expression2}) AND fwm_flag == '1') THEN 1 ELSE 0 END) total_{id1}_{id2}_fwm'''\
                         .format(id1=attribute.id, id2=attribute2.id, expression=attribute.logical_expression.convert_to_string(),
                                 expression2=attribute2.logical_expression.convert_to_string())
+
+            query_string += '''
+                FROM bhds_nopii'''
+
+            #Execute query
+            cur.execute(query_string)
+
+            print "done executing query"
+
+            columns = cur.getSchema()
+
+            #Fetch table results
+            for i in cur.fetch():
+                result_row = i
+
+    for index, val in enumerate(result_row):
+        return_results[columns[index]['columnName']] = str(val)
+
+    return json.dumps(return_results)
+
+@app.route('/queryHive/segments', methods=['POST'])
+def query_hive_segments():
+    form_logical_expression = json.loads(request.data)['logical_expression']
+    query_logical_expression = atp_classes.LogicalExpression(form_logical_expression)
+
+    query_string = ''
+    result_row = []
+    return_results = {}
+
+    with pyhs2.connect(host=config.get_config()['development']['database']['host'],
+                       port=config.get_config()['development']['database']['port'],
+                       authMechanism=config.get_config()['development']['database']['authMech'],
+                       user=config.get_config()['development']['database']['username'],
+                       password=config.get_config()['development']['database']['password'],
+                       database=config.get_config()['development']['database']['database']) as conn:
+        with conn.cursor() as cur:
+            print "executing query"
+
+            query_string += '''SELECT
+                SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_bhds,
+                SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_fwm'''\
+                    .format(expression=query_logical_expression.convert_to_string())
 
             query_string += '''
                 FROM bhds_nopii'''

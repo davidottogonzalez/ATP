@@ -1,3 +1,5 @@
+import atp_classes
+
 class LogicalExpression:
     operand1 = ''
     operator = ''
@@ -5,14 +7,23 @@ class LogicalExpression:
 
     def __init__(self, obj):
         if isinstance(obj['operand1'], dict):
-            self.operand1 = LogicalExpression(obj['operand1'])
+            if 'operand1' in obj['operand1']:
+                self.operand1 = LogicalExpression(obj['operand1'])
+            if 'id' in obj['operand1']:
+                self.operand1 = atp_classes.Attribute(obj['operand1']['id']).logical_expression
         else:
             self.operand1 = obj['operand1']
 
-        self.operator = obj['operator']
+        if isinstance(obj['operator'], dict):
+            self.operator = obj['operator']['name']
+        else:
+            self.operator = obj['operator']
 
         if isinstance(obj['operand2'], dict):
-            self.operand2 = LogicalExpression(obj['operand2'])
+            if 'operand2' in obj['operand2']:
+                self.operand2 = LogicalExpression(obj['operand2'])
+            if 'id' in obj['operand2']:
+                self.operand2 = atp_classes.Attribute(obj['operand2']['id']).logical_expression
         else:
             self.operand2 = obj['operand2']
 
