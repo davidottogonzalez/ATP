@@ -9,8 +9,10 @@ class LogicalExpression:
         if isinstance(obj['operand1'], dict):
             if 'operand1' in obj['operand1']:
                 self.operand1 = LogicalExpression(obj['operand1'])
-            if 'id' in obj['operand1']:
-                self.operand1 = atp_classes.Attribute(obj['operand1']['id']).logical_expression
+            elif 'id' in obj['operand1']:
+                    self.operand1 = atp_classes.Attribute(obj['operand1']['id']).logical_expression
+            elif 'name' in obj['operand1']:
+                self.operand1 = obj['operand1']['name']
         else:
             self.operand1 = obj['operand1']
 
@@ -22,8 +24,10 @@ class LogicalExpression:
         if isinstance(obj['operand2'], dict):
             if 'operand2' in obj['operand2']:
                 self.operand2 = LogicalExpression(obj['operand2'])
-            if 'id' in obj['operand2']:
+            elif 'id' in obj['operand2']:
                 self.operand2 = atp_classes.Attribute(obj['operand2']['id']).logical_expression
+            elif 'name' in obj['operand2']:
+                self.operand2 = obj['operand2']['name']
         else:
             self.operand2 = obj['operand2']
 

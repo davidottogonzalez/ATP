@@ -132,7 +132,6 @@ def query_hive_segments():
 
 @app.route('/getAttributesList/')
 def get_attributes():
-
     attribute_list = []
 
     for attribute in get_attributes_from_db():
@@ -140,16 +139,76 @@ def get_attributes():
 
     return json.dumps(attribute_list)
 
+@app.route('/admin/getAttributesList/')
+def get_admin_attributes():
+    return json.dumps(get_attributes_from_db(), default=atp_classes.JSONHandler.JSONHandler)
+
+@app.route('/admin/getFieldsList/')
+def get_admin_fields_list():
+    result_row = []
+
+    with pyhs2.connect(host=config.get_config()['development']['database']['host'],
+                       port=config.get_config()['development']['database']['port'],
+                       authMechanism=config.get_config()['development']['database']['authMech'],
+                       user=config.get_config()['development']['database']['username'],
+                       password=config.get_config()['development']['database']['password'],
+                       database=config.get_config()['development']['database']['database']) as conn:
+        with conn.cursor() as cur:
+            print "executing query"
+
+            query_string = '''SHOW COLUMNS FROM bhds_nopii'''
+
+            #Execute query
+            cur.execute(query_string)
+
+            print "done executing query"
+
+            columns = cur.getSchema()
+
+            #Fetch table results
+            for i in cur.fetch():
+                result_row.append({ 'name' : i[0].strip() })
+
+    return json.dumps(result_row)
+
+@app.route('/admin/saveJSON', methods=['POST'])
+def save_json_db():
+    db = {}
+    attributes = []
+    form_attribute = json.loads(request.data)['attributes']
+
+    for attribute in form_attribute:
+        attributes.append(atp_classes.Attribute(attribute))
+
+    largestid = 0
+
+    for index, attribute in enumerate(attributes):
+        if largestid < int(attribute.id):
+            largestid = int(attribute.id)
+
+        if int(attribute.id) == 0:
+            attributes[index].id = largestid + 1
+            largestid += 2
+
+    largestid = 0
+
+    db['attributes'] = attributes
+
+    with open('db.json', 'w') as outdb:
+        json.dump(db, outdb, indent=1,  default=atp_classes.JSONHandler.JSONHandler)
+
+    return json.dumps(db, default=atp_classes.JSONHandler.JSONHandler)
+
 @app.before_request
 def return_cached():
-    if request.data and request.method == 'POST':
+    if request.data and request.method == 'POST' and request.path != '/admin/saveJSON':
         response = cache.get(request.data)
         if response:
             return response
 
 @app.after_request
 def cache_response(response):
-    if request.data and request.method == 'POST':
+    if request.data and request.method == 'POST' and request.path != '/admin/saveJSON':
         cache.set(request.data, response)
     return response
 
