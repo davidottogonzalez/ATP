@@ -3,6 +3,7 @@ import pyhs2, atp_classes
 
 app = Flask(__name__)
 config = atp_classes.Config('config.json')
+cache = atp_classes.Cache()
 
 def get_attributes_from_db():
     attribute_list = []
@@ -138,6 +139,19 @@ def get_attributes():
         attribute_list.append({"id": attribute.id, "name": attribute.name})
 
     return json.dumps(attribute_list)
+
+@app.before_request
+def return_cached():
+    if request.data and request.method == 'POST':
+        response = cache.get(request.data)
+        if response:
+            return response
+
+@app.after_request
+def cache_response(response):
+    if request.data and request.method == 'POST':
+        cache.set(request.data, response)
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True, host=config.get_config()['development']['host'], threaded=True,
