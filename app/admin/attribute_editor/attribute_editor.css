@@ -1,0 +1,37 @@
+[ng-drop]{
+  background: rgba(0,255,0, 0.5);
+  text-align: center;
+  width: 100px;
+  height: initial;
+  padding-top:25px;
+  display: inline-block;
+  position: relative;
+  margin: 0px 5px;
+}
+[ng-drop].drag-enter{
+  border:solid 5px red;
+}
+[ng-drop] span.title{
+  display: block;
+  position: absolute;
+  top:50%;
+  left:50%;
+  width: 200px;
+  height: 20px;
+  margin-left: -100px;
+  margin-top: -10px;
+}
+[ng-drop] div{
+  position: relative;
+  z-index: 2;
+}
+.queryContainer
+{
+  background: rgba(88, 195, 88, 0.5);
+  text-align: center;
+  width: 600px;
+  height: 800px;
+  padding-top:25px;
+  display: block;
+  position: relative;
+}

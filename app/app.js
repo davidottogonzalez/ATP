@@ -5,6 +5,7 @@ angular.module('myApp', [
   'ngRoute',
   'myApp.query_crosstab',
   'myApp.query_segments',
+  'myApp.attribute_editor',
   'myApp.version',
   'ngDraggable'
 ]).
