@@ -141,7 +141,7 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
           };
       }
 
-      $scope.clear = function() {
+      $scope.clearNewAttribute = function() {
         $scope.newAttribute.logical_expression = LogicalExpressionService.createNew();
       };
 
