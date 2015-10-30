@@ -6,41 +6,47 @@ angular.module('ServicesModule', []).factory('LogicalExpressionService', functio
             this.operator = null
             this.operand2 = null
         }else{
-            this.operand1 = obj.operand1
-            this.operator = obj.operator
-            this.operand2 = obj.operand2
+            if(typeof obj.operand1 == 'object') {
+                if(typeof obj.operand1 != 'undefined') {
+                    this.operand1 = new LogicalExpressionInstance(obj.operand1);
+                }
+                else if(typeof obj.id != 'undefined') {
+                    var attribute = obj.operand1;
+                    attribute.logical_expression = new LogicalExpressionService(attribute.logical_expression);
+                    this.operand1 = attribute;
+                }else if (typeof obj.name != 'undefined') {
+                    this.operand1 = obj.operand1;
+                }
+            }else {
+                this.operand1 = {name:obj.operand1};
+            }
+
+            if(typeof obj.operator == 'object') {
+                this.operator = obj.operator;
+            } else {
+                this.operator = {name:obj.operator}
+            }
+
+            if(typeof obj.operand2 == 'object') {
+                if(typeof obj.operand2 != 'undefined') {
+                    this.operand2 = new LogicalExpressionInstance(obj.operand2);
+                }
+                else if(typeof obj.id != 'undefined') {
+                    var attribute = obj.operand2;
+                    attribute.logical_expression = new LogicalExpressionService(attribute.logical_expression);
+                    this.operand2 = attribute;
+                }else if (typeof obj.name != 'undefined') {
+                    this.operand2 = obj.operand2;
+                }
+            }else {
+                this.operand2 = {name:obj.operand2};
+            }
         }
-    };
-
-    function literalToObject(logical_expression) {
-        var newLogicalExpression = {};
-
-        if(typeof logical_expression.operand1.operand1 != 'undefined')
-        {
-            newLogicalExpression.operand1 = literalToObject(logical_expression.operand1)
-        }else{
-            newLogicalExpression.operand1 = {name:logical_expression.operand1}
-        }
-
-        newLogicalExpression.operator = {name:logical_expression.operator}
-
-        if(typeof logical_expression.operand2.operand1 != 'undefined')
-        {
-            newLogicalExpression.operand2 = literalToObject(logical_expression.operand2)
-        }else{
-            newLogicalExpression.operand2 = {name:logical_expression.operand2}
-        }
-
-        return newLogicalExpression;
     };
 
     return {
         createNew: function(obj) {
             return new LogicalExpressionInstance(obj);
-        },
-
-        literalToObjects: function(logical_expression) {
-            return literalToObject(logical_expression);
         }
     };
 });

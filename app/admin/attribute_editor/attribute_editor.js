@@ -162,7 +162,7 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
       };
 
       $scope.loadEditAttribute = function(attribute) {
-        attribute.logical_expression = LogicalExpressionService.literalToObjects(attribute.logical_expression);
+        attribute.logical_expression = LogicalExpressionService.createNew(attribute.logical_expression);
         $scope.editingAttribute = attribute;
         $scope.showAddAttribute();
       };
