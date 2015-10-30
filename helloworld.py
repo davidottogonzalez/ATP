@@ -146,6 +146,7 @@ def get_admin_attributes():
     return json.dumps(get_attributes_from_db(), default=atp_classes.JSONHandler.JSONHandler)
 
 @app.route('/admin/getFieldsList/')
+@cache
 def get_admin_fields_list():
     result_row = []
 
@@ -169,7 +170,7 @@ def get_admin_fields_list():
 
             #Fetch table results
             for i in cur.fetch():
-                result_row.append({ 'name' : i[0].strip() })
+                result_row.append({'name': i[0].strip()})
 
     return json.dumps(result_row)
 
@@ -197,7 +198,7 @@ def save_json_db():
     db['attributes'] = attributes
 
     with open('db.json', 'w') as outdb:
-        json.dump(db, outdb, indent=1,  default=atp_classes.JSONHandler.JSONHandler)
+        json.dump(db, outdb, indent=4,  default=atp_classes.JSONHandler.JSONHandler)
 
     return json.dumps(db, default=atp_classes.JSONHandler.JSONHandler)
 

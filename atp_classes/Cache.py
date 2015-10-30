@@ -13,10 +13,11 @@ class Cache(object):
     def __call__(self, f):
         @wraps(f)
         def decorator(*args, **kwargs):
-            response = self.cache.get(request.data)
+            key = request.data or request.path
+            response = self.cache.get(key)
             if response is None:
                 response = f(*args, **kwargs)
-                self.cache.set(request.data, response, self.timeout)
+                self.cache.set(key, response, self.timeout)
             return response
         return decorator
 
