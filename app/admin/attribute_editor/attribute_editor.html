@@ -5,6 +5,7 @@
             <span class="ddTitle">Attributes List</span>
             <div ng-repeat="attribute in queryAttributes track by $index">
                 <div ng-drag="false" ng-drag-data="attribute" ng-drag-success="onDragComplete($data,$event)" ng-center-anchor="true">
+                    <span class="glyphicon glyphicon-pencil" aria-hidden="true" ng-click="loadEditAttribute(attribute)"></span>
                     {{attribute.name}}
                 </div>
             </div>
@@ -54,20 +55,20 @@
         <div class="ddTitle">Add Attribute</div>
         <div class="col-md-7">
             <span>Name: </span>
-            <input type="text" ng-model="newAttribute.name" />
+            <input type="text" ng-model="editingAttribute.name" />
         </div>
         <div class="col-md-7">
             <span>Logical Expression: </span>
         </div>
         <div class="col-md-7 queryContainer">
-            <logical-expression-drop ng-model="newAttribute.logical_expression" />
+            <logical-expression-drop ng-model="editingAttribute.logical_expression" />
         </div>
         <div class="col-md-1">
-            <button type="submit" class="btn btn-primary" ng-click="saveNewAttribute()">Save Attribute
+            <button type="submit" class="btn btn-primary" ng-click="saveEditingAttribute()">Save Attribute
             </button>
             <br/>
             <br/>
-            <button type="submit" class="btn btn-primary" ng-click="clearNewAttribute()">Clear</button>
+            <button type="submit" class="btn btn-primary" ng-click="clearEditingAttribute()">Clear</button>
         </div>
     </div>
 </div>

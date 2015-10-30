@@ -42,7 +42,7 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
             name:'REGEXP'
         }
       ];
-      $scope.newAttribute = {
+      $scope.editingAttribute = {
         id : 0,
         name : '',
         logical_expression : LogicalExpressionService.createNew()
@@ -71,7 +71,7 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
 
       $scope.onDragComplete=function(data,evt){
         var hierarchy = evt.event.srcElement.classList[0].split('_');
-        var levelToChange = $scope.newAttribute.logical_expression;
+        var levelToChange = $scope.editingAttribute.logical_expression;
 
         if(hierarchy.length > 0)
         {
@@ -132,21 +132,43 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
         });
       };
 
-      $scope.saveNewAttribute = function(){
-        $scope.queryAttributes.push($scope.newAttribute);
-        $scope.newAttribute = {
+      $scope.saveEditingAttribute = function(){
+        if($scope.editingAttribute.id != 0)
+        {
+            angular.forEach($scope.queryAttributes, function(attribute, index){
+                if(attribute.id == $scope.editingAttribute.id)
+                {
+                    $scope.queryAttributes.splice(index, 1);
+                    $scope.editingAttribute.id = 0;
+                    return;
+                }
+            });
+        }
+
+        $scope.queryAttributes.push($scope.editingAttribute);
+        $scope.editingAttribute = {
             id : 0,
             name : '',
             logical_expression : LogicalExpressionService.createNew()
           };
       }
 
-      $scope.clearNewAttribute = function() {
-        $scope.newAttribute.logical_expression = LogicalExpressionService.createNew();
+      $scope.clearEditingAttribute = function() {
+        $scope.editingAttribute.logical_expression = LogicalExpressionService.createNew();
       };
 
       $scope.showAddAttribute = function() {
         $scope.showAdd = true;
+      };
+
+      $scope.loadEditAttribute = function(attribute) {
+        attribute.logical_expression = LogicalExpressionService.literalToObjects(attribute.logical_expression);
+        $scope.editingAttribute = attribute;
+        $scope.showAddAttribute();
+      };
+
+      $scope.setupEditAttributeLogicalExpression = function(logical_expression) {
+
       };
 
       $scope.saveLiteral = function() {
