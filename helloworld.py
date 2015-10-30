@@ -191,7 +191,7 @@ def save_json_db():
 
         if int(attribute.id) == 0:
             attributes[index].id = largestid + 1
-            largestid += 2
+            largestid += 1
 
     largestid = None
 
