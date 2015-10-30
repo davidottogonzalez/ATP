@@ -33,6 +33,7 @@ def index():
     return redirect(url_for('static_app', path='index.html'))
 
 @app.route('/queryHive/', methods=['POST'])
+@cache
 def query_hive():
     form_chosen_attributes = json.loads(request.data)['chosenAttributes']
     chosen_attributes = []
@@ -88,6 +89,7 @@ def query_hive():
     return json.dumps(return_results)
 
 @app.route('/queryHive/segments', methods=['POST'])
+@cache
 def query_hive_segments():
     form_logical_expression = json.loads(request.data)['logical_expression']
     query_logical_expression = atp_classes.LogicalExpression(form_logical_expression)
@@ -190,7 +192,7 @@ def save_json_db():
             attributes[index].id = largestid + 1
             largestid += 2
 
-    largestid = 0
+    largestid = None
 
     db['attributes'] = attributes
 
@@ -198,19 +200,6 @@ def save_json_db():
         json.dump(db, outdb, indent=1,  default=atp_classes.JSONHandler.JSONHandler)
 
     return json.dumps(db, default=atp_classes.JSONHandler.JSONHandler)
-
-@app.before_request
-def return_cached():
-    if request.data and request.method == 'POST' and request.path != '/admin/saveJSON':
-        response = cache.get(request.data)
-        if response:
-            return response
-
-@app.after_request
-def cache_response(response):
-    if request.data and request.method == 'POST' and request.path != '/admin/saveJSON':
-        cache.set(request.data, response)
-    return response
 
 if __name__ == '__main__':
     app.run(debug=True, host=config.get_config()['development']['host'], threaded=True,
