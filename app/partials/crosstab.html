@@ -1,4 +1,7 @@
-<table class="table table-bordered crosstab">
+<a class="btn btn-link" ng-click="exportToExcel('crosstab_table')">
+    <span class="glyphicon glyphicon-share"></span> Export to Excel
+</a>
+<table id="crosstab_table" class="table table-bordered crosstab">
     <tr>
         <th colspan="4">Attribute Crosstab</th>
         <th ng-repeat="attribute in crossTabsAttributes track by $index">

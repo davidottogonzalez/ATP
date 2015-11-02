@@ -1,4 +1,4 @@
-angular.module('ServicesModule', []).factory('LogicalExpressionService', function(){
+angular.module('ServicesModule', ['ngFileSaver']).factory('LogicalExpressionService', function(){
     function LogicalExpressionInstance(obj){
         if(typeof obj == 'undefined')
         {

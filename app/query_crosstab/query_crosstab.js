@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.query_crosstab', ['ngRoute'])
+angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/query_crosstab', {
@@ -9,7 +9,8 @@ angular.module('myApp.query_crosstab', ['ngRoute'])
   });
 }])
 
-.controller('QueryCrosstabCtrl', ['$scope', '$http', function($scope, $http) {
+.controller('QueryCrosstabCtrl', ['$scope', '$http', 'ExcelService',
+    function($scope, $http, ExcelService) {
       $scope.queryAttributes = [];
 
       $scope.init = function() {
@@ -59,13 +60,6 @@ angular.module('myApp.query_crosstab', ['ngRoute'])
             $scope.isQuerying = false;
             $scope.showCrossTab = true;
         });
-
-        /*setTimeout(function()
-        {
-            $scope.searchButtonText = 'Query!';
-            $scope.showCrossTab = true;
-            $scope.$apply();
-        },1000)*/
       };
 
       $scope.getAssociatedAttribute = function(baseAttribute, associatedIndex)
@@ -140,6 +134,10 @@ angular.module('myApp.query_crosstab', ['ngRoute'])
 
       $scope.clear = function() {
         $scope.chosenAttributes = [];
+      };
+
+      $scope.exportToExcel=function(tableId){
+        ExcelService.tableToExcel(tableId, 'Crosstab');
       };
 
       $scope.formatNumber = function(intNum) {

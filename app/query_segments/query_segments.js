@@ -9,8 +9,8 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
   });
 }])
 
-.controller('QuerySegmentsCtrl', ['$scope', '$http', 'LogicalExpressionService', '$sce', '$compile',
- function($scope, $http, LogicalExpressionService, $sce, $compile) {
+.controller('QuerySegmentsCtrl', ['$scope', '$http', 'LogicalExpressionService', '$sce', '$compile', 'ExcelService',
+ function($scope, $http, LogicalExpressionService, $sce, $compile, ExcelService) {
       $scope.queryAttributes = [];
       $scope.booleanOperators = [
         {
@@ -75,6 +75,10 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
             $scope.isQuerying = false;
             $scope.showResults = true;
         });
+      };
+
+      $scope.exportToExcel=function(tableId){
+        ExcelService.tableToExcel(tableId, 'Segments');
       };
 
       $scope.clear = function() {
