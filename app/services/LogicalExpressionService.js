@@ -12,7 +12,7 @@ angular.module('ServicesModule', []).factory('LogicalExpressionService', functio
                 }
                 else if(typeof obj.id != 'undefined') {
                     var attribute = obj.operand1;
-                    attribute.logical_expression = new LogicalExpressionService(attribute.logical_expression);
+                    attribute.logical_expression = new LogicalExpressionInstance(attribute.logical_expression);
                     this.operand1 = attribute;
                 }else if (typeof obj.name != 'undefined') {
                     this.operand1 = obj.operand1;
@@ -33,7 +33,7 @@ angular.module('ServicesModule', []).factory('LogicalExpressionService', functio
                 }
                 else if(typeof obj.id != 'undefined') {
                     var attribute = obj.operand2;
-                    attribute.logical_expression = new LogicalExpressionService(attribute.logical_expression);
+                    attribute.logical_expression = new LogicalExpressionInstance(attribute.logical_expression);
                     this.operand2 = attribute;
                 }else if (typeof obj.name != 'undefined') {
                     this.operand2 = obj.operand2;
@@ -42,7 +42,56 @@ angular.module('ServicesModule', []).factory('LogicalExpressionService', functio
                 this.operand2 = {name:obj.operand2};
             }
         }
+
+        this.changeBasedOnHierarchy = changeBasedOnHierarchy;
     };
+
+    var changeBasedOnHierarchy = function(dragObj, dragEvent) {
+        var hierarchy = dragEvent.event.srcElement.classList[0].split('_');
+        var levelToChange = this;
+
+        if(hierarchy.length > 0)
+        {
+           hierarchy.map(function(val, index){
+                switch(val){
+                    case 'op1':
+                        if(index == (hierarchy.length - 1))
+                        {
+                            if(dragObj.name == 'Parentheses')
+                            {
+                                levelToChange['operand1'] = new LogicalExpressionInstance();
+                            }else{
+                                levelToChange['operand1'] = dragObj;
+                            }
+                        }else{
+                            levelToChange = levelToChange['operand1'];
+                        }
+                        break;
+                    case 'op':
+                        if(index == (hierarchy.length - 1))
+                        {
+                            levelToChange['operator'] = dragObj;
+                        }else{
+                            levelToChange = levelToChange['operator'];
+                        }
+                        break;
+                    case 'op2':
+                        if(index == (hierarchy.length - 1))
+                        {
+                            if(dragObj.name == 'Parentheses')
+                            {
+                                levelToChange['operand2'] = new LogicalExpressionInstance();
+                            }else{
+                                levelToChange['operand2'] = dragObj;
+                            }
+                        }else{
+                            levelToChange = levelToChange['operand2'];
+                        }
+                        break;
+                }
+           });
+        }
+    }
 
     return {
         createNew: function(obj) {

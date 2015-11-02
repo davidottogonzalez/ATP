@@ -70,50 +70,7 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
       };
 
       $scope.onDragComplete=function(data,evt){
-        var hierarchy = evt.event.srcElement.classList[0].split('_');
-        var levelToChange = $scope.editingAttribute.logical_expression;
-
-        if(hierarchy.length > 0)
-        {
-           hierarchy.map(function(val, index){
-                switch(val){
-                    case 'op1':
-                        if(index == (hierarchy.length - 1))
-                        {
-                            if(data.name == 'Parentheses')
-                            {
-                                levelToChange['operand1'] = LogicalExpressionService.createNew();
-                            }else{
-                                levelToChange['operand1'] = data
-                            }
-                        }else{
-                            levelToChange = levelToChange['operand1']
-                        }
-                        break;
-                    case 'op':
-                        if(index == (hierarchy.length - 1))
-                        {
-                            levelToChange['operator'] = data
-                        }else{
-                            levelToChange = levelToChange['operator']
-                        }
-                        break;
-                    case 'op2':
-                        if(index == (hierarchy.length - 1))
-                        {
-                            if(data.name == 'Parentheses')
-                            {
-                                levelToChange['operand2'] = LogicalExpressionService.createNew();
-                            }else{
-                                levelToChange['operand2'] = data
-                            }
-                        }else{
-                            levelToChange = levelToChange['operand2']
-                        }
-                        break;
-                }
-           });
-        }
+        $scope.editingAttribute.logical_expression.changeBasedOnHierarchy(data, evt);
       };
 
       $scope.removeQueryAttr = function(data){
@@ -157,18 +114,24 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
         $scope.editingAttribute.logical_expression = LogicalExpressionService.createNew();
       };
 
-      $scope.showAddAttribute = function() {
+      $scope.showAddAttribute = function(clearExisting) {
+        if(typeof clearExisting == 'undefined' || clearExisting)
+        {
+            $scope.editingAttribute = {
+                id : 0,
+                name : '',
+                logical_expression : LogicalExpressionService.createNew()
+            };
+        }
+
         $scope.showAdd = true;
       };
 
       $scope.loadEditAttribute = function(attribute) {
-        attribute.logical_expression = LogicalExpressionService.createNew(attribute.logical_expression);
-        $scope.editingAttribute = attribute;
-        $scope.showAddAttribute();
-      };
-
-      $scope.setupEditAttributeLogicalExpression = function(logical_expression) {
-
+        var attributeCopy = angular.copy(attribute);
+        attributeCopy.logical_expression = LogicalExpressionService.createNew(attributeCopy.logical_expression);
+        $scope.editingAttribute = attributeCopy;
+        $scope.showAddAttribute(false);
       };
 
       $scope.saveLiteral = function() {
