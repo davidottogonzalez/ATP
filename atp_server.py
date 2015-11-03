@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory, url_for, redirect, json, request
+from flask import Flask, send_from_directory, url_for, redirect, json, request, make_response
 import pyhs2, atp_classes
 
 app = Flask(__name__)
@@ -201,6 +201,15 @@ def save_json_db():
         json.dump(db, outdb, indent=4,  default=atp_classes.JSONHandler.JSONHandler)
 
     return json.dumps(db, default=atp_classes.JSONHandler.JSONHandler)
+
+@app.errorhandler(Exception)
+def handle_exceptions(err):
+    err_message = str(err)
+
+    if len(err_message) > 150:
+        err_message = err_message[:150] + '...'
+
+    return make_response(err_message, 500)
 
 if __name__ == '__main__':
     app.run(debug=True, host=config.get_config()['development']['host'], threaded=True,
