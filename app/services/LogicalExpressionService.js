@@ -7,14 +7,14 @@ angular.module('ServicesModule', ['ngFileSaver']).factory('LogicalExpressionServ
             this.operand2 = null
         }else{
             if(typeof obj.operand1 == 'object') {
-                if(typeof obj.operand1 != 'undefined') {
+                if(typeof obj.operand1.operand1 != 'undefined') {
                     this.operand1 = new LogicalExpressionInstance(obj.operand1);
                 }
-                else if(typeof obj.id != 'undefined') {
+                else if(typeof obj.operand1.id != 'undefined') {
                     var attribute = obj.operand1;
                     attribute.logical_expression = new LogicalExpressionInstance(attribute.logical_expression);
                     this.operand1 = attribute;
-                }else if (typeof obj.name != 'undefined') {
+                }else if (typeof obj.operand1.name != 'undefined') {
                     this.operand1 = obj.operand1;
                 }
             }else {
@@ -28,14 +28,14 @@ angular.module('ServicesModule', ['ngFileSaver']).factory('LogicalExpressionServ
             }
 
             if(typeof obj.operand2 == 'object') {
-                if(typeof obj.operand2 != 'undefined') {
+                if(typeof obj.operand2.operand2 != 'undefined') {
                     this.operand2 = new LogicalExpressionInstance(obj.operand2);
                 }
-                else if(typeof obj.id != 'undefined') {
+                else if(typeof obj.operand2.id != 'undefined') {
                     var attribute = obj.operand2;
                     attribute.logical_expression = new LogicalExpressionInstance(attribute.logical_expression);
                     this.operand2 = attribute;
-                }else if (typeof obj.name != 'undefined') {
+                }else if (typeof obj.operand2.name != 'undefined') {
                     this.operand2 = obj.operand2;
                 }
             }else {
