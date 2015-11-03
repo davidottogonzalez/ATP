@@ -44,6 +44,8 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
       $scope.isQuerying = false;
       $scope.showResults = false;
       $scope.expressionIsEmpty = false;
+      $scope.returnedError = false;
+      $scope.returnedErrorMessage = '';
       $scope.topLogicalExpression = LogicalExpressionService.createNew();
       $scope.totals = {
         total_bhds: 0,
@@ -67,6 +69,8 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
 
         $scope.isQuerying = true;
         $scope.showResults = false;
+        $scope.returnedError = false;
+        $scope.returnedErrorMessage = '';
         $scope.searchButtonText = "Querying!";
 
         ngDialog.open({
@@ -84,6 +88,11 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
             $scope.totals.seg_fwm_percent = (parseInt($scope.totals.total_seg_fwm) / parseInt($scope.totals.total_fwm));
             $scope.isQuerying = false;
             $scope.showResults = true;
+        },function(res){
+            $scope.searchButtonText = 'Query!';
+            $scope.isQuerying = false;
+            $scope.returnedError = true;
+            $scope.returnedErrorMessage = res.data;
         });
       };
 

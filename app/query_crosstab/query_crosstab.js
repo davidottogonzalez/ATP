@@ -29,6 +29,8 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
       $scope.searchButtonText = 'Query!';
       $scope.showCrossTab = false;
       $scope.isQuerying = false;
+      $scope.returnedError = false;
+      $scope.returnedErrorMessage = '';
       $scope.bhds_total = 0;
       $scope.fwm_total = 0;
 
@@ -56,6 +58,8 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
       $scope.search = function(){
         $scope.showCrossTab = false;
         $scope.isQuerying = true;
+        $scope.returnedError = false;
+        $scope.returnedErrorMessage = '';
         $scope.searchButtonText = "Querying!";
         $scope.submittedAttributes = angular.copy($scope.chosenAttributes);
 
@@ -64,13 +68,17 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
             scope: $scope
         });
 
-        $http.post('/queryHive/',{chosenAttributes: $scope.submittedAttributes}).then(function(res){
+        $http.post('/queryHive/',{chosenAttributes: $scope.submittedAttributes})
+        .then(function(res){
             $scope.searchButtonText = 'Query!';
             buildCrossTabsAttributes(res.data);
-            console.log(res.data);
-            console.log($scope.crossTabsAttributes);
             $scope.isQuerying = false;
             $scope.showCrossTab = true;
+        },function(res){
+            $scope.searchButtonText = 'Query!';
+            $scope.isQuerying = false;
+            $scope.returnedError = true;
+            $scope.returnedErrorMessage = res.data;
         });
       };
 
