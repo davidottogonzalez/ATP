@@ -68,7 +68,7 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
         });
       };
 
-      $scope.searchButtonText = 'Query!';
+      $scope.saveJSONButton = 'Save Attributes';
       $scope.isQuerying = false;
       $scope.showAdd = false;
       $scope.expressionIsEmpty = false;
@@ -85,8 +85,10 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
       };
 
       $scope.saveJSON = function(){
+        $scope.saveJSONButton = 'Saving...';
+
         $http.post('/admin/saveJSON',{attributes: $scope.queryAttributes}).then(function(res){
-            alert('success');
+            $scope.saveJSONButton = 'Save Attributes';
         });
       };
 
