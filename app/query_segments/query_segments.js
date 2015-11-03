@@ -1,16 +1,23 @@
 'use strict';
 
-angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize'])
+angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize', 'ngDialog'])
 
-.config(['$routeProvider', function($routeProvider) {
+.config(['$routeProvider', 'ngDialogProvider', function($routeProvider, ngDialogProvider) {
   $routeProvider.when('/query_segments', {
     templateUrl: 'query_segments/query_segments.html',
     controller: 'QuerySegmentsCtrl'
   });
+
+  ngDialogProvider.setDefaults({
+    className: 'ngdialog-theme-plain',
+    showClose: true,
+    closeByDocument: true,
+    closeByEscape: true
+  });
 }])
 
-.controller('QuerySegmentsCtrl', ['$scope', '$http', 'LogicalExpressionService', '$sce', '$compile', 'ExcelService',
- function($scope, $http, LogicalExpressionService, $sce, $compile, ExcelService) {
+.controller('QuerySegmentsCtrl', ['$scope', '$http', 'LogicalExpressionService', '$sce', '$compile', 'ExcelService', 'ngDialog',
+ function($scope, $http, LogicalExpressionService, $sce, $compile, ExcelService, ngDialog) {
       $scope.queryAttributes = [];
       $scope.booleanOperators = [
         {
@@ -59,7 +66,13 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
         }
 
         $scope.isQuerying = true;
+        $scope.showResults = false;
         $scope.searchButtonText = "Querying!";
+
+        ngDialog.open({
+            template:'partials/segments_table.html',
+            scope: $scope
+        });
 
         $http.post('/queryHive/segments',{logical_expression: $scope.topLogicalExpression}).then(function(res){
             $scope.searchButtonText = 'Query!';

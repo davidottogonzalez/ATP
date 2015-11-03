@@ -1,49 +1,56 @@
-<a class="btn btn-link" ng-click="exportToExcel('segments_table')">
-    <span class="glyphicon glyphicon-share"></span> Export to Excel
-</a>
-<table id="segments_table" class="table table-bordered crosstab">
-    <tr>
-        <th>
-            BHDS TOTAL
-        </th>
-        <th>
-            SEGMENT TOTAL
-        </th>
-        <th>
-            PERCENT%
-        </th>
-    </tr>
-    <tr>
-        <th>
-            {{formatNumber(totals.total_bhds)}}
-        </th>
-        <th>
-            {{formatNumber(totals.total_seg_bhds)}}
-        </th>
-        <th>
-            {{formatPercentage(totals.seg_bhds_percent)}}
-        </th>
-    </tr>
-    <tr>
-        <th>
-            FWM TOTAL
-        </th>
-        <th>
-            SEGMENT TOTAL
-        </th>
-        <th>
-            PERCENT%
-        </th>
-    </tr>
-    <tr>
-        <th>
-            {{formatNumber(totals.total_fwm)}}
-        </th>
-        <th>
-            {{formatNumber(totals.total_seg_fwm)}}
-        </th>
-        <th>
-            {{formatPercentage(totals.seg_fwm_percent)}}
-        </th>
-    </tr>
-</table>
+<div ng-show="isQuerying" class="coffeeBreak">
+    <span>Reports on average take about 5 minutes. Grab a coffee while you wait!</span>
+    <br/>
+    <img style="-webkit-user-select: none" src="http://24.media.tumblr.com/e82331dc4de4ba3f9b2db5ab37e37611/tumblr_mq65adJg5v1savtcto1_250.gif">
+</div>
+<div ng-show="showResults">
+    <a class="btn btn-link" ng-click="exportToExcel('segments_table')">
+        <span class="glyphicon glyphicon-share"></span> Export to Excel
+    </a>
+    <table id="segments_table" class="table table-bordered crosstab">
+        <tr>
+            <th>
+                BHDS TOTAL
+            </th>
+            <th>
+                SEGMENT TOTAL
+            </th>
+            <th>
+                PERCENT%
+            </th>
+        </tr>
+        <tr>
+            <th>
+                {{formatNumber(totals.total_bhds)}}
+            </th>
+            <th>
+                {{formatNumber(totals.total_seg_bhds)}}
+            </th>
+            <th>
+                {{formatPercentage(totals.seg_bhds_percent)}}
+            </th>
+        </tr>
+        <tr>
+            <th>
+                FWM TOTAL
+            </th>
+            <th>
+                SEGMENT TOTAL
+            </th>
+            <th>
+                PERCENT%
+            </th>
+        </tr>
+        <tr>
+            <th>
+                {{formatNumber(totals.total_fwm)}}
+            </th>
+            <th>
+                {{formatNumber(totals.total_seg_fwm)}}
+            </th>
+            <th>
+                {{formatPercentage(totals.seg_fwm_percent)}}
+            </th>
+        </tr>
+    </table>
+</div>
