@@ -1,16 +1,23 @@
 'use strict';
 
-angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSanitize'])
+angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSanitize', 'ngDialog'])
 
-.config(['$routeProvider', function($routeProvider) {
+.config(['$routeProvider', 'ngDialogProvider', function($routeProvider, ngDialogProvider) {
   $routeProvider.when('/admin/attribute_editor', {
     templateUrl: 'admin/attribute_editor/attribute_editor.html',
     controller: 'AttributeEditorCtrl'
   });
+
+  ngDialogProvider.setDefaults({
+    className: 'ngdialog-theme-plain',
+    showClose: true,
+    closeByDocument: true,
+    closeByEscape: true
+  });
 }])
 
-.controller('AttributeEditorCtrl', ['$scope', '$http', 'LogicalExpressionService', '$sce', '$compile',
- function($scope, $http, LogicalExpressionService, $sce, $compile) {
+.controller('AttributeEditorCtrl', ['$scope', '$http', 'LogicalExpressionService', '$sce', '$compile', 'ngDialog',
+ function($scope, $http, LogicalExpressionService, $sce, $compile, ngDialog) {
       $scope.queryAttributes = [];
       $scope.fieldsList = [];
       $scope.chosenFieldsList = [];
@@ -151,7 +158,10 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
       };
 
       $scope.removeAttribute = function(attribute) {
-        angular.forEach($scope.queryAttributes, function(qattribute, index){
+        ngDialog.openConfirm({
+            template:'partials/dialogs/confirm.html',
+        }).then(function (confirm) {
+          angular.forEach($scope.queryAttributes, function(qattribute, index){
             if(attribute.id == qattribute.id)
             {
                 if(attribute.id != 0 || (attribute.id == 0 && (attribute.name == qattribute.name)))
@@ -159,6 +169,7 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
                     $scope.queryAttributes.splice(index, 1);
                 }
             }
+          });
         });
       };
 

@@ -14,6 +14,7 @@
     "ngDraggable": "~0.1.8",
     "bootstrap-css-only": "~3.3.5",
     "angular-sanitize": "~1.4.7",
-    "angular-file-saver": "~1.0.0"
+    "angular-file-saver": "~1.0.0",
+    "ng-dialog": "~0.5.5"
   }
 }
