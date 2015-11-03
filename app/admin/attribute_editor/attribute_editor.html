@@ -6,6 +6,7 @@
             <div ng-repeat="attribute in queryAttributes track by $index">
                 <div ng-drag="false" ng-drag-data="attribute" ng-drag-success="onDragComplete($data,$event)" ng-center-anchor="true">
                     <span class="glyphicon glyphicon-pencil" aria-hidden="true" ng-click="loadEditAttribute(attribute)"></span>
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeAttribute(attribute)"></span>
                     {{attribute.name}}
                 </div>
             </div>

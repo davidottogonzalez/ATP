@@ -160,6 +160,18 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
         $scope.showAddAttribute(false);
       };
 
+      $scope.removeAttribute = function(attribute) {
+        angular.forEach($scope.queryAttributes, function(qattribute, index){
+            if(attribute.id == qattribute.id)
+            {
+                if(attribute.id != 0 || (attribute.id == 0 && (attribute.name == qattribute.name)))
+                {
+                    $scope.queryAttributes.splice(index, 1);
+                }
+            }
+        });
+      };
+
       $scope.saveLiteral = function() {
         $scope.literalLists.push($scope.newLiteral)
         $scope.newLiteral = {
