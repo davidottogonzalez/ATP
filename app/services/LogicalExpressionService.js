@@ -126,13 +126,49 @@ angular.module('ServicesModule', ['ngFileSaver']).factory('LogicalExpressionServ
         return isValidDrop;
     };
 
+    var isExpressionNotEmpty = function(logical_expression) {
+        if(logical_expression.operand1 != null && typeof logical_expression.operand1 == 'object') {
+            if(typeof logical_expression.operand1.operand1 != 'undefined') {
+                return isExpressionNotEmpty(logical_expression.operand1);
+            }else if (typeof logical_expression.operand1.name == 'undefined') {
+                return false;
+            }
+        }else {
+            if(logical_expression.operand1 == null || logical_expression.operand1 == ''){
+               return false;
+            }
+        }
 
+        if(logical_expression.operator != null && typeof logical_expression.operator == 'object') {
+            if (typeof logical_expression.operator.name == 'undefined') {
+                return false;
+            }
+        } else {
+            if(logical_expression.operator == '' || logical_expression.operator == null){
+               return false;
+            }
+        }
+
+        if(logical_expression.operand2 != null && typeof logical_expression.operand2 == 'object') {
+            if(typeof logical_expression.operand2.operand1 != 'undefined') {
+                return isExpressionNotEmpty(logical_expression.operand2);
+            }else if (typeof logical_expression.operand2.name == 'undefined') {
+                return false;
+            }
+        }else {
+            if(logical_expression.operand2 == null || logical_expression.operand2 == ''){
+               return false;
+            }
+        }
+
+        return true;
+    };
 
     return {
         createNew: function(obj) {
             return new LogicalExpressionInstance(obj);
         },
-
-        isValidDrop: isValidDrop
+        isValidDrop: isValidDrop,
+        isExpressionNotEmpty: isExpressionNotEmpty
     };
 });

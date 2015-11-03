@@ -36,6 +36,7 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
       $scope.searchButtonText = 'Query!';
       $scope.isQuerying = false;
       $scope.showResults = false;
+      $scope.expressionIsEmpty = false;
       $scope.topLogicalExpression = LogicalExpressionService.createNew();
       $scope.totals = {
         total_bhds: 0,
@@ -47,6 +48,7 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
       }
 
       $scope.onDragComplete=function(data,evt){
+        $scope.expressionIsEmpty = false;
         $scope.topLogicalExpression.changeBasedOnHierarchy(data, evt, $scope.booleanOperators);
       };
 
@@ -61,6 +63,11 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
       };
 
       $scope.search = function(){
+        if(!LogicalExpressionService.isExpressionNotEmpty($scope.topLogicalExpression)){
+            $scope.expressionIsEmpty = true;
+            return;
+        }
+
         $scope.isQuerying = true;
         $scope.searchButtonText = "Querying!";
 
