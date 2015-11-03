@@ -64,12 +64,16 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
       $scope.searchButtonText = 'Query!';
       $scope.isQuerying = false;
       $scope.showAdd = false;
+      $scope.expressionIsEmpty = false;
+      $scope.editingNameEmpty = false;
 
       $scope.addChosenField = function() {
         $scope.chosenFieldsList.push($scope.toAddField);
       };
 
       $scope.onDragComplete=function(data,evt){
+        $scope.expressionIsEmpty = false;
+        $scope.editingNameEmpty = false;
         $scope.editingAttribute.logical_expression.changeBasedOnHierarchy(data, evt, $scope.booleanOperators);
       };
 
@@ -90,6 +94,24 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
       };
 
       $scope.saveEditingAttribute = function(){
+        if(!LogicalExpressionService.isExpressionNotEmpty($scope.editingAttribute.logical_expression)){
+            $scope.expressionIsEmpty = true;
+
+            if($scope.editingAttribute.name == '')
+            {
+                $scope.editingNameEmpty = true;
+                return;
+            }
+
+            return;
+        }
+
+        if($scope.editingAttribute.name == '')
+        {
+            $scope.editingNameEmpty = true;
+            return;
+        }
+
         if($scope.editingAttribute.id != 0)
         {
             angular.forEach($scope.queryAttributes, function(attribute, index){
@@ -112,6 +134,10 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
 
       $scope.clearEditingAttribute = function() {
         $scope.editingAttribute.logical_expression = LogicalExpressionService.createNew();
+      };
+
+      $scope.clearNameError = function() {
+        $scope.editingNameEmpty = false;
       };
 
       $scope.showAddAttribute = function(clearExisting) {

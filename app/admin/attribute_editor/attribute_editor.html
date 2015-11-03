@@ -54,8 +54,18 @@
         </div>
         <div class="ddTitle">Add Attribute</div>
         <div class="col-md-7">
+            <div ng-show="editingNameEmpty" class="alert alert-danger" role="alert">
+              <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+              <span class="sr-only">Error:</span>
+              New Attribute name cannot be empty
+            </div>
+            <div ng-show="expressionIsEmpty" class="alert alert-danger" role="alert">
+              <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+              <span class="sr-only">Error:</span>
+              No part of the Logical Expression can be empty!
+            </div>
             <span>Name: </span>
-            <input type="text" ng-model="editingAttribute.name" />
+            <input type="text" ng-model="editingAttribute.name" ng-change="clearNameError()"/>
         </div>
         <div class="col-md-7">
             <span>Logical Expression: </span>
