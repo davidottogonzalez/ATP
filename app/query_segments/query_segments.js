@@ -47,7 +47,7 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
       }
 
       $scope.onDragComplete=function(data,evt){
-        $scope.topLogicalExpression.changeBasedOnHierarchy(data, evt);
+        $scope.topLogicalExpression.changeBasedOnHierarchy(data, evt, $scope.booleanOperators);
       };
 
       $scope.removeQueryAttr = function(data){

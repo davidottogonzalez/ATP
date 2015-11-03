@@ -70,7 +70,7 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
       };
 
       $scope.onDragComplete=function(data,evt){
-        $scope.editingAttribute.logical_expression.changeBasedOnHierarchy(data, evt);
+        $scope.editingAttribute.logical_expression.changeBasedOnHierarchy(data, evt, $scope.booleanOperators);
       };
 
       $scope.removeQueryAttr = function(data){

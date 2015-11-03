@@ -44,9 +44,15 @@ angular.module('ServicesModule', ['ngFileSaver']).factory('LogicalExpressionServ
         }
 
         this.changeBasedOnHierarchy = changeBasedOnHierarchy;
+        this.isValidDrop = isValidDrop;
     };
 
-    var changeBasedOnHierarchy = function(dragObj, dragEvent) {
+    var changeBasedOnHierarchy = function(dragObj, dragEvent, arrayToCheck) {
+
+        if(!isValidDrop(dragObj, dragEvent, arrayToCheck)) {
+            return;
+        };
+
         var hierarchy = dragEvent.event.srcElement.classList[0].split('_');
         var levelToChange = this;
 
@@ -92,6 +98,34 @@ angular.module('ServicesModule', ['ngFileSaver']).factory('LogicalExpressionServ
            });
         }
     }
+
+    var isValidDrop = function(dragObj, dragEvent, arrayToCheck) {
+        var isValidDrop = false;
+        var hierarchy = dragEvent.event.srcElement.classList[0].split('_');
+        var dropType = hierarchy[hierarchy.length - 1];
+
+        switch(dropType) {
+            case 'op':
+                angular.forEach(arrayToCheck, function(operator){
+                    if(dragObj.name != 'Parentheses' && dragObj.name == operator.name){
+                        isValidDrop = true;
+                    }
+                });
+                break;
+            case 'op1':
+            case 'op2':
+                isValidDrop = true;
+                angular.forEach(arrayToCheck, function(operator){
+                    var test = 'help';
+                    if(dragObj.name != 'Parentheses' && dragObj.name == operator.name){
+                        isValidDrop = false;
+                    }
+                });
+                break;
+        }
+
+        return isValidDrop;
+    };
 
     return {
         createNew: function(obj) {
