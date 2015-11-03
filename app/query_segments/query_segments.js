@@ -52,16 +52,6 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
         $scope.topLogicalExpression.changeBasedOnHierarchy(data, evt, $scope.booleanOperators);
       };
 
-      $scope.removeQueryAttr = function(data){
-        angular.forEach($scope.chosenAttributes, function(value, key)
-        {
-           if(data.name == value.name){
-               $scope.chosenAttributes.splice(key, 1);
-               return;
-           }
-        });
-      };
-
       $scope.search = function(){
         if(!LogicalExpressionService.isExpressionNotEmpty($scope.topLogicalExpression)){
             $scope.expressionIsEmpty = true;

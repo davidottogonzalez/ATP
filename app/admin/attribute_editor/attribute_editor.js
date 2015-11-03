@@ -77,16 +77,6 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
         $scope.editingAttribute.logical_expression.changeBasedOnHierarchy(data, evt, $scope.booleanOperators);
       };
 
-      $scope.removeQueryAttr = function(data){
-        angular.forEach($scope.chosenAttributes, function(value, key)
-        {
-           if(data.name == value.name){
-               $scope.chosenAttributes.splice(key, 1);
-               return;
-           }
-        });
-      };
-
       $scope.saveJSON = function(){
         $http.post('/admin/saveJSON',{attributes: $scope.queryAttributes}).then(function(res){
             alert('success');
