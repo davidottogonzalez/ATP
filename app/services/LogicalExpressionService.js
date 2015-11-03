@@ -44,7 +44,6 @@ angular.module('ServicesModule', ['ngFileSaver']).factory('LogicalExpressionServ
         }
 
         this.changeBasedOnHierarchy = changeBasedOnHierarchy;
-        this.isValidDrop = isValidDrop;
     };
 
     var changeBasedOnHierarchy = function(dragObj, dragEvent, arrayToCheck) {
@@ -127,9 +126,13 @@ angular.module('ServicesModule', ['ngFileSaver']).factory('LogicalExpressionServ
         return isValidDrop;
     };
 
+
+
     return {
         createNew: function(obj) {
             return new LogicalExpressionInstance(obj);
-        }
+        },
+
+        isValidDrop: isValidDrop
     };
 });
