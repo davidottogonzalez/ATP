@@ -159,7 +159,7 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
 
       $scope.removeAttribute = function(attribute) {
         ngDialog.openConfirm({
-            template:'partials/dialogs/confirm.html',
+            template:'partials/dialogs/confirm.html'
         }).then(function (confirm) {
           angular.forEach($scope.queryAttributes, function(qattribute, index){
             if(attribute.id == qattribute.id)
