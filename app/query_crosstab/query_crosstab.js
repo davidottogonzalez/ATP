@@ -1,16 +1,23 @@
 'use strict';
 
-angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule'])
+angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog'])
 
-.config(['$routeProvider', function($routeProvider) {
+.config(['$routeProvider', 'ngDialogProvider', function($routeProvider, ngDialogProvider) {
   $routeProvider.when('/query_crosstab', {
     templateUrl: 'query_crosstab/query_crosstab.html',
     controller: 'QueryCrosstabCtrl'
   });
+
+  ngDialogProvider.setDefaults({
+    className: 'ngdialog-theme-plain',
+    showClose: true,
+    closeByDocument: true,
+    closeByEscape: true
+  });
 }])
 
-.controller('QueryCrosstabCtrl', ['$scope', '$http', 'ExcelService',
-    function($scope, $http, ExcelService) {
+.controller('QueryCrosstabCtrl', ['$scope', '$http', 'ExcelService', 'ngDialog',
+    function($scope, $http, ExcelService, ngDialog) {
       $scope.queryAttributes = [];
 
       $scope.init = function() {
@@ -52,6 +59,11 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule'])
         $scope.searchButtonText = "Querying!";
         $scope.submittedAttributes = angular.copy($scope.chosenAttributes);
 
+        ngDialog.open({
+            template:'partials/crosstab.html',
+            scope: $scope
+        });
+
         $http.post('/queryHive/',{chosenAttributes: $scope.submittedAttributes}).then(function(res){
             $scope.searchButtonText = 'Query!';
             buildCrossTabsAttributes(res.data);
@@ -92,6 +104,7 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule'])
       }
 
       var buildCrossTabsAttributes = function(totals){
+        $scope.crossTabsAttributes = [];
         $scope.bhds_total = totals.total_bhds;
         $scope.fwm_total = totals.total_fwm;
 

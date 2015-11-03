@@ -1,81 +1,88 @@
-<a class="btn btn-link" ng-click="exportToExcel('crosstab_table')">
-    <span class="glyphicon glyphicon-share"></span> Export to Excel
-</a>
-<table id="crosstab_table" class="table table-bordered crosstab">
-    <tr>
-        <th colspan="4">Attribute Crosstab</th>
-        <th ng-repeat="attribute in crossTabsAttributes track by $index">
-            {{attribute.name}}
-        </th>
-    </tr>
-    <tr>
-        <th rowspan="5">Total</th>
-    </tr>
-    <tr>
-        <td>Data source</td>
-        <td>BHDS (201507)</td>
-        <td>Count</td>
-        <td ng-repeat="attribute in crossTabsAttributes track by $index">
-            {{formatNumber(attribute.bhds_total)}}
-        </td>
-    </tr>
-    <tr>
-        <td>Base</td>
-        <td>{{formatNumber(bhds_total)}}</td>
-        <td>Row % of Base</td>
-        <td ng-repeat="attribute in crossTabsAttributes track by $index">
-            {{formatPercentage(attribute.bhds_percent)}}
-        </td>
-    </tr>
-    <tr>
-        <td>Data source</td>
-        <td>FWM (201507)</td>
-        <td>Count</td>
-        <td ng-repeat="attribute in crossTabsAttributes track by $index">
-            {{formatNumber(attribute.fwm_total)}}
-        </td>
-    </tr>
-    <tr>
-        <td>Base</td>
-        <td>{{formatNumber(fwm_total)}}</td>
-        <td>Row % of Base</td>
-        <td ng-repeat="attribute in crossTabsAttributes track by $index">
-            {{formatPercentage(attribute.fwm_percent)}}
-        </td>
-    </tr>
-    <tr ng-repeat-start="attribute in crossTabsAttributes">
-        <th rowspan="5">{{attribute.name}}</th>
-    </tr>
-    <tr>
-        <td>Data source</td>
-        <td>BHDS (201507)</td>
-        <td>Count</td>
-        <td ng-repeat="attribute in crossTabsAttributes track by $index">
-            <span>{{formatNumber(getAssociatedAttribute(attribute, $parent.$index).bhds_total)}}</span>
-        </td>
-    </tr>
-    <tr>
-        <td>Base</td>
-        <td>{{formatNumber(attribute.bhds_total)}}</td>
-        <td>Row % of Base</td>
-        <td ng-repeat="attribute in crossTabsAttributes track by $index">
-            <span>{{formatPercentage(getAssociatedAttribute(attribute, $parent.$index).bhds_percent)}}</span>
-        </td>
-    </tr>
-    <tr>
-        <td>Data source</td>
-        <td>FWM (201507)</td>
-        <td>Count</td>
-        <td ng-repeat="attribute in crossTabsAttributes track by $index">
-            <span>{{formatNumber(getAssociatedAttribute(attribute, $parent.$index).fwm_total)}}</span>
-        </td>
-    </tr>
-    <tr ng-repeat-end>
-        <td>Base</td>
-        <td>{{formatNumber(attribute.fwm_total)}}</td>
-        <td>Row % of Base</td>
-        <td ng-repeat="attribute in crossTabsAttributes track by $index">
-            <span>{{formatPercentage(getAssociatedAttribute(attribute, $parent.$index).fwm_percent)}}</span>
-        </td>
-    </tr>
-</table>
+<div ng-show="isQuerying" class="coffeeBreak">
+    <span>Reports on average take about 5 minutes. Grab a coffee while you wait!</span>
+    <br/>
+    <img style="-webkit-user-select: none" src="http://24.media.tumblr.com/e82331dc4de4ba3f9b2db5ab37e37611/tumblr_mq65adJg5v1savtcto1_250.gif">
+</div>
+<div ng-show="showCrossTab">
+    <a class="btn btn-link" ng-click="exportToExcel('crosstab_table')">
+        <span class="glyphicon glyphicon-share"></span> Export to Excel
+    </a>
+    <table id="crosstab_table" class="table table-bordered crosstab">
+        <tr>
+            <th colspan="4">Attribute Crosstab</th>
+            <th ng-repeat="attribute in crossTabsAttributes track by $index">
+                {{attribute.name}}
+            </th>
+        </tr>
+        <tr>
+            <th rowspan="5">Total</th>
+        </tr>
+        <tr>
+            <td>Data source</td>
+            <td>BHDS (201507)</td>
+            <td>Count</td>
+            <td ng-repeat="attribute in crossTabsAttributes track by $index">
+                {{formatNumber(attribute.bhds_total)}}
+            </td>
+        </tr>
+        <tr>
+            <td>Base</td>
+            <td>{{formatNumber(bhds_total)}}</td>
+            <td>Row % of Base</td>
+            <td ng-repeat="attribute in crossTabsAttributes track by $index">
+                {{formatPercentage(attribute.bhds_percent)}}
+            </td>
+        </tr>
+        <tr>
+            <td>Data source</td>
+            <td>FWM (201507)</td>
+            <td>Count</td>
+            <td ng-repeat="attribute in crossTabsAttributes track by $index">
+                {{formatNumber(attribute.fwm_total)}}
+            </td>
+        </tr>
+        <tr>
+            <td>Base</td>
+            <td>{{formatNumber(fwm_total)}}</td>
+            <td>Row % of Base</td>
+            <td ng-repeat="attribute in crossTabsAttributes track by $index">
+                {{formatPercentage(attribute.fwm_percent)}}
+            </td>
+        </tr>
+        <tr ng-repeat-start="attribute in crossTabsAttributes">
+            <th rowspan="5">{{attribute.name}}</th>
+        </tr>
+        <tr>
+            <td>Data source</td>
+            <td>BHDS (201507)</td>
+            <td>Count</td>
+            <td ng-repeat="attribute in crossTabsAttributes track by $index">
+                <span>{{formatNumber(getAssociatedAttribute(attribute, $parent.$index).bhds_total)}}</span>
+            </td>
+        </tr>
+        <tr>
+            <td>Base</td>
+            <td>{{formatNumber(attribute.bhds_total)}}</td>
+            <td>Row % of Base</td>
+            <td ng-repeat="attribute in crossTabsAttributes track by $index">
+                <span>{{formatPercentage(getAssociatedAttribute(attribute, $parent.$index).bhds_percent)}}</span>
+            </td>
+        </tr>
+        <tr>
+            <td>Data source</td>
+            <td>FWM (201507)</td>
+            <td>Count</td>
+            <td ng-repeat="attribute in crossTabsAttributes track by $index">
+                <span>{{formatNumber(getAssociatedAttribute(attribute, $parent.$index).fwm_total)}}</span>
+            </td>
+        </tr>
+        <tr ng-repeat-end>
+            <td>Base</td>
+            <td>{{formatNumber(attribute.fwm_total)}}</td>
+            <td>Row % of Base</td>
+            <td ng-repeat="attribute in crossTabsAttributes track by $index">
+                <span>{{formatPercentage(getAssociatedAttribute(attribute, $parent.$index).fwm_percent)}}</span>
+            </td>
+        </tr>
+    </table>
+</div>

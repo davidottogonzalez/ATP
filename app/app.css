@@ -103,10 +103,15 @@ ul.draggable-objects:after{
 table.crosstab
 {
   margin-top: 10px;
+  max-width: 900px;
 }
 div.coffeeBreak
 {
   text-align: center;
   clear: both;
   margin-top: 5px;
+}
+.ngdialog.ngdialog-theme-plain .ngdialog-content {
+  width: inherit;
+  max-width: 900px;
 }
