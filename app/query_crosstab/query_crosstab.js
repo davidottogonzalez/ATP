@@ -23,7 +23,7 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
       $scope.init = function() {
         $http.get('/getAttributesList/').then(function(res){
             $scope.queryAttributes = res.data;
-        })
+        });
       };
 
       $scope.searchButtonText = 'Query!';
@@ -70,10 +70,10 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
 
         $http.post('/queryHive/',{chosenAttributes: $scope.submittedAttributes})
         .then(function(res){
-            $scope.searchButtonText = 'Query!';
             buildCrossTabsAttributes(res.data);
             $scope.isQuerying = false;
             $scope.showCrossTab = true;
+            $scope.searchButtonText = 'Query!';
         },function(res){
             $scope.searchButtonText = 'Query!';
             $scope.isQuerying = false;

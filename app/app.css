@@ -115,3 +115,11 @@ div.coffeeBreak
   width: inherit;
   max-width: 900px;
 }
+/* Added to speedup dialog animations and prevent focus delays */
+.ngdialog * {
+  -webkit-animation-duration: 0.3s !important;
+  -moz-animation-duration: 0.3s !important;
+  -o-animation-duration: 0.3s !important;
+  -ms-animation-duration: 0.3s !important;
+  animation-duration: 0.3s !important;
+}

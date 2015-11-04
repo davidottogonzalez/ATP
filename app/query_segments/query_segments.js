@@ -37,7 +37,7 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
       $scope.init = function() {
         $http.get('/getAttributesList/').then(function(res){
             $scope.queryAttributes = res.data;
-        })
+        });
       };
 
       $scope.searchButtonText = 'Query!';
@@ -79,7 +79,6 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
         });
 
         $http.post('/queryHive/segments',{logical_expression: $scope.topLogicalExpression}).then(function(res){
-            $scope.searchButtonText = 'Query!';
             $scope.totals.total_bhds = res.data.total_bhds;
             $scope.totals.total_seg_bhds = res.data.total_seg_bhds;
             $scope.totals.total_fwm = res.data.total_fwm;
@@ -88,6 +87,7 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
             $scope.totals.seg_fwm_percent = (parseInt($scope.totals.total_seg_fwm) / parseInt($scope.totals.total_fwm));
             $scope.isQuerying = false;
             $scope.showResults = true;
+            $scope.searchButtonText = 'Query!';
         },function(res){
             $scope.searchButtonText = 'Query!';
             $scope.isQuerying = false;
