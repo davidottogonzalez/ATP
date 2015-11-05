@@ -103,7 +103,7 @@ ul.draggable-objects:after{
 table.crosstab
 {
   margin-top: 10px;
-  max-width: 900px;
+  max-width: 1100px;
 }
 div.coffeeBreak
 {
@@ -113,7 +113,7 @@ div.coffeeBreak
 }
 .ngdialog.ngdialog-theme-plain .ngdialog-content {
   width: inherit;
-  max-width: 900px;
+  max-width: 1100px;
 }
 /* Added to speedup dialog animations and prevent focus delays */
 .ngdialog * {
