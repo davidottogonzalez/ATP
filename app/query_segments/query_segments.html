@@ -1,0 +1,40 @@
+<link rel="stylesheet" href="query_segments/query_segments.css">
+<div class="col-md-12">
+    <div class="col-md-2">
+        <div>
+            <span class="ddTitle">Attributes List</span>
+            <div ng-repeat="attribute in queryAttributes track by $index">
+                <div ng-drag="true" ng-drag-data="attribute" ng-drag-success="onDragComplete($data,$event)" ng-center-anchor="true">
+                    {{attribute.name}}
+                </div>
+            </div>
+        </div>
+        <div>
+            <span class="ddTitle">Boolean Logic List</span>
+            <div ng-repeat="boolean in booleanOperators track by $index">
+                <div ng-drag="true" ng-drag-data="boolean" ng-drag-success="onDragComplete($data,$event)" ng-center-anchor="true">
+                    {{boolean.name}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-10">
+        <div ng-show="expressionIsEmpty" class="alert alert-danger" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          No part of the Logical Expression can be empty!
+        </div>
+        <div class="ddTitle">Query Builder</div>
+        <div class="col-md-10 queryContainer">
+            <logical-expression-drop ng-model="topLogicalExpression" />
+        </div>
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-primary" ng-click="search()">{{ searchButtonText }}
+            </button>
+            <br/>
+            <br/>
+            <button type="submit" class="btn btn-primary" ng-click="clear()">Clear</button>
+        </div>
+    </div>
+</div>

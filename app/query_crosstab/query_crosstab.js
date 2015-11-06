@@ -1,96 +1,36 @@
 'use strict';
 
-angular.module('myApp.view1', ['ngRoute'])
+angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog'])
 
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/view1', {
-    templateUrl: 'view1/view1.html',
-    controller: 'View1Ctrl'
+.config(['$routeProvider', 'ngDialogProvider', function($routeProvider, ngDialogProvider) {
+  $routeProvider.when('/query_crosstab', {
+    templateUrl: 'query_crosstab/query_crosstab.html',
+    controller: 'QueryCrosstabCtrl'
+  });
+
+  ngDialogProvider.setDefaults({
+    className: 'ngdialog-theme-plain',
+    showClose: true,
+    closeByDocument: true,
+    closeByEscape: true
   });
 }])
 
-.controller('View1Ctrl', ['$scope', '$http', function($scope, $http) {
-      $scope.queryAttributes = [
-          /*{
-              name: '100K+',
-              bhds_total: '25,453,856',
-              bhds_percent: '19.14%',
-              fwm_total: '183,780',
-              fwm_percent: '20.18%',
-              joins: [
-                  {
-                      name: '25+ Age',
-                      bhds_total: '19,911,149',
-                      bhds_percent: '23.18%',
-                      fwm_total: '170,499',
-                      fwm_percent: '21.27%'
-                  },
-                  {
-                      name: '1+ home',
-                      bhds_total: '16,177,658',
-                      bhds_percent: '27.06%',
-                      fwm_total: '152,122',
-                      fwm_percent: '23.49%'
-                  }
-              ]
-          },
-          {
-              name: '25+ Age',
-              bhds_total: '85,911,672',
-              bhds_percent: '64.61%',
-              fwm_total: '801,768',
-              fwm_percent: '88.05%',
-              joins: [
-                  {
-                      name: '100K+',
-                      bhds_total: '19,911,149',
-                      bhds_percent: '78.22%',
-                      fwm_total: '170,499',
-                      fwm_percent: '92.77%'
-                  },
-                  {
-                      name: '1+ home',
-                      bhds_total: '54,452,258',
-                      bhds_percent: '91.08%',
-                      fwm_total: '616,760',
-                      fwm_percent: '95.23%'
-                  }
-              ]
-          },
-          {
-              name: '1+ home',
-              bhds_total: '59,788,123',
-              bhds_percent: '44.96%',
-              fwm_total: '647,648',
-              fwm_percent: '71.12%',
-              joins: [
-                  {
-                      name: '25+ Age',
-                      bhds_total: '54,452,258',
-                      bhds_percent: '63.38%',
-                      fwm_total: '616,760',
-                      fwm_percent: '76.92%'
-                  },
-                  {
-                      name: '100K+',
-                      bhds_total: '16,177,658',
-                      bhds_percent: '63.56%',
-                      fwm_total: '152,122',
-                      fwm_percent: '82.77%'
-                  }
-              ]
-          }*/
-      ];
+.controller('QueryCrosstabCtrl', ['$scope', '$http', 'ExcelService', 'ngDialog',
+    function($scope, $http, ExcelService, ngDialog) {
+      $scope.queryAttributes = [];
 
       $scope.init = function() {
         $http.get('/getAttributesList/').then(function(res){
             $scope.queryAttributes = res.data;
-        })
+        });
       };
 
       $scope.searchButtonText = 'Query!';
       $scope.showCrossTab = false;
       $scope.isQuerying = false;
+      $scope.returnedError = false;
+      $scope.returnedErrorMessage = '';
       $scope.bhds_total = 0;
       $scope.fwm_total = 0;
 
@@ -118,24 +58,28 @@ angular.module('myApp.view1', ['ngRoute'])
       $scope.search = function(){
         $scope.showCrossTab = false;
         $scope.isQuerying = true;
+        $scope.returnedError = false;
+        $scope.returnedErrorMessage = '';
         $scope.searchButtonText = "Querying!";
         $scope.submittedAttributes = angular.copy($scope.chosenAttributes);
 
-        $http.post('/queryHive/',{chosenAttributes: $scope.submittedAttributes}).then(function(res){
-            $scope.searchButtonText = 'Query!';
-            buildCrossTabsAttributes(res.data);
-            console.log(res.data);
-            console.log($scope.crossTabsAttributes);
-            $scope.isQuerying = false;
-            $scope.showCrossTab = true;
+        ngDialog.open({
+            template:'partials/crosstab.html',
+            scope: $scope
         });
 
-        /*setTimeout(function()
-        {
-            $scope.searchButtonText = 'Query!';
+        $http.post('/queryHive/',{chosenAttributes: $scope.submittedAttributes})
+        .then(function(res){
+            buildCrossTabsAttributes(res.data);
+            $scope.isQuerying = false;
             $scope.showCrossTab = true;
-            $scope.$apply();
-        },1000)*/
+            $scope.searchButtonText = 'Query!';
+        },function(res){
+            $scope.searchButtonText = 'Query!';
+            $scope.isQuerying = false;
+            $scope.returnedError = true;
+            $scope.returnedErrorMessage = res.data;
+        });
       };
 
       $scope.getAssociatedAttribute = function(baseAttribute, associatedIndex)
@@ -168,6 +112,7 @@ angular.module('myApp.view1', ['ngRoute'])
       }
 
       var buildCrossTabsAttributes = function(totals){
+        $scope.crossTabsAttributes = [];
         $scope.bhds_total = totals.total_bhds;
         $scope.fwm_total = totals.total_fwm;
 
@@ -212,13 +157,9 @@ angular.module('myApp.view1', ['ngRoute'])
         $scope.chosenAttributes = [];
       };
 
-      $scope.formatNumber = function(intNum) {
-        return intNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      }
-
-      $scope.formatPercentage = function(floNum) {
-        return (floNum * 100).toFixed(2) + "%"
-      }
+      $scope.exportToExcel=function(tableId){
+        ExcelService.tableToExcel(tableId, 'Crosstab');
+      };
 
       $scope.init();
 }]);

@@ -1,0 +1,85 @@
+<link rel="stylesheet" href="admin/attribute_editor/attribute_editor.css">
+<div class="col-md-12">
+    <div class="col-md-2">
+        <div>
+            <span class="ddTitle">Attributes List</span>
+            <div ng-repeat="attribute in queryAttributes track by $index">
+                <div ng-drag="false" ng-drag-data="attribute" ng-drag-success="onDragComplete($data,$event)" ng-center-anchor="true">
+                    <span class="glyphicon glyphicon-pencil" aria-hidden="true" ng-click="loadEditAttribute(attribute)"></span>
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeAttribute(attribute)"></span>
+                    {{attribute.name}}
+                </div>
+            </div>
+            <div ng-drag="false" ng-center-anchor="true" ng-click="showAddAttribute()">
+                Add +
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary" ng-click="saveJSON()">{{saveJSONButton}}</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-10" ng-show="showAdd">
+        <div class="col-md-3">
+            <div>
+                <span class="ddTitle">Fields List</span>
+                <div>
+                    <select ng-options="field.name for field in fieldsList" ng-model="toAddField" ng-change="addChosenField()">
+                        <option value="" disabled>Choose Field</option>
+                    </select>
+                </div>
+                <br/><br/>
+                <div ng-repeat="field in chosenFieldsList track by $index">
+                    <div ng-drag="true" ng-drag-data="field" ng-drag-success="onDragComplete($data,$event)" ng-center-anchor="true">
+                        {{field.name}}
+                    </div>
+                </div>
+            </div>
+            <div>
+                <span class="ddTitle">Boolean Logic List</span>
+                <div ng-repeat="boolean in booleanOperators track by $index">
+                    <div ng-drag="true" ng-drag-data="boolean" ng-drag-success="onDragComplete($data,$event)" ng-center-anchor="true">
+                        {{boolean.name}}
+                    </div>
+                </div>
+            </div>
+            <div>
+                <span class="ddTitle">Add Literal</span>
+                <input type="text" ng-model="newLiteral.name" />
+                <button type="submit" class="btn btn-primary" ng-click="saveLiteral()">New Literal</button>
+                <div ng-repeat="literal in literalLists track by $index">
+                    <div ng-drag="true" ng-drag-data="literal" ng-drag-success="onDragComplete($data,$event)" ng-center-anchor="true">
+                        {{literal.name}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ddTitle">Add Attribute</div>
+        <div class="col-md-7">
+            <div ng-show="editingNameEmpty" class="alert alert-danger" role="alert">
+              <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+              <span class="sr-only">Error:</span>
+              New Attribute name cannot be empty
+            </div>
+            <div ng-show="expressionIsEmpty" class="alert alert-danger" role="alert">
+              <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+              <span class="sr-only">Error:</span>
+              No part of the Logical Expression can be empty!
+            </div>
+            <span>Name: </span>
+            <input type="text" ng-model="editingAttribute.name" ng-change="clearNameError()"/>
+        </div>
+        <div class="col-md-7">
+            <span>Logical Expression: </span>
+        </div>
+        <div class="col-md-7 queryContainer">
+            <logical-expression-drop ng-model="editingAttribute.logical_expression" />
+        </div>
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-primary" ng-click="saveEditingAttribute()">Add Attribute
+            </button>
+            <br/>
+            <br/>
+            <button type="submit" class="btn btn-primary" ng-click="clearEditingAttribute()">Clear</button>
+        </div>
+    </div>
+</div>
