@@ -8,7 +8,7 @@
     <span class="sr-only">Error:</span>
     {{returnedErrorMessage}}
 </div>
-<div ng-show="showResults">
+<div ng-if="showResults" ng-show="showResults">
     <a class="btn btn-link" ng-click="exportToExcel('segments_table')">
         <span class="glyphicon glyphicon-share"></span> Export to Excel
     </a>
