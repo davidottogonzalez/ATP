@@ -1,0 +1,25 @@
+{
+  "attributes" : [
+    {
+      "id" : 1,
+      "name" : "100K+",
+      "operand1" : "f037",
+      "operator" : "REGEXP",
+      "operand2" : "'[G-L]'"
+    },
+    {
+      "id" : 2,
+      "name" : "1+ Home",
+      "operand1" : "f036",
+      "operator" : "REGEXP",
+      "operand2" : "'[H]'"
+    },
+    {
+      "id" : 3,
+      "name" : "Own/lease 2+ vehicles - EXP 2+",
+      "operand1" : "AT004",
+      "operator" : ">=",
+      "operand2" : "2"
+    }
+  ]
+}
