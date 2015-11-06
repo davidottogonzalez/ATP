@@ -8,7 +8,7 @@
     <span class="sr-only">Error:</span>
     {{returnedErrorMessage}}
 </div>
-<div ng-show="showCrossTab">
+<div ng-if="showCrossTab" ng-show="showCrossTab">
     <a class="btn btn-link" ng-click="exportToExcel('crosstab_table')">
         <span class="glyphicon glyphicon-share"></span> Export to Excel
     </a>
