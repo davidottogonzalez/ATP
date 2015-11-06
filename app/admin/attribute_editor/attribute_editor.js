@@ -182,13 +182,5 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
         }
       }
 
-      $scope.formatNumber = function(intNum) {
-        return intNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      }
-
-      $scope.formatPercentage = function(floNum) {
-        return (floNum * 100).toFixed(2) + "%"
-      }
-
       $scope.init();
 }]);

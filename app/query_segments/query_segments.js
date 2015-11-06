@@ -104,13 +104,5 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
         $scope.topLogicalExpression = LogicalExpressionService.createNew();
       };
 
-      $scope.formatNumber = function(intNum) {
-        return intNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      }
-
-      $scope.formatPercentage = function(floNum) {
-        return (floNum * 100).toFixed(2) + "%"
-      }
-
       $scope.init();
 }]);
