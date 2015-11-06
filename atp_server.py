@@ -5,6 +5,7 @@ app = Flask(__name__)
 config = atp_classes.Config('config.json')
 cache = atp_classes.Cache()
 
+
 def get_attributes_from_db():
     attribute_list = []
 
@@ -17,6 +18,7 @@ def get_attributes_from_db():
 
     return attribute_list
 
+
 @app.route('/test')
 def test():
     for attribute in get_attributes_from_db():
@@ -24,13 +26,16 @@ def test():
 
     return json.dumps(get_attributes_from_db(), default=atp_classes.JSONHandler.JSONHandler)
 
+
 @app.route('/app/<path:path>')
 def static_app(path):
     return send_from_directory('app', path)
 
+
 @app.route('/')
 def index():
     return redirect(url_for('static_app', path='index.html'))
+
 
 @app.route('/queryHive/', methods=['POST'])
 @cache
@@ -44,7 +49,7 @@ def query_hive():
 
     for dbattribute in get_attributes_from_db():
         for cattribute in form_chosen_attributes:
-            if(dbattribute.id == cattribute['id']):
+            if (dbattribute.id == cattribute['id']):
                 chosen_attributes.append(dbattribute)
 
     with pyhs2.connect(host=config.get_config()['development']['database']['host'],
@@ -59,27 +64,28 @@ def query_hive():
             for index, attribute in enumerate(chosen_attributes):
                 query_string += ''',
                 SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_{id},
-                SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_{id}_fwm'''\
+                SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_{id}_fwm''' \
                     .format(id=attribute.id, expression=attribute.logical_expression.convert_to_string())
 
-                for index2, attribute2 in enumerate(chosen_attributes[(index+1):]):
+                for index2, attribute2 in enumerate(chosen_attributes[(index + 1):]):
                     query_string += ''',
                     SUM(CASE WHEN ({expression} AND {expression2}) THEN 1 ELSE 0 END) total_{id1}_{id2},
-                    SUM(CASE WHEN (({expression} AND {expression2}) AND fwm_flag == '1') THEN 1 ELSE 0 END) total_{id1}_{id2}_fwm'''\
-                        .format(id1=attribute.id, id2=attribute2.id, expression=attribute.logical_expression.convert_to_string(),
+                    SUM(CASE WHEN (({expression} AND {expression2}) AND fwm_flag == '1') THEN 1 ELSE 0 END) total_{id1}_{id2}_fwm''' \
+                        .format(id1=attribute.id, id2=attribute2.id,
+                                expression=attribute.logical_expression.convert_to_string(),
                                 expression2=attribute2.logical_expression.convert_to_string())
 
             query_string += '''
                 FROM bhds_nopii'''
 
-            #Execute query
+            # Execute query
             cur.execute(query_string)
 
             print "done executing query"
 
             columns = cur.getSchema()
 
-            #Fetch table results
+            # Fetch table results
             for i in cur.fetch():
                 result_row = i
 
@@ -87,6 +93,7 @@ def query_hive():
         return_results[columns[index]['columnName']] = str(val)
 
     return json.dumps(return_results)
+
 
 @app.route('/queryHive/segments', methods=['POST'])
 @cache
@@ -110,20 +117,20 @@ def query_hive_segments():
             query_string += '''SELECT COUNT(*) total_bhds,
                 SUM(CASE WHEN fwm_flag == '1' THEN 1 ELSE 0 END) total_fwm,
                 SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_seg_bhds,
-                SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_seg_fwm'''\
-                    .format(expression=query_logical_expression.convert_to_string())
+                SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_seg_fwm''' \
+                .format(expression=query_logical_expression.convert_to_string())
 
             query_string += '''
                 FROM bhds_nopii'''
 
-            #Execute query
+            # Execute query
             cur.execute(query_string)
 
             print "done executing query"
 
             columns = cur.getSchema()
 
-            #Fetch table results
+            # Fetch table results
             for i in cur.fetch():
                 result_row = i
 
@@ -131,6 +138,7 @@ def query_hive_segments():
         return_results[columns[index]['columnName']] = str(val)
 
     return json.dumps(return_results)
+
 
 @app.route('/getAttributesList/')
 def get_attributes():
@@ -141,9 +149,11 @@ def get_attributes():
 
     return json.dumps(attribute_list)
 
+
 @app.route('/admin/getAttributesList/')
 def get_admin_attributes():
     return json.dumps(get_attributes_from_db(), default=atp_classes.JSONHandler.JSONHandler)
+
 
 @app.route('/admin/getFieldsList/')
 @cache
@@ -161,18 +171,19 @@ def get_admin_fields_list():
 
             query_string = '''SHOW COLUMNS FROM bhds_nopii'''
 
-            #Execute query
+            # Execute query
             cur.execute(query_string)
 
             print "done executing query"
 
             columns = cur.getSchema()
 
-            #Fetch table results
+            # Fetch table results
             for i in cur.fetch():
                 result_row.append({'name': i[0].strip()})
 
     return json.dumps(result_row)
+
 
 @app.route('/admin/saveJSON', methods=['POST'])
 def save_json_db():
@@ -198,9 +209,10 @@ def save_json_db():
     db['attributes'] = attributes
 
     with open('db.json', 'w') as outdb:
-        json.dump(db, outdb, indent=4,  default=atp_classes.JSONHandler.JSONHandler)
+        json.dump(db, outdb, indent=4, default=atp_classes.JSONHandler.JSONHandler)
 
     return json.dumps(db, default=atp_classes.JSONHandler.JSONHandler)
+
 
 @app.errorhandler(Exception)
 def handle_exceptions(err):
@@ -210,6 +222,7 @@ def handle_exceptions(err):
         err_message = err_message[:150] + '...'
 
     return make_response(err_message, 500)
+
 
 if __name__ == '__main__':
     app.run(debug=True, host=config.get_config()['development']['host'], threaded=True,
