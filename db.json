@@ -1,80 +1,450 @@
 {
-  "attributes" : [
-    {
-      "id" : 1,
-      "name" : "100K+",
-      "logical_expression" : {
-        "operand1" : "f037",
-        "operator" : "REGEXP",
-        "operand2" : "'[G-L]'"
-      }
-    },
-    {
-      "id" : 2,
-      "name" : "1+ Home",
-      "logical_expression" : {
-        "operand1" : "f036",
-        "operator" : "REGEXP",
-        "operand2" : "'[H]'"
-      }
-    },
-    {
-      "id" : 3,
-      "name" : "Own/lease 2+ vehicles - EXP 2+",
-      "logical_expression" : {
-        "operand1" : "AT004",
-        "operator" : ">=",
-        "operand2" : "2"
-      }
-    },
-    {
-      "id" : 4,
-      "name" : "Age 25+ HH",
-      "logical_expression" : {
-        "operand1" : {
-          "operand1" : {
-            "operand1" : {
-              "operand1" : "F061",
-              "operator" : ">=",
-              "operand2" : "25"
-            },
-            "operator" : "OR",
-            "operand2" : {
-              "operand1" : "F079",
-              "operator" : ">=",
-              "operand2" : "25"
-            }
-          },
-          "operator" : "OR",
-          "operand2" : {
-            "operand1" : "F097",
-            "operator" : ">=",
-            "operand2" : "25"
-          }
-        },
-        "operator" : "OR",
-        "operand2" : {
-          "operand1" : {
-            "operand1" : "F115",
-            "operator" : ">=",
-            "operand2" : "25"
-          },
-          "operator" : "OR",
-          "operand2" : {
-            "operand1" : {
-              "operand1" : "F133",
-              "operator" : ">=",
-              "operand2" : "25"
-            },
-            "operator" : "OR",
-            "operand2" : {
-              "operand1" : "F151",
-              "operator" : ">=",
-              "operand2" : "25"
-            }
-          }
+    "attributes": [
+        {
+            "id": 2, 
+            "logical_expression": {
+                "operand1": "f036", 
+                "operand2": "'[H]'", 
+                "operator": "REGEXP"
+            }, 
+            "name": "1+ Home"
+        }, 
+        {
+            "id": 3, 
+            "logical_expression": {
+                "operand1": "AT004", 
+                "operand2": "2", 
+                "operator": ">="
+            }, 
+            "name": "Own/lease 2+ vehicles - EXP 2+"
+        }, 
+        {
+            "id": 4, 
+            "logical_expression": {
+                "operand1": {
+                    "operand1": {
+                        "operand1": {
+                            "operand1": "F061", 
+                            "operand2": "25", 
+                            "operator": ">="
+                        }, 
+                        "operand2": {
+                            "operand1": "F079", 
+                            "operand2": "25", 
+                            "operator": ">="
+                        }, 
+                        "operator": "OR"
+                    }, 
+                    "operand2": {
+                        "operand1": "F097", 
+                        "operand2": "25", 
+                        "operator": ">="
+                    }, 
+                    "operator": "OR"
+                }, 
+                "operand2": {
+                    "operand1": {
+                        "operand1": "F115", 
+                        "operand2": "25", 
+                        "operator": ">="
+                    }, 
+                    "operand2": {
+                        "operand1": {
+                            "operand1": "F133", 
+                            "operand2": "25", 
+                            "operator": ">="
+                        }, 
+                        "operand2": {
+                            "operand1": "F151", 
+                            "operand2": "25", 
+                            "operator": ">="
+                        }, 
+                        "operator": "OR"
+                    }, 
+                    "operator": "OR"
+                }, 
+                "operator": "OR"
+            }, 
+            "name": "Age 25+ HH"
+        }, 
+        {
+            "id": 6, 
+            "logical_expression": {
+                "operand1": "f037", 
+                "operand2": "'[G-L]'", 
+                "operator": "REGEXP"
+            }, 
+            "name": "$100K+"
+        }, 
+        {
+            "id": 7, 
+            "logical_expression": {
+                "operand1": "f037", 
+                "operand2": "'[A-E]'", 
+                "operator": "REGEXP"
+            }, 
+            "name": "<$75K"
+        }, 
+        {
+            "id": 8, 
+            "logical_expression": {
+                "operand1": "f037", 
+                "operand2": "'[H-L]'", 
+                "operator": "REGEXP"
+            }, 
+            "name": "$125K+"
+        }, 
+        {
+            "id": 9, 
+            "logical_expression": {
+                "operand1": "f037", 
+                "operand2": "'[A-F]'", 
+                "operator": "REGEXP"
+            }, 
+            "name": "<$100K"
+        }, 
+        {
+            "id": 10, 
+            "logical_expression": {
+                "operand1": "f206", 
+                "operand2": "'A01|A02|A03|A04|A05|A06|B07|B08|B09|B10|C11|C12|C13|C14|D15|D16|D17|D18|E19|E20|E21|F22|F23'", 
+                "operator": "REGEXP"
+            }, 
+            "name": "Med-High Profitability"
+        }, 
+        {
+            "id": 11, 
+            "logical_expression": {
+                "operand1": "f036", 
+                "operand2": "'[R|T|U]'", 
+                "operator": "REGEXP"
+            }, 
+            "name": "Does not own a home"
+        }, 
+        {
+            "id": 14, 
+            "logical_expression": {
+                "operand1": {
+                    "operand1": {
+                        "operand1": "f061", 
+                        "operand2": "25", 
+                        "operator": ">="
+                    }, 
+                    "operand2": {
+                        "operand1": "f061", 
+                        "operand2": "49", 
+                        "operator": "<="
+                    }, 
+                    "operator": "AND"
+                }, 
+                "operand2": {
+                    "operand1": {
+                        "operand1": {
+                            "operand1": "f079", 
+                            "operand2": "25", 
+                            "operator": ">="
+                        }, 
+                        "operand2": {
+                            "operand1": "f079", 
+                            "operand2": "49", 
+                            "operator": "<="
+                        }, 
+                        "operator": "AND"
+                    }, 
+                    "operand2": {
+                        "operand1": {
+                            "operand1": {
+                                "operand1": "f097", 
+                                "operand2": "25", 
+                                "operator": ">="
+                            }, 
+                            "operand2": {
+                                "operand1": "f097", 
+                                "operand2": "49", 
+                                "operator": "<="
+                            }, 
+                            "operator": "AND"
+                        }, 
+                        "operand2": {
+                            "operand1": {
+                                "operand1": {
+                                    "operand1": "f115", 
+                                    "operand2": "25", 
+                                    "operator": ">="
+                                }, 
+                                "operand2": {
+                                    "operand1": "f115", 
+                                    "operand2": "49", 
+                                    "operator": "<="
+                                }, 
+                                "operator": "AND"
+                            }, 
+                            "operand2": {
+                                "operand1": {
+                                    "operand1": {
+                                        "operand1": "f133", 
+                                        "operand2": "25", 
+                                        "operator": ">="
+                                    }, 
+                                    "operand2": {
+                                        "operand1": "f133", 
+                                        "operand2": "49", 
+                                        "operator": "<="
+                                    }, 
+                                    "operator": "AND"
+                                }, 
+                                "operand2": {
+                                    "operand1": {
+                                        "operand1": "f151", 
+                                        "operand2": "25", 
+                                        "operator": ">="
+                                    }, 
+                                    "operand2": {
+                                        "operand1": "f151", 
+                                        "operand2": "49", 
+                                        "operator": "<="
+                                    }, 
+                                    "operator": "AND"
+                                }, 
+                                "operator": "OR"
+                            }, 
+                            "operator": "OR"
+                        }, 
+                        "operator": "OR"
+                    }, 
+                    "operator": "OR"
+                }, 
+                "operator": "OR"
+            }, 
+            "name": "Age 25-49 HH"
+        }, 
+        {
+            "id": 15, 
+            "logical_expression": {
+                "operand1": "f063", 
+                "operand2": "'13|14|53|54'", 
+                "operator": "REGEXP"
+            }, 
+            "name": "Person 1 College Graduate"
+        }, 
+        {
+            "id": 16, 
+            "logical_expression": {
+                "operand1": "f081", 
+                "operand2": "'13|14|53|54'", 
+                "operator": "REGEXP"
+            }, 
+            "name": "Person 2 College Graduate"
+        }, 
+        {
+            "id": 17, 
+            "logical_expression": {
+                "operand1": "f063", 
+                "operand2": "'11|12|15|51|52|55'", 
+                "operator": "REGEXP"
+            }, 
+            "name": "Person 1 Not College Graduate"
+        }, 
+        {
+            "id": 18, 
+            "logical_expression": {
+                "operand1": "f081", 
+                "operand2": "'11|12|15|51|52|55'", 
+                "operator": "REGEXP"
+            }, 
+            "name": "Person 2 Not College Graduate"
+        }, 
+        {
+            "id": 19, 
+            "logical_expression": {
+                "operand1": {
+                    "operand1": "vs_grandcherokee", 
+                    "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                    "operator": "REGEXP"
+                }, 
+                "operand2": {
+                    "operand1": {
+                        "operand1": "vs_explorer", 
+                        "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                        "operator": "REGEXP"
+                    }, 
+                    "operand2": {
+                        "operand1": {
+                            "operand1": "vs_highlander", 
+                            "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                            "operator": "REGEXP"
+                        }, 
+                        "operand2": {
+                            "operand1": {
+                                "operand1": "vs_pilot", 
+                                "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                                "operator": "REGEXP"
+                            }, 
+                            "operand2": {
+                                "operand1": {
+                                    "operand1": "vs_4runner", 
+                                    "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                                    "operator": "REGEXP"
+                                }, 
+                                "operand2": {
+                                    "operand1": {
+                                        "operand1": "vs_pathfinder", 
+                                        "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                                        "operator": "REGEXP"
+                                    }, 
+                                    "operand2": {
+                                        "operand1": {
+                                            "operand1": "vs_mdx", 
+                                            "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                                            "operator": "REGEXP"
+                                        }, 
+                                        "operand2": {
+                                            "operand1": {
+                                                "operand1": "vs_durango", 
+                                                "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                                                "operator": "REGEXP"
+                                            }, 
+                                            "operand2": {
+                                                "operand1": {
+                                                    "operand1": "vs_m_class", 
+                                                    "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                                                    "operator": "REGEXP"
+                                                }, 
+                                                "operand2": {
+                                                    "operand1": {
+                                                        "operand1": "vs_x5", 
+                                                        "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                                                        "operator": "REGEXP"
+                                                    }, 
+                                                    "operand2": {
+                                                        "operand1": "vs_santafe_sport", 
+                                                        "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                                                        "operator": "REGEXP"
+                                                    }, 
+                                                    "operator": "OR"
+                                                }, 
+                                                "operator": "OR"
+                                            }, 
+                                            "operator": "OR"
+                                        }, 
+                                        "operator": "OR"
+                                    }, 
+                                    "operator": "OR"
+                                }, 
+                                "operator": "OR"
+                            }, 
+                            "operator": "OR"
+                        }, 
+                        "operator": "OR"
+                    }, 
+                    "operator": "OR"
+                }, 
+                "operator": "OR"
+            }, 
+            "name": "Chrysler"
+        }, 
+        {
+            "id": 20, 
+            "logical_expression": {
+                "operand1": {
+                    "operand1": "vs_malibu", 
+                    "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                    "operator": "REGEXP"
+                }, 
+                "operand2": {
+                    "operand1": {
+                        "operand1": "vs_fusion", 
+                        "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                        "operator": "REGEXP"
+                    }, 
+                    "operand2": {
+                        "operand1": {
+                            "operand1": "vs_accord", 
+                            "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                            "operator": "REGEXP"
+                        }, 
+                        "operand2": {
+                            "operand1": {
+                                "operand1": "vs_sonata", 
+                                "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                                "operator": "REGEXP"
+                            }, 
+                            "operand2": {
+                                "operand1": {
+                                    "operand1": "vs_altima", 
+                                    "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                                    "operator": "REGEXP"
+                                }, 
+                                "operand2": {
+                                    "operand1": "vs_camry", 
+                                    "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                                    "operator": "REGEXP"
+                                }, 
+                                "operator": "OR"
+                            }, 
+                            "operator": "OR"
+                        }, 
+                        "operator": "OR"
+                    }, 
+                    "operator": "OR"
+                }, 
+                "operator": "OR"
+            }, 
+            "name": "Chevy"
+        }, 
+        {
+            "id": 21, 
+            "logical_expression": {
+                "operand1": "vs_accord", 
+                "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                "operator": "REGEXP"
+            }, 
+            "name": "Accord Intender"
+        }, 
+        {
+            "id": 22, 
+            "logical_expression": {
+                "operand1": "vs_sonata", 
+                "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                "operator": "REGEXP"
+            }, 
+            "name": "Sonsata Intender"
+        }, 
+        {
+            "id": 23, 
+            "logical_expression": {
+                "operand1": "vs_camry", 
+                "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                "operator": "REGEXP"
+            }, 
+            "name": "Camry Intender"
+        }, 
+        {
+            "id": 24, 
+            "logical_expression": {
+                "operand1": "vs_fusion", 
+                "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                "operator": "REGEXP"
+            }, 
+            "name": "Fusion Intender"
+        }, 
+        {
+            "id": 25, 
+            "logical_expression": {
+                "operand1": "vs_altima", 
+                "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                "operator": "REGEXP"
+            }, 
+            "name": "Altima Intender"
+        }, 
+        {
+            "id": 26, 
+            "logical_expression": {
+                "operand1": "vs_malibu", 
+                "operand2": "'1|2|3|4|5|6|7|8|9|10'", 
+                "operator": "REGEXP"
+            }, 
+            "name": "Malibu Intender"
         }
-      }
-    }
-  ]
+    ]
 }
