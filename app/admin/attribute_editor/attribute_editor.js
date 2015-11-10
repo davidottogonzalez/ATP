@@ -68,11 +68,11 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
         });
       };
 
-      $scope.saveJSONButton = 'Save Attributes';
       $scope.isQuerying = false;
       $scope.showAdd = false;
       $scope.expressionIsEmpty = false;
       $scope.editingNameEmpty = false;
+      $scope.saveAttributeButton = 'Save Attribute';
 
       $scope.addChosenField = function() {
         $scope.chosenFieldsList.push($scope.toAddField);
@@ -82,14 +82,6 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
         $scope.expressionIsEmpty = false;
         $scope.editingNameEmpty = false;
         $scope.editingAttribute.logical_expression.changeBasedOnHierarchy(data, evt, $scope.booleanOperators);
-      };
-
-      $scope.saveJSON = function(){
-        $scope.saveJSONButton = 'Saving...';
-
-        $http.post('/admin/saveJSON',{attributes: $scope.queryAttributes}).then(function(res){
-            $scope.saveJSONButton = 'Save Attributes';
-        });
       };
 
       $scope.saveEditingAttribute = function(){
@@ -113,17 +105,26 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
 
         if($scope.editingAttribute.id != 0)
         {
-            angular.forEach($scope.queryAttributes, function(attribute, index){
-                if(attribute.id == $scope.editingAttribute.id)
-                {
-                    $scope.queryAttributes.splice(index, 1);
-                    $scope.editingAttribute.id = 0;
-                    return;
-                }
+            $scope.saveAttributeButton = 'Updating Attribute';
+            $http.post('/admin/updateAttribute/',{updateAttribute: $scope.editingAttribute}).then(function(res){
+                angular.forEach($scope.queryAttributes, function(attribute, index){
+                    if(attribute._id == res.data._id)
+                    {
+                        $scope.queryAttributes[index] = res.data;
+                        return;
+                    }
+                });
+                $scope.saveAttributeButton = 'Save Attribute';
+            });
+        }else
+        {
+            $scope.saveAttributeButton = 'Adding Attribute';
+            $http.post('/admin/addAttribute/',{addAttribute: $scope.editingAttribute}).then(function(res){
+                $scope.queryAttributes.push(res.data);
+                $scope.saveAttributeButton = 'Save Attribute';
             });
         }
 
-        $scope.queryAttributes.push($scope.editingAttribute);
         $scope.editingAttribute = {
             id : 0,
             name : '',
@@ -163,15 +164,19 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
         ngDialog.openConfirm({
             template:'partials/dialogs/confirm.html'
         }).then(function (confirm) {
-          angular.forEach($scope.queryAttributes, function(qattribute, index){
-            if(attribute.id == qattribute.id)
-            {
-                if(attribute.id != 0 || (attribute.id == 0 && (attribute.name == qattribute.name)))
-                {
-                    $scope.queryAttributes.splice(index, 1);
-                }
-            }
-          });
+            $scope.editingAttribute = {
+                id : 0,
+                name : '',
+                logical_expression : LogicalExpressionService.createNew()
+            };
+            $http.post('/admin/removeAttribute/',{removeAttribute: attribute}).then(function(res){
+                angular.forEach($scope.queryAttributes, function(qattribute, index){
+                    if(attribute._id == qattribute._id)
+                    {
+                        $scope.queryAttributes.splice(index, 1);
+                    }
+                });
+            });
         });
       };
 

@@ -4,27 +4,23 @@ import pyhs2, atp_classes
 app = Flask(__name__)
 config = atp_classes.Config('config.json')
 cache = atp_classes.Cache()
+app_db = atp_classes.AppDB(config.get_config()['development']['database']['appData']['host'],
+                           config.get_config()['development']['database']['appData']['username'],
+                           config.get_config()['development']['database']['appData']['password'],
+                           config.get_config()['development']['database']['appData']['authDB']
+                           )
 
 
 def get_attributes_from_db():
+    app_db.set_db(config.get_config()['development']['database']['appData']['database'])
     attribute_list = []
+    attribute_list_db = app_db.get_collection('attributes')
 
-    with open('db.json') as data_file:
-        data = json.load(data_file)
-
-    for attribute in data['attributes']:
+    for attribute in attribute_list_db:
         attribute_obj = atp_classes.Attribute(attribute)
         attribute_list.append(attribute_obj)
 
     return attribute_list
-
-
-@app.route('/test')
-def test():
-    for attribute in get_attributes_from_db():
-        print attribute.logical_expression.convert_to_string()
-
-    return json.dumps(get_attributes_from_db(), default=atp_classes.JSONHandler.JSONHandler)
 
 
 @app.route('/app/<path:path>')
@@ -52,12 +48,12 @@ def query_hive():
             if (dbattribute.id == cattribute['id']):
                 chosen_attributes.append(dbattribute)
 
-    with pyhs2.connect(host=config.get_config()['development']['database']['host'],
-                       port=config.get_config()['development']['database']['port'],
-                       authMechanism=config.get_config()['development']['database']['authMech'],
-                       user=config.get_config()['development']['database']['username'],
-                       password=config.get_config()['development']['database']['password'],
-                       database=config.get_config()['development']['database']['database']) as conn:
+    with pyhs2.connect(host=config.get_config()['development']['database']["bigData"]['host'],
+                       port=config.get_config()['development']['database']["bigData"]['port'],
+                       authMechanism=config.get_config()['development']['database']["bigData"]['authMech'],
+                       user=config.get_config()['development']['database']["bigData"]['username'],
+                       password=config.get_config()['development']['database']["bigData"]['password'],
+                       database=config.get_config()['development']['database']["bigData"]['database']) as conn:
         with conn.cursor() as cur:
             print "executing query"
 
@@ -105,12 +101,12 @@ def query_hive_segments():
     result_row = []
     return_results = {}
 
-    with pyhs2.connect(host=config.get_config()['development']['database']['host'],
-                       port=config.get_config()['development']['database']['port'],
-                       authMechanism=config.get_config()['development']['database']['authMech'],
-                       user=config.get_config()['development']['database']['username'],
-                       password=config.get_config()['development']['database']['password'],
-                       database=config.get_config()['development']['database']['database']) as conn:
+    with pyhs2.connect(host=config.get_config()['development']['database']["bigData"]['host'],
+                       port=config.get_config()['development']['database']["bigData"]['port'],
+                       authMechanism=config.get_config()['development']['database']["bigData"]['authMech'],
+                       user=config.get_config()['development']['database']["bigData"]['username'],
+                       password=config.get_config()['development']['database']["bigData"]['password'],
+                       database=config.get_config()['development']['database']["bigData"]['database']) as conn:
         with conn.cursor() as cur:
             print "executing query"
 
@@ -145,9 +141,9 @@ def get_attributes():
     attribute_list = []
 
     for attribute in get_attributes_from_db():
-        attribute_list.append({"id": attribute.id, "name": attribute.name})
+        attribute_list.append({"id": attribute._id, "name": attribute.name})
 
-    return json.dumps(attribute_list)
+    return json.dumps(attribute_list,default=atp_classes.JSONHandler.JSONHandler)
 
 
 @app.route('/admin/getAttributesList/')
@@ -160,12 +156,12 @@ def get_admin_attributes():
 def get_admin_fields_list():
     result_row = []
 
-    with pyhs2.connect(host=config.get_config()['development']['database']['host'],
-                       port=config.get_config()['development']['database']['port'],
-                       authMechanism=config.get_config()['development']['database']['authMech'],
-                       user=config.get_config()['development']['database']['username'],
-                       password=config.get_config()['development']['database']['password'],
-                       database=config.get_config()['development']['database']['database']) as conn:
+    with pyhs2.connect(host=config.get_config()['development']['database']["bigData"]['host'],
+                       port=config.get_config()['development']['database']["bigData"]['port'],
+                       authMechanism=config.get_config()['development']['database']["bigData"]['authMech'],
+                       user=config.get_config()['development']['database']["bigData"]['username'],
+                       password=config.get_config()['development']['database']["bigData"]['password'],
+                       database=config.get_config()['development']['database']["bigData"]['database']) as conn:
         with conn.cursor() as cur:
             print "executing query"
 
@@ -185,33 +181,30 @@ def get_admin_fields_list():
     return json.dumps(result_row)
 
 
-@app.route('/admin/saveJSON', methods=['POST'])
-def save_json_db():
-    db = {}
-    attributes = []
-    form_attribute = json.loads(request.data)['attributes']
+@app.route('/admin/updateAttribute/', methods=['POST'])
+def update_attribute():
+    form_attribute = json.loads(request.data)['updateAttribute']
 
-    for attribute in form_attribute:
-        attributes.append(atp_classes.Attribute(attribute))
+    return json.dumps(app_db.update_collection('attributes', form_attribute),
+                      default=atp_classes.JSONHandler.JSONHandler)
 
-    largestid = 0
 
-    for index, attribute in enumerate(attributes):
-        if largestid < int(attribute.id):
-            largestid = int(attribute.id)
+@app.route('/admin/addAttribute/', methods=['POST'])
+def add_attribute():
+    form_attribute = json.loads(request.data)['addAttribute']
 
-        if int(attribute.id) == 0:
-            attributes[index].id = largestid + 1
-            largestid += 1
+    return json.dumps(app_db.add_to_collection('attributes', form_attribute),
+                      default=atp_classes.JSONHandler.JSONHandler)
 
-    largestid = None
 
-    db['attributes'] = attributes
+@app.route('/admin/removeAttribute/', methods=['POST'])
+def remove_attribute():
+    form_attribute = json.loads(request.data)['removeAttribute']
 
-    with open('db.json', 'w') as outdb:
-        json.dump(db, outdb, indent=4, default=atp_classes.JSONHandler.JSONHandler)
-
-    return json.dumps(db, default=atp_classes.JSONHandler.JSONHandler)
+    if app_db.remove_from_collection('attributes', form_attribute) > 0:
+        return json.dumps({"status": True})
+    else:
+        return json.dumps({"status": False})
 
 
 @app.errorhandler(Exception)
