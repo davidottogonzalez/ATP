@@ -24,24 +24,42 @@
         "host": "localhost",
         "port": 5000,
         "database": {
-          "username": "username",
-          "password": "password",
-          "database": "merkle",
-          "host": "aoabdlp00042.tfayd.com",
-          "port": "10001",
-          "authMech": "LDAP"
+            "bigData": {
+                "username": "username",
+                "password": "password",
+                "database": "merkle",
+                "host":"aoabdlp00042.tfayd.com",
+                "port": 10001,
+                "authMech": "LDAP"
+            },
+            "appData": {
+                "username": "username",
+                "password": "password",
+                "database": "ATP",
+                "host":"3.23.115.251",
+                "authDB": "admin"
+            }
         }
     },
     "production": {
         "host": "",
         "port": 3001,
         "database": {
-            "username": "username",
-            "password": "password",
-            "database": "merkle",
-            "host":"aoabdlp00042.tfayd.com",
-            "port": "10001",
-            "authMech": "LDAP"
+            "bigData": {
+                "username": "206438423",
+                "password": "NBCU2015bscs",
+                "database": "merkle",
+                "host":"aoabdlp00042.tfayd.com",
+                "port": 10001,
+                "authMech": "LDAP"
+            },
+            "appData": {
+                "username": "david",
+                "password": "pa55word",
+                "database": "ATP",
+                "host":"3.23.115.251",
+                "authDB": "admin"
+            }
         }
     }
 }
