@@ -22,16 +22,16 @@ class Attribute:
                 self._id = ''
                 self.name = ''
                 self.logical_expression = atp_classes.LogicalExpression({
-                    self.operand1: '',
-                    self.operator: '',
-                    self.operand2: ''
+                    "operand1": '',
+                    "operator": '',
+                    "operand2": ''
                 })
 
     def find(self, id):
         __app_db = atp_classes.AppDB()
 
         for attribute in __app_db.get_collection('attributes'):
-            if attribute['_id'] == id:
+            if str(attribute['_id']) == id:
                 return attribute
 
         return False

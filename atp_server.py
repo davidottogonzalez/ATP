@@ -77,7 +77,7 @@ def query_hive():
 
     for dbattribute in get_attributes_from_db():
         for cattribute in form_chosen_attributes:
-            if dbattribute._id == cattribute['id']:
+            if str(dbattribute._id) == cattribute['id']:
                 chosen_attributes.append(dbattribute)
 
     with pyhs2.connect(host=config.get_config()['development']['database']["bigData"]['host'],
@@ -93,13 +93,13 @@ def query_hive():
                 query_string += ''',
                 SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_{id},
                 SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_{id}_fwm''' \
-                    .format(id=attribute.id, expression=attribute.logical_expression.convert_to_string())
+                    .format(id=attribute._id, expression=attribute.logical_expression.convert_to_string())
 
                 for index2, attribute2 in enumerate(chosen_attributes[(index + 1):]):
                     query_string += ''',
                     SUM(CASE WHEN ({expression} AND {expression2}) THEN 1 ELSE 0 END) total_{id1}_{id2},
                     SUM(CASE WHEN (({expression} AND {expression2}) AND fwm_flag == '1') THEN 1 ELSE 0 END) total_{id1}_{id2}_fwm''' \
-                        .format(id1=attribute.id, id2=attribute2.id,
+                        .format(id1=attribute._id, id2=attribute2._id,
                                 expression=attribute.logical_expression.convert_to_string(),
                                 expression2=attribute2.logical_expression.convert_to_string())
 
@@ -123,7 +123,7 @@ def query_hive():
     return json.dumps(return_results)
 
 
-@app.route('/queryHive/segments/', methods=['POST'])
+@app.route('/queryHive/segments', methods=['POST'])
 @app_login.required_login
 @cache
 def query_hive_segments():
