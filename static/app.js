@@ -7,6 +7,7 @@ angular.module('myApp', [
   'myApp.query_segments',
   'myApp.attribute_editor',
   'myApp.login',
+  'myApp.logout',
   'myApp.version',
   'ngDraggable'
 ]).
