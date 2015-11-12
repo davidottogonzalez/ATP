@@ -162,7 +162,7 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
 
       $scope.removeAttribute = function(attribute) {
         ngDialog.openConfirm({
-            template:'partials/dialogs/confirm.html'
+            template:'static/partials/dialogs/confirm.html'
         }).then(function (confirm) {
             $scope.editingAttribute = {
                 id : 0,

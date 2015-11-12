@@ -50,7 +50,7 @@ def login_form():
         return make_response(open('static/index.html').read())
 
 
-@app.route('/isUserAuthenticated')
+@app.route('/isUserAuthenticated/')
 def is_user_authenticated():
     if app_login.current_user.is_authenticated:
         return json.dumps({"status": 'true'})
@@ -58,7 +58,7 @@ def is_user_authenticated():
         return json.dumps({"status": 'failed'})
 
 
-@app.route('/logout')
+@app.route('/logout/')
 def logout():
     app_login.log_user_out()
     return redirect('/')
@@ -123,7 +123,7 @@ def query_hive():
     return json.dumps(return_results)
 
 
-@app.route('/queryHive/segments', methods=['POST'])
+@app.route('/queryHive/segments/', methods=['POST'])
 @app_login.required_login
 @cache
 def query_hive_segments():

@@ -66,7 +66,7 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
         $scope.submittedAttributes = angular.copy($scope.chosenAttributes);
 
         ngDialog.open({
-            template:'partials/crosstab.html',
+            template:'static/partials/crosstab.html',
             scope: $scope
         });
 

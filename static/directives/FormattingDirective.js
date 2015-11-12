@@ -19,6 +19,6 @@ angular.module('myApp').directive('formattingData', function() {
                     scope.formatData = scope.unFormattedData;
             }
         },
-        templateUrl: 'directives/partials/formatting_directive.html'
+        templateUrl: 'static/directives/partials/formatting_directive.html'
     };
 })

@@ -74,7 +74,7 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
         $scope.searchButtonText = "Querying!";
 
         ngDialog.open({
-            template:'partials/segments_table.html',
+            template:'static/partials/segments_table.html',
             scope: $scope
         });
 
