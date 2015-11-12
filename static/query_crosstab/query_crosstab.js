@@ -2,9 +2,9 @@
 
 angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog'])
 
-.config(['$routeProvider', 'ngDialogProvider', function($routeProvider, ngDialogProvider) {
+.config(['$routeProvider', 'ngDialogProvider', '$locationProvider', function($routeProvider, ngDialogProvider, $locationProvider) {
   $routeProvider.when('/query_crosstab', {
-    templateUrl: 'query_crosstab/query_crosstab.html',
+    templateUrl: 'static/query_crosstab/query_crosstab.html',
     controller: 'QueryCrosstabCtrl'
   });
 
@@ -14,6 +14,8 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
     closeByDocument: true,
     closeByEscape: true
   });
+
+  $locationProvider.html5Mode(true);
 }])
 
 .controller('QueryCrosstabCtrl', ['$scope', '$http', 'ExcelService', 'ngDialog',

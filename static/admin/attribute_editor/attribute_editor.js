@@ -4,7 +4,7 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
 
 .config(['$routeProvider', 'ngDialogProvider', function($routeProvider, ngDialogProvider) {
   $routeProvider.when('/admin/attribute_editor', {
-    templateUrl: 'admin/attribute_editor/attribute_editor.html',
+    templateUrl: 'static/admin/attribute_editor/attribute_editor.html',
     controller: 'AttributeEditorCtrl'
   });
 
