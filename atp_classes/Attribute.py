@@ -1,4 +1,4 @@
-import atp_classes, os
+import atp_classes
 
 
 class Attribute:
@@ -28,14 +28,7 @@ class Attribute:
                 })
 
     def find(self, id):
-        __config = atp_classes.Config(os.path.join(os.path.dirname(__file__), '../config.json'))
-        __app_db = atp_classes.AppDB(__config.get_config()['development']['database']['appData']['host'],
-                                     __config.get_config()['development']['database']['appData']['username'],
-                                     __config.get_config()['development']['database']['appData']['password'],
-                                     __config.get_config()['development']['database']['appData']['authDB']
-                                     )
-
-        __app_db.set_db(__config.get_config()['development']['database']['appData']['database'])
+        __app_db = atp_classes.AppDB()
 
         for attribute in __app_db.get_collection('attributes'):
             if attribute['_id'] == id:

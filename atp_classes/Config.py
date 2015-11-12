@@ -1,8 +1,14 @@
-import json
+import json,os
+
+
 class Config:
     __config = {}
 
-    def __init__(self, config_path):
+    def __init__(self):
+        with open(os.path.join(os.path.dirname(__file__), '../config.json')) as data_file:
+            self.__config = self.stringify(json.load(data_file, 'utf-8'))
+
+    def set_config(self, config_path):
         with open(config_path) as data_file:
             self.__config = self.stringify(json.load(data_file, 'utf-8'))
 

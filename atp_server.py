@@ -2,17 +2,12 @@ from flask import Flask, send_from_directory, url_for, redirect, json, request, 
 import pyhs2, atp_classes
 
 app = Flask(__name__)
-config = atp_classes.Config('config.json')
+config = atp_classes.Config()
 cache = atp_classes.Cache()
-app_db = atp_classes.AppDB(config.get_config()['development']['database']['appData']['host'],
-                           config.get_config()['development']['database']['appData']['username'],
-                           config.get_config()['development']['database']['appData']['password'],
-                           config.get_config()['development']['database']['appData']['authDB']
-                           )
+app_db = atp_classes.AppDB()
 
 
 def get_attributes_from_db():
-    app_db.set_db(config.get_config()['development']['database']['appData']['database'])
     attribute_list = []
     attribute_list_db = app_db.get_collection('attributes')
 
