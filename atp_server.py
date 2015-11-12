@@ -2,9 +2,11 @@ from flask import Flask, send_from_directory, url_for, redirect, json, request, 
 import pyhs2, atp_classes
 
 app = Flask(__name__)
+app.secret_key = 'secret_session_key'
 config = atp_classes.Config()
 cache = atp_classes.Cache()
 app_db = atp_classes.AppDB()
+app_login = atp_classes.AppLogin(app)
 
 
 def get_attributes_from_db():
@@ -18,17 +20,46 @@ def get_attributes_from_db():
     return attribute_list
 
 
-@app.route('/app/<path:path>')
-def static_app(path):
-    return send_from_directory('app', path)
-
-
 @app.route('/')
-def index():
-    return redirect(url_for('static_app', path='index.html'))
+@app.route('/<path:path>')
+@app_login.required_login
+def index(path=None):
+    return make_response(open('static/index.html').read())
+
+
+@app.route('/handleLogin', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        user = atp_classes.User.find_user_by_username(json.loads(request.data)['username'])
+        if user and atp_classes.User.validate_login(user.password, json.loads(request.data)['password']):
+            user_obj = atp_classes.User(str(user._id), user.username)
+            app_login.log_user_in(user_obj)
+            return json.dumps({"status": 'success'})
+        return json.dumps({"status": 'failed'})
+    return redirect(url_for('login_form', next=request.args.get("next")))
+
+
+@app.route('/login')
+def login_form():
+    return make_response(open('static/index.html').read())
+
+
+@app.route('/isUserAuthenticated')
+def is_user_authenticated():
+    if app_login.current_user.is_authenticated:
+        return json.dumps({"status": 'true'})
+    else:
+        return json.dumps({"status": 'failed'})
+
+
+@app.route('/logout')
+def logout():
+    app_login.log_user_out()
+    return redirect('/')
 
 
 @app.route('/queryHive/', methods=['POST'])
+@app_login.required_login
 @cache
 def query_hive():
     form_chosen_attributes = json.loads(request.data)['chosenAttributes']
@@ -87,6 +118,7 @@ def query_hive():
 
 
 @app.route('/queryHive/segments', methods=['POST'])
+@app_login.required_login
 @cache
 def query_hive_segments():
     form_logical_expression = json.loads(request.data)['logical_expression']
@@ -132,6 +164,7 @@ def query_hive_segments():
 
 
 @app.route('/getAttributesList/')
+@app_login.required_login
 def get_attributes():
     attribute_list = []
 
@@ -142,11 +175,13 @@ def get_attributes():
 
 
 @app.route('/admin/getAttributesList/')
+@app_login.required_login
 def get_admin_attributes():
     return json.dumps(get_attributes_from_db(), default=atp_classes.JSONHandler.JSONHandler)
 
 
 @app.route('/admin/getFieldsList/')
+@app_login.required_login
 @cache
 def get_admin_fields_list():
     result_row = []
@@ -177,6 +212,7 @@ def get_admin_fields_list():
 
 
 @app.route('/admin/updateAttribute/', methods=['POST'])
+@app_login.required_login
 def update_attribute():
     form_attribute = json.loads(request.data)['updateAttribute']
 
@@ -185,6 +221,7 @@ def update_attribute():
 
 
 @app.route('/admin/addAttribute/', methods=['POST'])
+@app_login.required_login
 def add_attribute():
     form_attribute = json.loads(request.data)['addAttribute']
 
@@ -193,6 +230,7 @@ def add_attribute():
 
 
 @app.route('/admin/removeAttribute/', methods=['POST'])
+@app_login.required_login
 def remove_attribute():
     form_attribute = json.loads(request.data)['removeAttribute']
 
