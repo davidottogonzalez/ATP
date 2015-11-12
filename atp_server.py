@@ -77,7 +77,7 @@ def query_hive():
 
     for dbattribute in get_attributes_from_db():
         for cattribute in form_chosen_attributes:
-            if (dbattribute.id == cattribute['id']):
+            if dbattribute._id == cattribute['id']:
                 chosen_attributes.append(dbattribute)
 
     with pyhs2.connect(host=config.get_config()['development']['database']["bigData"]['host'],
