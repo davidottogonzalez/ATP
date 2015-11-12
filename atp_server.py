@@ -42,9 +42,12 @@ def login():
     return redirect(url_for('login_form', next=request.args.get("next")))
 
 
-@app.route('/login')
+@app.route('/login/')
 def login_form():
-    return make_response(open('static/index.html').read())
+    if app_login.current_user.is_authenticated:
+        return redirect(url_for('index'))
+    else:
+        return make_response(open('static/index.html').read())
 
 
 @app.route('/isUserAuthenticated')

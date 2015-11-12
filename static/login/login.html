@@ -1,6 +1,9 @@
 <div class="col-md-12">
-    {{username}}
-    {{password}}
+    <div ng-show="showLoginFailed" class="alert alert-danger" role="alert">
+      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+      <span class="sr-only">Error:</span>
+      Log in failed!
+    </div>
     <form name="loginForm" class="form-signin" ng-submit="loginForm.$valid && doLogin()">
         <h2 class="form-signin-heading">Please sign in</h2>
         <label class="sr-only">Username</label>

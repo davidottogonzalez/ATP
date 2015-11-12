@@ -13,12 +13,14 @@ angular.module('myApp.login', ['ngRoute'])
     function($scope, $http, $location, $window) {
       $scope.username = '';
       $scope.password = '';
+      $scope.showLoginFailed = false;
 
       $scope.$on('$locationChangeStart', function(changeEvent){
         changeEvent.preventDefault();
       });
 
       $scope.doLogin = function(){
+        $scope.showLoginFailed = false;
 
         $http.post('/handleLogin', {username: $scope.username, password: $scope.password})
         .then(function(res){
@@ -26,7 +28,7 @@ angular.module('myApp.login', ['ngRoute'])
                $window.location.href = $location.search().next;
             }else
             {
-                alert('bad!');
+                $scope.showLoginFailed = true;
             }
         });
 
