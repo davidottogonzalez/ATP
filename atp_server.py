@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory, url_for, redirect, json, request, make_response
+from flask import Flask, url_for, redirect, json, request, make_response
 import pyhs2, atp_classes
 
 app = Flask(__name__)
