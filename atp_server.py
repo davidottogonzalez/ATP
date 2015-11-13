@@ -2,8 +2,8 @@ from flask import Flask, url_for, redirect, json, request, make_response
 import pyhs2, atp_classes
 
 app = Flask(__name__)
-app.secret_key = 'secret_session_key'
 config = atp_classes.Config()
+app.secret_key = config.get_config()['development']['session_secret']
 cache = atp_classes.Cache()
 app_db = atp_classes.AppDB()
 app_login = atp_classes.AppLogin(app)
