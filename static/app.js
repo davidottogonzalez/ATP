@@ -7,6 +7,7 @@ angular.module('myApp', [
   'myApp.query_crosstab',
   'myApp.query_segments',
   'myApp.attribute_editor',
+  'myApp.user_editor',
   'myApp.login',
   'myApp.logout',
   'myApp.version',

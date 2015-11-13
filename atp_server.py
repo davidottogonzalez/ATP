@@ -254,6 +254,53 @@ def remove_attribute():
         return json.dumps({"status": False})
 
 
+@app.route('/admin/getUsers/')
+@app_login.required_login
+@app_login.required_admin
+def get_users():
+    users_list = []
+
+    for user in app_db.get_collection('users'):
+        user["password"] = ''
+        users_list.append(user)
+
+    return json.dumps(users_list, default=atp_classes.JSONHandler.JSONHandler)
+
+
+@app.route('/admin/updateUser/', methods=['POST'])
+@app_login.required_login
+@app_login.required_admin
+def update_user():
+    form_user = json.loads(request.data)['updateUser']
+    form_user['password'] = atp_classes.User.generate_hash(form_user['password'])
+
+    return json.dumps(app_db.update_collection('users', form_user),
+                      default=atp_classes.JSONHandler.JSONHandler)
+
+
+@app.route('/admin/addUser/', methods=['POST'])
+@app_login.required_login
+@app_login.required_admin
+def add_user():
+    form_user = json.loads(request.data)['addUser']
+    form_user['password'] = atp_classes.User.generate_hash(form_user['password'])
+
+    return json.dumps(app_db.add_to_collection('users', form_user),
+                      default=atp_classes.JSONHandler.JSONHandler)
+
+
+@app.route('/admin/removeUser/', methods=['POST'])
+@app_login.required_login
+@app_login.required_admin
+def remove_user():
+    form_user = json.loads(request.data)['removeUser']
+
+    if app_db.remove_from_collection('users', form_user) > 0:
+        return json.dumps({"status": True})
+    else:
+        return json.dumps({"status": False})
+
+
 @app.errorhandler(Exception)
 def handle_exceptions(err):
     err_message = str(err)
