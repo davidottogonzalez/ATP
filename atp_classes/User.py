@@ -1,6 +1,7 @@
 from werkzeug.security import check_password_hash
 import atp_classes
 
+ADMIN_USERS_ID = ['5644b9622582d972352da864']
 
 class User:
 
@@ -20,6 +21,11 @@ class User:
 
     def get_id(self):
         return self._id
+
+    def is_admin(self):
+        if str(self._id) in ADMIN_USERS_ID:
+            return True
+        return False
 
     @classmethod
     def find_user_by_id(cls, id):

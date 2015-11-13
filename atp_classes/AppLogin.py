@@ -1,6 +1,7 @@
 from flask.ext.login import LoginManager, login_user, logout_user, login_required, current_user
 import atp_classes
-
+from functools import wraps
+from flask import make_response
 
 class AppLogin:
 
@@ -27,3 +28,15 @@ class AppLogin:
     def log_user_out(self):
         logout_user()
         return True
+
+    def required_admin(self, f):
+        @wraps(f)
+        def decorator(*args, **kwargs):
+            if self.current_user.is_admin():
+                response = f(*args, **kwargs)
+            else:
+                response = make_response("Invalid privileges")
+
+            return response
+
+        return decorator
