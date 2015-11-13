@@ -1,4 +1,4 @@
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 import atp_classes
 
 ADMIN_USERS_ID = ['5644b9622582d972352da864']
@@ -50,3 +50,7 @@ class User:
     @staticmethod
     def validate_login(password_hash, password):
         return check_password_hash(password_hash, password)
+
+    @staticmethod
+    def generate_hash(str):
+        return generate_password_hash(str)
