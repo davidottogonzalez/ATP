@@ -53,9 +53,17 @@ def login_form():
 @app.route('/isUserAuthenticated/')
 def is_user_authenticated():
     if app_login.current_user.is_authenticated:
-        return json.dumps({"status": 'true'})
+        return json.dumps({"status": True})
     else:
-        return json.dumps({"status": 'failed'})
+        return json.dumps({"status": False})
+
+
+@app.route('/isUserAdmin/')
+def is_user_admin():
+    if app_login.current_user.is_authenticated and app_login.current_user.is_admin():
+        return json.dumps({"status": True})
+    else:
+        return json.dumps({"status": False})
 
 
 @app.route('/logout/')
