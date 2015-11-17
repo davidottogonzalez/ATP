@@ -59,12 +59,18 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
       }
 
       $scope.init = function() {
-        $http.get('/admin/getAttributesList/').then(function(res){
-            $scope.queryAttributes = res.data;
-        });
+        $scope.reloadQueryAttributes();
 
         $http.get('/admin/getFieldsList/').then(function(res){
             $scope.fieldsList = res.data;
+        });
+      };
+
+      $scope.reloadQueryAttributes = function() {
+        $scope.queryAttributes = [];
+
+        $http.get('/admin/getAttributesList/').then(function(res){
+            $scope.queryAttributes = res.data;
         });
       };
 
@@ -107,20 +113,14 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
         {
             $scope.saveAttributeButton = 'Updating Attribute';
             $http.post('/admin/updateAttribute/',{updateAttribute: $scope.editingAttribute}).then(function(res){
-                angular.forEach($scope.queryAttributes, function(attribute, index){
-                    if(attribute._id == res.data._id)
-                    {
-                        $scope.queryAttributes[index] = res.data;
-                        return;
-                    }
-                });
+                $scope.reloadQueryAttributes();
                 $scope.saveAttributeButton = 'Save Attribute';
             });
         }else
         {
             $scope.saveAttributeButton = 'Adding Attribute';
             $http.post('/admin/addAttribute/',{addAttribute: $scope.editingAttribute}).then(function(res){
-                $scope.queryAttributes.push(res.data);
+                $scope.reloadQueryAttributes();
                 $scope.saveAttributeButton = 'Save Attribute';
             });
         }
@@ -170,12 +170,7 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
                 logical_expression : LogicalExpressionService.createNew()
             };
             $http.post('/admin/removeAttribute/',{removeAttribute: attribute}).then(function(res){
-                angular.forEach($scope.queryAttributes, function(qattribute, index){
-                    if(attribute._id == qattribute._id)
-                    {
-                        $scope.queryAttributes.splice(index, 1);
-                    }
-                });
+                $scope.reloadQueryAttributes();
             });
         });
       };

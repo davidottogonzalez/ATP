@@ -28,10 +28,15 @@ angular.module('myApp.user_editor', ['ngRoute', 'ngDialog'])
     $scope.formButton = ''
 
     $scope.init = function() {
-        $http.get('/admin/getUsers')
-        .then(function(res){
-            $scope.users = res.data;
-        });
+        $scope.reloadUsers();
+    };
+
+    $scope.reloadUsers = function() {
+      $scope.users = [];
+
+      $http.get('/admin/getUsers').then(function(res){
+          $scope.users = res.data;
+      });
     };
 
     $scope.showNewUserForm = function() {
@@ -61,20 +66,14 @@ angular.module('myApp.user_editor', ['ngRoute', 'ngDialog'])
         {
             $scope.formButton = 'Updating';
             $http.post('/admin/updateUser/',{updateUser: $scope.editingUser}).then(function(res){
-                angular.forEach($scope.users, function(user, index){
-                    if(user._id == res.data._id)
-                    {
-                        $scope.users[index] = res.data;
-                        return;
-                    }
-                });
+                $scope.reloadUsers();
                 $scope.formButton = 'Updated!';
             });
         }else
         {
             $scope.formButton = 'Adding User';
             $http.post('/admin/addUser/',{addUser: $scope.editingUser}).then(function(res){
-                $scope.users.push(res.data);
+                $scope.reloadUsers();
                 $scope.formButton = 'Add User';
             });
         }
@@ -90,12 +89,7 @@ angular.module('myApp.user_editor', ['ngRoute', 'ngDialog'])
                 password: ''
             };
             $http.post('/admin/removeUser/',{removeUser: user}).then(function(res){
-                angular.forEach($scope.users, function(luser, index){
-                    if(user._id == luser._id)
-                    {
-                        $scope.users.splice(index, 1);
-                    }
-                });
+                $scope.reloadUsers();
             });
         });
       };
