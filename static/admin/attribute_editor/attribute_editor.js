@@ -79,6 +79,7 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
       $scope.expressionIsEmpty = false;
       $scope.editingNameEmpty = false;
       $scope.saveAttributeButton = 'Save Attribute';
+      $scope.formTitle = 'New Attribute';
 
       $scope.addChosenField = function() {
         $scope.chosenFieldsList.push($scope.toAddField);
@@ -115,6 +116,7 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
             $http.post('/admin/updateAttribute/',{updateAttribute: $scope.editingAttribute}).then(function(res){
                 $scope.reloadQueryAttributes();
                 $scope.saveAttributeButton = 'Save Attribute';
+                $scope.formTitle = 'New Attribute';
             });
         }else
         {
@@ -150,6 +152,8 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
             };
         }
 
+        $scope.saveAttributeButton = 'Add Attribute';
+        $scope.formTitle = 'New Attribute';
         $scope.showAdd = true;
       };
 
@@ -158,6 +162,8 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
         attributeCopy.logical_expression = LogicalExpressionService.createNew(attributeCopy.logical_expression);
         $scope.editingAttribute = attributeCopy;
         $scope.showAddAttribute(false);
+        $scope.saveAttributeButton = 'Update Attribute';
+        $scope.formTitle = 'Edit Attribute';
       };
 
       $scope.removeAttribute = function(attribute) {
