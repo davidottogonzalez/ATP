@@ -2,9 +2,9 @@
 
 angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog'])
 
-.config(['$routeProvider', 'ngDialogProvider', function($routeProvider, ngDialogProvider) {
+.config(['$routeProvider', 'ngDialogProvider', '$locationProvider', function($routeProvider, ngDialogProvider, $locationProvider) {
   $routeProvider.when('/query_crosstab', {
-    templateUrl: 'query_crosstab/query_crosstab.html',
+    templateUrl: 'static/query_crosstab/query_crosstab.html',
     controller: 'QueryCrosstabCtrl'
   });
 
@@ -14,6 +14,8 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
     closeByDocument: true,
     closeByEscape: true
   });
+
+  $locationProvider.html5Mode(true);
 }])
 
 .controller('QueryCrosstabCtrl', ['$scope', '$http', 'ExcelService', 'ngDialog',
@@ -64,7 +66,7 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
         $scope.submittedAttributes = angular.copy($scope.chosenAttributes);
 
         ngDialog.open({
-            template:'partials/crosstab.html',
+            template:'static/partials/crosstab.html',
             scope: $scope
         });
 
@@ -131,18 +133,16 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
                 {
                     var joinObj = angular.copy(obj2);
 
-                    if(parseInt(attrObj.id) < parseInt(obj2.id))
+                    if(totals.hasOwnProperty('total_' + attrObj.id + '_' + obj2.id))
                     {
-                        var id1 = attrObj.id;
-                        var id2 = obj2.id;
+                        joinObj.bhds_total = totals['total_' + attrObj.id + '_' + obj2.id];
+                        joinObj.fwm_total = totals['total_' + attrObj.id + '_' + obj2.id + '_fwm'];
                     }else{
-                        var id1 = obj2.id;
-                        var id2 = attrObj.id;
+                        joinObj.bhds_total = totals['total_' + obj2.id + '_' + attrObj.id];
+                        joinObj.fwm_total = totals['total_' + obj2.id + '_' + attrObj.id + '_fwm'];
                     }
 
-                    joinObj.bhds_total = totals['total_' + id1 + '_' + id2];
                     joinObj.bhds_percent = parseInt(joinObj.bhds_total) / parseInt(totals['total_' + obj2.id]);
-                    joinObj.fwm_total = totals['total_' + id1 + '_' + id2 + '_fwm'];
                     joinObj.fwm_percent = parseInt(joinObj.fwm_total) / parseInt(totals['total_' + obj2.id + '_fwm']);
 
                     attrObj.joins.push(joinObj);

@@ -1,0 +1,16 @@
+<table id="user_table" class="table table-bordered">
+    <tr>
+        <th>
+            Username
+            <span class="glyphicon glyphicon-plus" aria-hidden="true" ng-click="showNewUserForm()"></span>
+        </th>
+        <th>Actions</th>
+    </tr>
+    <tr ng-repeat="user in users track by $index">
+        <td>{{user.username}}</td>
+        <td>
+            <span class="glyphicon glyphicon-pencil" aria-hidden="true" ng-click="loadUser(user)"></span>
+            <span class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeUser(user)"></span>
+        </td>
+    </tr>
+</table>

@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="admin/attribute_editor/attribute_editor.css">
+<link rel="stylesheet" href="static/admin/attribute_editor/attribute_editor.css">
 <div class="col-md-12">
     <div class="col-md-2">
         <div>
@@ -12,9 +12,6 @@
             </div>
             <div ng-drag="false" ng-center-anchor="true" ng-click="showAddAttribute()">
                 Add +
-            </div>
-            <div>
-                <button type="submit" class="btn btn-primary" ng-click="saveJSON()">{{saveJSONButton}}</button>
             </div>
         </div>
     </div>
@@ -53,7 +50,7 @@
                 </div>
             </div>
         </div>
-        <div class="ddTitle">Add Attribute</div>
+        <div class="ddTitle">{{formTitle}}</div>
         <div class="col-md-7">
             <div ng-show="editingNameEmpty" class="alert alert-danger" role="alert">
               <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -75,7 +72,7 @@
             <logical-expression-drop ng-model="editingAttribute.logical_expression" />
         </div>
         <div class="col-md-1">
-            <button type="submit" class="btn btn-primary" ng-click="saveEditingAttribute()">Add Attribute
+            <button type="submit" class="btn btn-primary" ng-click="saveEditingAttribute()">{{saveAttributeButton}}
             </button>
             <br/>
             <br/>

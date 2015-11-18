@@ -4,7 +4,7 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
 
 .config(['$routeProvider', 'ngDialogProvider', function($routeProvider, ngDialogProvider) {
   $routeProvider.when('/query_segments', {
-    templateUrl: 'query_segments/query_segments.html',
+    templateUrl: 'static/query_segments/query_segments.html',
     controller: 'QuerySegmentsCtrl'
   });
 
@@ -74,7 +74,7 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
         $scope.searchButtonText = "Querying!";
 
         ngDialog.open({
-            template:'partials/segments_table.html',
+            template:'static/partials/segments_table.html',
             scope: $scope
         });
 

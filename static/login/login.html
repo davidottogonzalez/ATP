@@ -1,0 +1,15 @@
+<div class="col-md-12">
+    <div ng-show="showLoginFailed" class="alert alert-danger" role="alert">
+      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+      <span class="sr-only">Error:</span>
+      Log in failed!
+    </div>
+    <form name="loginForm" class="form-signin" ng-submit="loginForm.$valid && doLogin()">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <label class="sr-only">Username</label>
+        <input ng-model="username" class="form-control" placeholder="Username" required="" autofocus="">
+        <label class="sr-only">Password</label>
+        <input ng-model="password" type="password" class="form-control" placeholder="Password" required="">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    </form>
+</div>

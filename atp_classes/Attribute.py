@@ -1,37 +1,37 @@
-import atp_classes, json
+import atp_classes
+
 
 class Attribute:
-    id = None
+    _id = None
     name = ''
     logical_expression = None
 
     def __init__(self, loader):
         if isinstance(loader, dict):
-            self.id = loader['id']
+            self._id = loader['_id']
             self.name = loader['name']
             self.logical_expression = atp_classes.LogicalExpression(loader['logical_expression'])
         else:
             lookup_attribute = self.find(loader)
 
             if lookup_attribute:
-                self.id = lookup_attribute['id']
+                self._id = lookup_attribute['_id']
                 self.name = lookup_attribute['name']
                 self.logical_expression = atp_classes.LogicalExpression(lookup_attribute['logical_expression'])
             else:
-                self.id = ''
+                self._id = ''
                 self.name = ''
                 self.logical_expression = atp_classes.LogicalExpression({
-                    self.operand1:'',
-                    self.operator:'',
-                    self.operand2:''
+                    "operand1": '',
+                    "operator": '',
+                    "operand2": ''
                 })
 
     def find(self, id):
-        with open('db.json') as data_file:
-            data = json.load(data_file)
+        __app_db = atp_classes.AppDB()
 
-        for attribute in data['attributes']:
-            if attribute['id'] == id:
+        for attribute in __app_db.get_collection('attributes'):
+            if str(attribute['_id']) == id:
                 return attribute
 
         return False
