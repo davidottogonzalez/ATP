@@ -1,0 +1,4 @@
+{"_id":{"$oid":"5644b9622582d972352da864"},"username":"admin","password":"pbkdf2:sha1:1000$rZYnRyAy$22b583172b8e02502dc4e67786e4c9b6398225fe"}
+{"_id":{"$oid":"56460ce7c3b5a04556176861"},"username":"david","password":"pbkdf2:sha1:1000$pydt4Pz3$0671871cb6b3396ec8743836b8b6ffb1e850190f"}
+{"_id":{"$oid":"56460cf7c3b5a04556176862"},"username":"greg","password":"pbkdf2:sha1:1000$v9HZyMnG$dd5bbf5f7d49adcfb38aaabc4f163b586309b626"}
+{"_id":{"$oid":"56460cfbc3b5a04556176863"},"username":"gloria","password":"pbkdf2:sha1:1000$lNoHpdCz$1e69d54a91ac6b544491c61479a7810a2c2cfb89"}
