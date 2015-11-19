@@ -42,7 +42,9 @@ class AppDB:
 
     def update_collection(self, collection, obj):
         update_id = obj["_id"]
-        del obj["_id"]
+
+        if '_id' in obj:
+            del obj["_id"]
 
         self.db[collection].update_one(
             {"_id": ObjectId(update_id)},
@@ -54,7 +56,9 @@ class AppDB:
         return self.db[collection].find_one({"_id": ObjectId(update_id)})
 
     def add_to_collection(self, collection, obj):
-        del obj['id']
+        if 'id' in obj:
+            del obj['id']
+
         new_id = self.db[collection].insert_one(obj).inserted_id
 
         return self.db[collection].find_one({"_id": new_id})
