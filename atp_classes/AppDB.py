@@ -55,6 +55,19 @@ class AppDB:
 
         return self.db[collection].find_one({"_id": ObjectId(update_id)})
 
+    def update_collection_by_query(self, collection, obj, query):
+        if '_id' in obj:
+            del obj["_id"]
+
+        results = self.db[collection].update_many(
+            query,
+            {
+                "$set": obj
+            }
+        )
+
+        return results.modified_count
+
     def add_to_collection(self, collection, obj):
         if 'id' in obj:
             del obj['id']
