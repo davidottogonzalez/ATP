@@ -17,7 +17,7 @@ def get_field_list_from_file():
             line = line.replace('\n', '')
 
             if '"' in line:
-                line_split = re.split(',"|', line)
+                line_split = re.split(',"|"', line)
             else:
                 line_split = line.split(',')
 
