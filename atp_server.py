@@ -198,7 +198,9 @@ def get_admin_attributes():
 @app_login.required_login
 @cache
 def get_admin_fields_list():
-    return json.dumps(app_db.get_collection('fields', [('data_source', atp_classes.AppDB.ASCENDING)]), default=atp_classes.JSONHandler.JSONHandler)
+    return json.dumps(app_db.get_collection('fields', [('data_source', atp_classes.AppDB.ASCENDING),
+                                                       ('name', atp_classes.AppDB.ASCENDING)]),
+                      default=atp_classes.JSONHandler.JSONHandler)
 
 
 @app.route('/admin/updateAttribute/', methods=['POST'])
