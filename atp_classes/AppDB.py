@@ -1,4 +1,4 @@
-from pymongo import MongoClient
+from pymongo import MongoClient, ASCENDING as pymASCEND, DESCENDING as pymDESCENDING
 from bson.objectid import ObjectId
 import atp_classes
 
@@ -6,6 +6,8 @@ import atp_classes
 class AppDB:
     client = None
     db = None
+    ASCENDING = pymASCEND
+    DESCENDING = pymDESCENDING
 
     def __init__(self):
         config = atp_classes.Config()
@@ -23,10 +25,10 @@ class AppDB:
     def set_db(self, db):
         self.db = self.client[db]
 
-    def get_collection(self, collection):
+    def get_collection(self, collection, sort=None):
         results = []
 
-        for doc in self.db[collection].find():
+        for doc in self.db[collection].find(sort=sort):
             results.append(doc)
 
         return results
