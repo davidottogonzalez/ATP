@@ -1,0 +1,19 @@
+<div align="center">
+    <img src="static/images/loading.gif" ng-show="isLoading"/>
+    <table id="field_dialog_table" class="table table-bordered" ng-show="!isLoading">
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Data Source</th>
+            <th>Actions</th>
+        </tr>
+        <tr ng-repeat="field in tableFieldsList track by $index">
+            <td>{{field.name}}</td>
+            <td>{{field.description}}</td>
+            <td>{{field.data_source}}</td>
+            <td>
+                <span class="glyphicon glyphicon-plus" aria-hidden="true" ng-click="addField(field)"></span>
+            </td>
+        </tr>
+    </table>
+</div>

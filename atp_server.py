@@ -198,31 +198,9 @@ def get_admin_attributes():
 @app_login.required_login
 @cache
 def get_admin_fields_list():
-    result_row = []
-
-    with pyhs2.connect(host=config.get_config()['development']['database']["bigData"]['host'],
-                       port=config.get_config()['development']['database']["bigData"]['port'],
-                       authMechanism=config.get_config()['development']['database']["bigData"]['authMech'],
-                       user=config.get_config()['development']['database']["bigData"]['username'],
-                       password=config.get_config()['development']['database']["bigData"]['password'],
-                       database=config.get_config()['development']['database']["bigData"]['database']) as conn:
-        with conn.cursor() as cur:
-            print "executing query"
-
-            query_string = '''SHOW COLUMNS FROM bhds_nopii'''
-
-            # Execute query
-            cur.execute(query_string)
-
-            print "done executing query"
-
-            columns = cur.getSchema()
-
-            # Fetch table results
-            for i in cur.fetch():
-                result_row.append({'name': i[0].strip()})
-
-    return json.dumps(result_row)
+    return json.dumps(app_db.get_collection('fields', [('data_source', atp_classes.AppDB.ASCENDING),
+                                                       ('name', atp_classes.AppDB.ASCENDING)]),
+                      default=atp_classes.JSONHandler.JSONHandler)
 
 
 @app.route('/admin/updateAttribute/', methods=['POST'])

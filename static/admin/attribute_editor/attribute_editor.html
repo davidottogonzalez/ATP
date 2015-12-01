@@ -19,14 +19,9 @@
         <div class="col-md-3">
             <div>
                 <span class="ddTitle">Fields List</span>
-                <div>
-                    <select ng-options="field.name for field in fieldsList" ng-model="toAddField" ng-change="addChosenField()">
-                        <option value="" disabled>Choose Field</option>
-                    </select>
-                </div>
-                <br/><br/>
+                <span class="glyphicon glyphicon-plus" aria-hidden="true" ng-click="showAddFieldForm()" title="Add field"></span>
                 <div ng-repeat="field in chosenFieldsList track by $index">
-                    <div ng-drag="true" ng-drag-data="field" ng-drag-success="onDragComplete($data,$event)" ng-center-anchor="true">
+                    <div ng-drag="true" ng-drag-data="field" ng-drag-success="onDragComplete($data,$event)" ng-center-anchor="true" title="{{field.description}}">
                         {{field.name}}
                     </div>
                 </div>

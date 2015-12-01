@@ -1,4 +1,4 @@
-from pymongo import MongoClient
+from pymongo import MongoClient, ASCENDING as pymASCEND, DESCENDING as pymDESCENDING
 from bson.objectid import ObjectId
 import atp_classes
 
@@ -6,6 +6,8 @@ import atp_classes
 class AppDB:
     client = None
     db = None
+    ASCENDING = pymASCEND
+    DESCENDING = pymDESCENDING
 
     def __init__(self):
         config = atp_classes.Config()
@@ -23,10 +25,10 @@ class AppDB:
     def set_db(self, db):
         self.db = self.client[db]
 
-    def get_collection(self, collection):
+    def get_collection(self, collection, sort=None):
         results = []
 
-        for doc in self.db[collection].find():
+        for doc in self.db[collection].find(sort=sort):
             results.append(doc)
 
         return results
@@ -42,7 +44,9 @@ class AppDB:
 
     def update_collection(self, collection, obj):
         update_id = obj["_id"]
-        del obj["_id"]
+
+        if '_id' in obj:
+            del obj["_id"]
 
         self.db[collection].update_one(
             {"_id": ObjectId(update_id)},
@@ -53,8 +57,23 @@ class AppDB:
 
         return self.db[collection].find_one({"_id": ObjectId(update_id)})
 
+    def update_collection_by_query(self, collection, obj, query):
+        if '_id' in obj:
+            del obj["_id"]
+
+        results = self.db[collection].update_many(
+            query,
+            {
+                "$set": obj
+            }
+        )
+
+        return results.modified_count
+
     def add_to_collection(self, collection, obj):
-        del obj['id']
+        if 'id' in obj:
+            del obj['id']
+
         new_id = self.db[collection].insert_one(obj).inserted_id
 
         return self.db[collection].find_one({"_id": new_id})

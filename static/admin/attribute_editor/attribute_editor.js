@@ -19,7 +19,6 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
 .controller('AttributeEditorCtrl', ['$scope', '$http', 'LogicalExpressionService', '$sce', '$compile', 'ngDialog',
  function($scope, $http, LogicalExpressionService, $sce, $compile, ngDialog) {
       $scope.queryAttributes = [];
-      $scope.fieldsList = [];
       $scope.chosenFieldsList = [];
       $scope.literalLists = [];
       $scope.toAddField = {name : 'id'};
@@ -60,10 +59,6 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
 
       $scope.init = function() {
         $scope.reloadQueryAttributes();
-
-        $http.get('/admin/getFieldsList/').then(function(res){
-            $scope.fieldsList = res.data;
-        });
       };
 
       $scope.reloadQueryAttributes = function() {
@@ -80,10 +75,6 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
       $scope.editingNameEmpty = false;
       $scope.saveAttributeButton = 'Save Attribute';
       $scope.formTitle = 'New Attribute';
-
-      $scope.addChosenField = function() {
-        $scope.chosenFieldsList.push($scope.toAddField);
-      };
 
       $scope.onDragComplete=function(data,evt){
         $scope.expressionIsEmpty = false;
@@ -186,7 +177,15 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
         $scope.newLiteral = {
             name : ''
         }
-      }
+      };
+
+      $scope.showAddFieldForm = function() {
+        ngDialog.open({
+            template:'static/partials/dialogs/field_form.html',
+            controller: 'FieldDialogCtrl',
+            scope: $scope
+        })
+      };
 
       $scope.init();
 }]);
