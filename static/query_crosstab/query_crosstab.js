@@ -21,10 +21,12 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
 .controller('QueryCrosstabCtrl', ['$scope', '$http', 'ExcelService', 'ngDialog',
     function($scope, $http, ExcelService, ngDialog) {
       $scope.queryAttributes = [];
+      $scope.initiated = false;
 
       $scope.init = function() {
         $http.get('/getAttributesList/').then(function(res){
             $scope.queryAttributes = res.data;
+            $scope.initiated = true;
         });
       };
 

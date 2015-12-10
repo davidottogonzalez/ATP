@@ -20,6 +20,7 @@ angular.module('myApp.user_editor', ['ngRoute', 'ngDialog'])
  function($scope, $http, ngDialog) {
 
     $scope.users = [];
+    $scope.initiated = false;
     $scope.editingUser = {
         id: 0,
         username: '',
@@ -36,6 +37,7 @@ angular.module('myApp.user_editor', ['ngRoute', 'ngDialog'])
 
       $http.get('/admin/getUsers').then(function(res){
           $scope.users = res.data;
+          $scope.initiated = true;
       });
     };
 

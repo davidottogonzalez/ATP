@@ -19,6 +19,7 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
 .controller('QuerySegmentsCtrl', ['$scope', '$http', 'LogicalExpressionService', '$sce', '$compile', 'ExcelService', 'ngDialog',
  function($scope, $http, LogicalExpressionService, $sce, $compile, ExcelService, ngDialog) {
       $scope.queryAttributes = [];
+      $scope.initiated = false;
       $scope.booleanOperators = [
         {
             id:1,
@@ -37,6 +38,7 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
       $scope.init = function() {
         $http.get('/getAttributesList/').then(function(res){
             $scope.queryAttributes = res.data;
+            $scope.initiated = true;
         });
       };
 

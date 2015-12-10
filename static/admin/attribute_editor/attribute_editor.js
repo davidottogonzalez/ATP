@@ -22,6 +22,7 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
       $scope.chosenFieldsList = [];
       $scope.literalLists = [];
       $scope.toAddField = {name : 'id'};
+      $scope.initiated = false;
       $scope.booleanOperators = [
         {
             name:'AND'
@@ -66,6 +67,7 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
 
         $http.get('/admin/getAttributesList/').then(function(res){
             $scope.queryAttributes = res.data;
+            $scope.initiated = true;
         });
       };
 
