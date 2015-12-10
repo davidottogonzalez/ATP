@@ -53,7 +53,7 @@ def login_form():
 @app.route('/isUserAuthenticated/')
 def is_user_authenticated():
     if app_login.current_user.is_authenticated:
-        return json.dumps({"status": True})
+        return json.dumps({"status": True, "username": app_login.current_user.username})
     else:
         return json.dumps({"status": False})
 

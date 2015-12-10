@@ -13,6 +13,7 @@ angular.module('myApp.navbar', [])
                 if(res.data.status)
                 {
                     $scope.isLoggedIn = true;
+                    $scope.username = res.data.username
                 }else
                 {
                     $scope.isLoggedIn = false;
