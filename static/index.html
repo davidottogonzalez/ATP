@@ -7,7 +7,7 @@
   <base href="/">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>The Attribute Blender</title>
+  <title>Audience Studio Query Builder</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/static/bower_components/html5-boilerplate/dist/css/normalize.css">
@@ -19,13 +19,14 @@
   <script src="/static/bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
 <body>
+  <div class="appHeading">Audience Studio Query Builder</div>
   <div ng-include ng-controller="NavbarCtrl" src="'/static/navbar/navbar.html'"></div>
 
   <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
 
-  <div ng-view></div>
+  <div ng-view class="col-md-12"></div>
 
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>

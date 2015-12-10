@@ -1,32 +1,33 @@
 /* app css stylesheet */
 
-.menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
+.appHeading{
+    padding: 10px 15px;
+    font-size: 22px;
 }
 
-.menu:before {
-  content: "[";
+ul.nav-tabs{
+    padding-left: 15px;
 }
 
-.menu:after {
-  content: "]";
+.nav-tabs>li>a{
+    border: 1px solid #ddd;
+    font-size: 16px;
+    padding: 5px 15px;
+    color: #555;
 }
 
-.menu > li {
-  display: inline;
+.nav-tabs>li.active>a{
+    font-weight: bold;
 }
 
-.menu > li:before {
-  content: "|";
-  padding-right: 0.3em;
+.nav-tabs>li{
+    width: 25%;
 }
 
-.menu > li:nth-child(1):before {
-  content: "";
-  padding: 0;
+.logoutSpan{
+    position: absolute;
+    top: 10px;
+    right: 15px;
 }
 
 *{
