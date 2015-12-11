@@ -1,11 +1,11 @@
 'use strict';
 
-angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSanitize', 'ngDialog'])
+angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanitize', 'ngDialog'])
 
 .config(['$routeProvider', 'ngDialogProvider', function($routeProvider, ngDialogProvider) {
-  $routeProvider.when('/admin/attribute_editor', {
-    templateUrl: 'static/admin/attribute_editor/attribute_editor.html',
-    controller: 'AttributeEditorCtrl'
+  $routeProvider.when('/admin/attribute_builder', {
+    templateUrl: 'static/admin/attribute_builder/attribute_builder.html',
+    controller: 'AttributeBuilderCtrl'
   });
 
   ngDialogProvider.setDefaults({
@@ -16,7 +16,7 @@ angular.module('myApp.attribute_editor', ['ngRoute', 'ServicesModule', 'ngSaniti
   });
 }])
 
-.controller('AttributeEditorCtrl', ['$scope', '$http', 'LogicalExpressionService', '$sce', '$compile', 'ngDialog',
+.controller('AttributeBuilderCtrl', ['$scope', '$http', 'LogicalExpressionService', '$sce', '$compile', 'ngDialog',
  function($scope, $http, LogicalExpressionService, $sce, $compile, ngDialog) {
       $scope.queryAttributes = [];
       $scope.chosenFieldsList = [];

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.attribute_editor')
+angular.module('myApp.attribute_builder')
 
 .controller('FieldDialogCtrl', ['$scope', '$http',
  function($scope, $http) {

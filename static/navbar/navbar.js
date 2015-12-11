@@ -15,8 +15,8 @@ angular.module('myApp.navbar', [])
             title: 'Segment Query',
             url: '/query_segments'
         }, {
-            title: 'Attribute Editor',
-            url: '/admin/attribute_editor'
+            title: 'Attribute Builder',
+            url: '/admin/attribute_builder'
         }];
 
         $scope.adminTabs = [{
