@@ -30,73 +30,82 @@ ul.nav-tabs{
     right: 15px;
 }
 
+.viewContainer{
+    padding-top: 15px;
+}
+
+.sectionsContainer{
+    padding-top: 15px;
+}
+
+.section{
+    padding-left: 0px;
+    height: 400px !important;
+}
+
+.halfSection{
+    padding-left: 0px;
+    height: 250px !important;
+}
+
+.buttonSection{
+    text-align: center;
+}
+
+.buttonSection > div{
+    position: relative;
+    top: 45%;
+    padding-top: 10px;
+}
+
+.fieldLevelLabel{
+    font-weight: bold;
+}
+
+.overflowScroll{
+    overflow-y: scroll;
+}
+
+.dragDropContainer{
+    border: 1px solid;
+    border-radius: 8px;
+    overflow: scroll;
+    height: inherit;
+}
+
+.dragBox, [ng-drag-clone]{
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-align: left;
+    display: inline-block;
+    cursor: move;
+    margin-left: 20px;
+    padding: 0px 5px;
+}
+
+.dragBox.selected {
+    outline: 1px solid blue;
+}
+
+.submitButtons{
+    padding-top: 10px;
+}
+
 *{
   -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
 }
-[ng-drag], .drag{
-  -moz-user-select: -moz-none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-[ng-drag], .drag{
-  width: 100px;
-  background: rgba(255,0,0, 0.5);
-  color:white;
-  text-align: center;
-  display: inline-block;
-  cursor: move;
-  margin-top: 5px;
-}
-ul.draggable-objects:after{
-  display: block;
-  content:"";
-  clear:both;
-}
-.draggable-objects li{
-  float:left;
-  display: block;
-  width: 120px;
-  height:100px;
-}
+
 [ng-drag].drag-over{
   border:solid 1px red;
 }
+
 [ng-drag].dragging{
-  opacity: 0.5;
+  opacity: 0;
 }
-[ng-drop]{
-  background: rgba(0,255,0, 0.5);
-  text-align: center;
-  width: 600px;
-  height: 100px;
-  padding-top:25px;
-  display: block;
-  position: relative;
-}
-[ng-drop].drag-enter{
-  border:solid 5px red;
-}
-[ng-drop] span.title{
-  display: block;
-  position: absolute;
-  top:50%;
-  left:50%;
-  width: 200px;
-  height: 20px;
-  margin-left: -100px;
-  margin-top: -10px;
-}
-[ng-drop] div{
-  position: relative;
-  z-index: 2;
-}
-.ddTitle
-{
-  font-size: x-large;
-  font-weight: bold;
-}
+
 .glyphicon
 {
   cursor: pointer;
