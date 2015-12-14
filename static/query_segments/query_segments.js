@@ -42,7 +42,7 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
         });
       };
 
-      $scope.searchButtonText = 'Query!';
+      $scope.searchButtonText = 'Run Query';
       $scope.isQuerying = false;
       $scope.showResults = false;
       $scope.expressionIsEmpty = false;
@@ -56,9 +56,10 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
         total_seg_fwm: 0,
         seg_bhds_percent: 0,
         seg_fwm_percent: 0
-      }
+      };
+      $scope.draggingObject = {};
 
-      $scope.onDragComplete=function(data,evt){
+      $scope.onDropComplete=function(data,evt){
         $scope.expressionIsEmpty = false;
         $scope.topLogicalExpression.changeBasedOnHierarchy(data, evt, $scope.booleanOperators);
       };
@@ -89,9 +90,9 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
             $scope.totals.seg_fwm_percent = (parseInt($scope.totals.total_seg_fwm) / parseInt($scope.totals.total_fwm));
             $scope.isQuerying = false;
             $scope.showResults = true;
-            $scope.searchButtonText = 'Query!';
+            $scope.searchButtonText = 'Run Query';
         },function(res){
-            $scope.searchButtonText = 'Query!';
+            $scope.searchButtonText = 'Run Query';
             $scope.isQuerying = false;
             $scope.returnedError = true;
             $scope.returnedErrorMessage = res.data;
@@ -104,6 +105,52 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
 
       $scope.clear = function() {
         $scope.topLogicalExpression = LogicalExpressionService.createNew();
+      };
+
+      $scope.$on('draggable:start', function(event, data){
+        $scope.isDraggingOperator = false;
+        $scope.draggingObject = data.data;
+
+        if(data.element[0].classList.contains('operator')){
+            $scope.isDraggingOperator = true;
+        }
+      });
+
+      $scope.selectAttribute = function(attribute){
+        angular.forEach($scope.queryAttributes, function(value, key)
+        {
+           if(attribute.id == value.id){
+               $scope.queryAttributes[key].selected = true;
+           }else{
+               $scope.queryAttributes[key].selected = false;
+           }
+        });
+      };
+
+      $scope.addAttribute = function(){
+        angular.element(LogicalExpressionService.getFirstEmptyOperandDrop()).addClass('drag-enter');
+        $scope.expressionIsEmpty = false;
+
+        angular.forEach($scope.queryAttributes, function(value)
+        {
+            if(value.selected){
+                $scope.topLogicalExpression.changeBasedOnHierarchy(value, null, $scope.booleanOperators);
+            }
+        });
+
+        angular.element(LogicalExpressionService.getFirstEmptyOperandDrop()).removeClass('drag-enter');
+      };
+
+      $scope.removeAttribute = function(){
+        var lastOperandDrop = LogicalExpressionService.getLastOperandDrop();
+
+        if(typeof lastOperandDrop != 'undefined') {
+            angular.element(lastOperandDrop).addClass('drag-enter');
+            $scope.expressionIsEmpty = false;
+
+            $scope.topLogicalExpression.changeBasedOnHierarchy('', null, $scope.booleanOperators);
+        }
+
       };
 
       $scope.init();
