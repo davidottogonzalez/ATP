@@ -2,7 +2,7 @@
 
 angular.module('myApp.login', ['ngRoute'])
 
-.config(['$routeProvider', 'ngDialogProvider', function($routeProvider, ngDialogProvider) {
+.config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/login/', {
     templateUrl: 'static/login/login.html',
     controller: 'LoginCtrl'

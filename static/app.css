@@ -152,6 +152,9 @@ div.coffeeBreak
   border-radius: 7px;
 
 }
+.dialogConfirm {
+    padding: 10px;
+}
 
 /* Added to speedup dialog animations and prevent focus delays */
 .ngdialog * {
