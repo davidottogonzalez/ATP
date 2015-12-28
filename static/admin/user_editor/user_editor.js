@@ -21,12 +21,14 @@ angular.module('myApp.user_editor', ['ngRoute', 'ngDialog'])
 
     $scope.users = [];
     $scope.initiated = false;
+    $scope.showForm = false;
     $scope.editingUser = {
         id: 0,
         username: '',
         password: ''
     }
-    $scope.formButton = ''
+    $scope.formButton = '';
+    $scope.formTitle = 'Add User';
 
     $scope.init = function() {
         $scope.reloadUsers();
@@ -43,40 +45,38 @@ angular.module('myApp.user_editor', ['ngRoute', 'ngDialog'])
 
     $scope.showNewUserForm = function() {
         $scope.formButton = 'Add User'
+        $scope.formTitle = 'Add User';
         $scope.editingUser = {
             id: 0,
             username: '',
             password: ''
         };
-        ngDialog.open({
-            template:'static/partials/dialogs/user_form.html',
-            scope: $scope
-        });
+        $scope.showForm = true;
     };
 
     $scope.loadUser = function(user){
-        $scope.formButton = 'Update'
-        ngDialog.open({
-            template:'static/partials/dialogs/user_form.html',
-            scope: $scope
-        });
+        $scope.formButton = 'Update User';
+        $scope.formTitle = 'Edit User';
         $scope.editingUser = angular.copy(user);
+        $scope.showForm = true;
     };
 
     $scope.saveUser = function() {
         if($scope.editingUser.id != 0)
         {
-            $scope.formButton = 'Updating';
+            $scope.formButton = 'Updating User';
             $http.post('/admin/updateUser/',{updateUser: $scope.editingUser}).then(function(res){
                 $scope.reloadUsers();
                 $scope.formButton = 'Updated!';
+                $scope.showForm = false;
             });
         }else
         {
             $scope.formButton = 'Adding User';
             $http.post('/admin/addUser/',{addUser: $scope.editingUser}).then(function(res){
                 $scope.reloadUsers();
-                $scope.formButton = 'Add User';
+                $scope.formButton = 'Added!';
+                $scope.showForm = false;
             });
         }
     };
@@ -94,7 +94,17 @@ angular.module('myApp.user_editor', ['ngRoute', 'ngDialog'])
                 $scope.reloadUsers();
             });
         });
-      };
+    };
+
+    $scope.cancelEditing = function(){
+        $scope.showForm = false;
+
+        $scope.editingUser = {
+            id: 0,
+            username: '',
+            password: ''
+        };
+    };
 
     $scope.init();
 }]);
