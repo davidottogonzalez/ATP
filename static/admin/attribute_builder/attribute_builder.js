@@ -21,6 +21,7 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
       $scope.queryAttributes = [];
       $scope.chosenFieldsList = [];
       $scope.literalLists = [];
+      $scope.fieldsList = [];
       $scope.toAddField = {name : 'id'};
       $scope.initiated = false;
       $scope.booleanOperators = [
@@ -57,9 +58,14 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
       $scope.newLiteral = {
         name : ''
       }
+      $scope.draggingObject = {};
 
       $scope.init = function() {
         $scope.reloadQueryAttributes();
+
+        $http.get('/admin/getFieldsList/').then(function(res){
+            $scope.fieldsList = res.data;
+        });
       };
 
       $scope.reloadQueryAttributes = function() {
@@ -72,11 +78,11 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
       };
 
       $scope.isQuerying = false;
-      $scope.showAdd = false;
+      $scope.showForm = false;
       $scope.expressionIsEmpty = false;
       $scope.editingNameEmpty = false;
       $scope.saveAttributeButton = 'Save Attribute';
-      $scope.formTitle = 'New Attribute';
+      $scope.formTitle = 'Add Attribute';
 
       $scope.onDragComplete=function(data,evt){
         $scope.expressionIsEmpty = false;
@@ -109,7 +115,8 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
             $http.post('/admin/updateAttribute/',{updateAttribute: $scope.editingAttribute}).then(function(res){
                 $scope.reloadQueryAttributes();
                 $scope.saveAttributeButton = 'Save Attribute';
-                $scope.formTitle = 'New Attribute';
+                $scope.formTitle = 'Add Attribute';
+                $scope.showForm = false;
             });
         }else
         {
@@ -117,6 +124,7 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
             $http.post('/admin/addAttribute/',{addAttribute: $scope.editingAttribute}).then(function(res){
                 $scope.reloadQueryAttributes();
                 $scope.saveAttributeButton = 'Save Attribute';
+                $scope.showForm = false;
             });
         }
 
@@ -124,11 +132,21 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
             id : 0,
             name : '',
             logical_expression : LogicalExpressionService.createNew()
-          };
+        };
       }
 
       $scope.clearEditingAttribute = function() {
         $scope.editingAttribute.logical_expression = LogicalExpressionService.createNew();
+      };
+
+      $scope.cancelEditing = function() {
+        $scope.showForm = false;
+
+        $scope.editingAttribute = {
+            id : 0,
+            name : '',
+            logical_expression : LogicalExpressionService.createNew()
+        };
       };
 
       $scope.clearNameError = function() {
@@ -146,8 +164,8 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
         }
 
         $scope.saveAttributeButton = 'Add Attribute';
-        $scope.formTitle = 'New Attribute';
-        $scope.showAdd = true;
+        $scope.formTitle = 'Add Attribute';
+        $scope.showForm = true;
       };
 
       $scope.loadEditAttribute = function(attribute) {
@@ -181,12 +199,54 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
         }
       };
 
-      $scope.showAddFieldForm = function() {
-        ngDialog.open({
-            template:'static/partials/dialogs/field_form.html',
-            controller: 'FieldDialogCtrl',
-            scope: $scope
-        })
+      $scope.$on('draggable:start', function(event, data){
+        $scope.isDraggingOperator = false;
+        $scope.draggingObject = data.data;
+
+        if(data.element[0].classList.contains('operator')){
+            $scope.isDraggingOperator = true;
+            $scope.draggingObject.displayName = $scope.draggingObject.name;
+        }else {
+            $scope.draggingObject.displayName = $scope.draggingObject.name + '(' + $scope.draggingObject.description
+                                                + '|' + $scope.draggingObject.data_source + ')';
+        }
+      });
+
+      $scope.selectField = function(field){
+        angular.forEach($scope.fieldsList, function(value, key)
+        {
+           if(field._id == value._id){
+               $scope.fieldsList[key].selected = true;
+           }else{
+               $scope.fieldsList[key].selected = false;
+           }
+        });
+      };
+
+      $scope.addField = function(){
+        angular.element(LogicalExpressionService.getFirstEmptyOperandDrop()).addClass('drag-enter');
+        $scope.expressionIsEmpty = false;
+
+        angular.forEach($scope.fieldsList, function(value)
+        {
+            if(value.selected){
+                $scope.editingAttribute.logical_expression.changeBasedOnHierarchy(value, null, $scope.booleanOperators);
+            }
+        });
+
+        angular.element(LogicalExpressionService.getFirstEmptyOperandDrop()).removeClass('drag-enter');
+      };
+
+      $scope.removeField = function(){
+        var lastOperandDrop = LogicalExpressionService.getLastOperandDrop();
+
+        if(typeof lastOperandDrop != 'undefined') {
+            angular.element(lastOperandDrop).addClass('drag-enter');
+            $scope.expressionIsEmpty = false;
+
+            $scope.editingAttribute.logical_expression.changeBasedOnHierarchy('', null, $scope.booleanOperators);
+        }
+
       };
 
       $scope.init();

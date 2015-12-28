@@ -34,6 +34,12 @@ ul.nav-tabs{
     padding-top: 15px;
 }
 
+.sectionHeading {
+    font-size: 16px;
+    text-decoration: underline;
+    padding-bottom: 10px;
+}
+
 .sectionsContainer{
     padding-top: 15px;
 }
@@ -48,6 +54,10 @@ ul.nav-tabs{
     height: 250px !important;
 }
 
+.threeFourthSection{
+    height: 325px !important;
+}
+
 .buttonSection{
     text-align: center;
 }
@@ -60,10 +70,15 @@ ul.nav-tabs{
 
 .fieldLevelLabel{
     font-weight: bold;
+    padding: 14px 0px 0px 0px;
 }
 
 .overflowScroll{
     overflow-y: scroll;
+}
+
+.topContainer {
+    padding-bottom: 10px;
 }
 
 .dragDropContainer{
@@ -180,4 +195,23 @@ div.coffeeBreak
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+/*table css*/
+.heading_row {
+    background-color: #CCCCCC !important;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #F0F0F0;
+}
+
+td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.table {
+    table-layout: fixed;
 }

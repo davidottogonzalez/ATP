@@ -15,6 +15,7 @@ def get_attributes_from_db():
 
     for attribute in attribute_list_db:
         attribute_obj = atp_classes.Attribute(attribute)
+        attribute_obj.expression_string = attribute_obj.logical_expression.convert_to_string()
         attribute_list.append(attribute_obj)
 
     return attribute_list
