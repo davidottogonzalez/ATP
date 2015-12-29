@@ -113,7 +113,7 @@ def query_hive():
                                 expression2=attribute2.logical_expression.convert_to_string())
 
             query_string += '''
-                FROM bhds_nopii'''
+                FROM bhds_nomc_nopii'''
 
             # Execute query
             cur.execute(query_string)
@@ -159,7 +159,7 @@ def query_hive_segments():
                 .format(expression=query_logical_expression.convert_to_string())
 
             query_string += '''
-                FROM bhds_nopii'''
+                FROM bhds_nomc_nopii'''
 
             # Execute query
             cur.execute(query_string)
