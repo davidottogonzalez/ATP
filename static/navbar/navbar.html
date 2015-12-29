@@ -1,7 +1,13 @@
-<ul ng-show="isLoggedIn" class="menu">
-    <li><a href="query_crosstab">CrossTab</a></li>
-    <li><a href="query_segments">Segments</a></li>
-    <li><a href="admin/attribute_editor">Attribute Editor</a></li>
-    <li ng-show="isUserAdmin"><a href="admin/user_editor">User Editor</a></li>
-    <li><a href="/logout">Logout</a></li>
+<span ng-show="isLoggedIn" class="logoutSpan">
+    Welcome, {{username}}! | <a href="/logout">Sign Out</a>
+</span>
+<ul ng-show="isLoggedIn" class="nav nav-tabs">
+    <li ng-repeat="tab in tabs"
+    ng-class="{active:isActiveTab(tab.url)}"
+    ng-click="onClickTab(tab)"><a href="#">{{tab.title}}</a></li>
+
+    <li ng-repeat="tab in adminTabs"
+    ng-class="{active:isActiveTab(tab.url)}"
+    ng-click="onClickTab(tab)"
+    ng-show="isUserAdmin"><a href="#">{{tab.title}}</a></li>
 </ul>

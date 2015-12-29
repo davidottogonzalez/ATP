@@ -6,18 +6,21 @@ angular.module('myApp').directive('logicalExpressionDrop', function($compile) {
         if(logicalExpression.operand1 != null && logicalExpression.operand1.constructor.name == 'LogicalExpressionInstance') {
             html += getDropHTML(logicalExpression.operand1, class_prefix + 'op1_');
         }else{
-            output = logicalExpression.operand1 == null ? '' : logicalExpression.operand1.name
-            html += '<span ng-drop="true" class="' + class_prefix + 'op1">' + output + '</span>'
+            output = logicalExpression.operand1 == null || logicalExpression.operand1 == '' ? '' : logicalExpression.operand1.name
+            var classes = class_prefix + 'op1' + (output == '' ? ' empty' : ' operandDrop');
+            html += '<span ng-drop="true" class="' + classes + '">' + output + '</span>'
         }
 
         output = logicalExpression.operator == null ? '' : logicalExpression.operator.name
-        html += '<span ng-drop="true" class="' + class_prefix + 'op">' + output + '</span>'
+        var classes = class_prefix + 'op';
+        html += '<span ng-drop="true" class="' + classes + '">' + output + '</span>'
 
         if(logicalExpression.operand2 != null && logicalExpression.operand2.constructor.name == 'LogicalExpressionInstance') {
             html += getDropHTML(logicalExpression.operand2, class_prefix + 'op2_');
         }else{
-            output = logicalExpression.operand2 == null ? '' : logicalExpression.operand2.name
-            html += '<span ng-drop="true" class="' + class_prefix + 'op2">' + output + '</span>'
+            output = logicalExpression.operand2 == null || logicalExpression.operand2 == '' ? '' : logicalExpression.operand2.name
+            var classes = class_prefix + 'op2' + (output == '' ? ' empty' : ' operandDrop');
+            html += '<span ng-drop="true" class="' + classes + '">' + output + '</span>'
         }
 
         html += ')</span>'

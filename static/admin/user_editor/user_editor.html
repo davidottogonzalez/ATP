@@ -1,16 +1,53 @@
-<table id="user_table" class="table table-bordered">
-    <tr>
-        <th>
-            Username
-            <span class="glyphicon glyphicon-plus" aria-hidden="true" ng-click="showNewUserForm()"></span>
-        </th>
-        <th>Actions</th>
-    </tr>
-    <tr ng-repeat="user in users track by $index">
-        <td>{{user.username}}</td>
-        <td>
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" ng-click="loadUser(user)"></span>
-            <span class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeUser(user)"></span>
-        </td>
-    </tr>
-</table>
+<div class="col-md-12" ng-show="initiated">
+    <div ng-hide="showForm">
+        <div class="col-md-12 bodyTextContainer">
+            <div class="bodyText">
+                Use the User Editor to edit an existing user or add a new user to access the site.
+            </div>
+        </div>
+        <div class="col-md-12 topContainer">
+            <span class="col-md-10 fieldLevelLabel">Existing users:</span>
+            <button type="submit" class="btn btn-primary col-md-2" ng-click="showNewUserForm()">
+                Add User
+            </button>
+        </div>
+        <div class="col-md-12">
+            <table class="table table-bordered table-striped" ng-show="initiated">
+                <tr>
+                    <th>Username</th>
+                    <th>Actions</th>
+                </tr>
+                <tr ng-repeat="user in users track by $index">
+                    <td>{{user.username}}</td>
+                    <td>
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true" ng-click="loadUser(user)"></span>
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeUser(user)"></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div ng-show="showForm">
+        <div class="col-md-12 bodyTextContainer">
+            <div class="bodyText" ng-hide="formTitle == 'Edit User'">
+                To add a new user to access the site, type a username for the user and password for the user, and then
+                click <b>Add User</b>.
+            </div>
+            <div class="bodyText" ng-show="formTitle == 'Edit User'">
+                To edit a user, edit the username for the user and password for the user, and then click <b>Update
+                User</b>.
+            </div>
+        </div>
+        <div class="col-md-12 sectionsContainer">
+            <form name="userForm" class="form-signin" ng-submit="userForm.$valid && saveUser()">
+                <h2 class="form-signin-heading">{{formTitle}}</h2>
+                <label>Username</label>
+                <input ng-model="editingUser.username" class="form-control" placeholder="Username" required="" autofocus="">
+                <label>Password</label>
+                <input ng-model="editingUser.password" type="password" class="form-control" placeholder="Password" required="">
+                <button class="btn btn-primary btn-block" type="submit">{{formButton}}</button>
+                <button class="btn btn-primary btn-block" type="button" ng-click="cancelEditing()">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>

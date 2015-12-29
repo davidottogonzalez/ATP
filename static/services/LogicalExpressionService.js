@@ -52,7 +52,7 @@ angular.module('ServicesModule', ['ngFileSaver']).factory('LogicalExpressionServ
             return;
         };
 
-        var hierarchy = dragEvent.event.srcElement.classList[0].split('_');
+        var hierarchy = document.getElementsByClassName("drag-enter")[0].classList[0].split('_');
         var levelToChange = this;
 
         if(hierarchy.length > 0)
@@ -100,7 +100,7 @@ angular.module('ServicesModule', ['ngFileSaver']).factory('LogicalExpressionServ
 
     var isValidDrop = function(dragObj, dragEvent, arrayToCheck) {
         var isValidDrop = false;
-        var hierarchy = dragEvent.event.srcElement.classList[0].split('_');
+        var hierarchy = document.getElementsByClassName("drag-enter")[0].classList[0].split('_');
         var dropType = hierarchy[hierarchy.length - 1];
 
         switch(dropType) {
@@ -164,11 +164,39 @@ angular.module('ServicesModule', ['ngFileSaver']).factory('LogicalExpressionServ
         return true;
     };
 
+    var getFirstEmptyOperandDrop = function() {
+        var emptyDrops = document.getElementsByClassName("empty");
+        var firstEmpty = null;
+
+        angular.forEach(emptyDrops, function(emptyDrop){
+            var classList = emptyDrop.classList;
+
+            angular.forEach(classList, function(classString){
+                if(firstEmpty == null && (classString.indexOf('op1') != -1 || classString.indexOf('op2') != -1)){
+                    firstEmpty = emptyDrop;
+                }
+            });
+        });
+
+        if(firstEmpty == null) {
+            return getLastOperandDrop();
+        }
+
+        return firstEmpty;
+    };
+
+    var getLastOperandDrop = function() {
+        var operandDrops = document.getElementsByClassName("operandDrop");
+        return operandDrops[operandDrops.length - 1];
+    };
+
     return {
         createNew: function(obj) {
             return new LogicalExpressionInstance(obj);
         },
         isValidDrop: isValidDrop,
-        isExpressionNotEmpty: isExpressionNotEmpty
+        isExpressionNotEmpty: isExpressionNotEmpty,
+        getFirstEmptyOperandDrop: getFirstEmptyOperandDrop,
+        getLastOperandDrop: getLastOperandDrop
     };
 });

@@ -6,7 +6,7 @@ angular.module('myApp', [
   'myApp.navbar',
   'myApp.query_crosstab',
   'myApp.query_segments',
-  'myApp.attribute_editor',
+  'myApp.attribute_builder',
   'myApp.user_editor',
   'myApp.login',
   'myApp.logout',

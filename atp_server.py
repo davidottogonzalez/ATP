@@ -15,6 +15,7 @@ def get_attributes_from_db():
 
     for attribute in attribute_list_db:
         attribute_obj = atp_classes.Attribute(attribute)
+        attribute_obj.expression_string = attribute_obj.logical_expression.convert_to_string()
         attribute_list.append(attribute_obj)
 
     return attribute_list
@@ -53,7 +54,7 @@ def login_form():
 @app.route('/isUserAuthenticated/')
 def is_user_authenticated():
     if app_login.current_user.is_authenticated:
-        return json.dumps({"status": True})
+        return json.dumps({"status": True, "username": app_login.current_user.username})
     else:
         return json.dumps({"status": False})
 
@@ -112,7 +113,7 @@ def query_hive():
                                 expression2=attribute2.logical_expression.convert_to_string())
 
             query_string += '''
-                FROM bhds_nopii'''
+                FROM bhds_nomc_nopii'''
 
             # Execute query
             cur.execute(query_string)
@@ -158,7 +159,7 @@ def query_hive_segments():
                 .format(expression=query_logical_expression.convert_to_string())
 
             query_string += '''
-                FROM bhds_nopii'''
+                FROM bhds_nomc_nopii'''
 
             # Execute query
             cur.execute(query_string)

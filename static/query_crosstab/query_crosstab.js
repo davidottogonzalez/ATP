@@ -21,14 +21,16 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
 .controller('QueryCrosstabCtrl', ['$scope', '$http', 'ExcelService', 'ngDialog',
     function($scope, $http, ExcelService, ngDialog) {
       $scope.queryAttributes = [];
+      $scope.initiated = false;
 
       $scope.init = function() {
         $http.get('/getAttributesList/').then(function(res){
             $scope.queryAttributes = res.data;
+            $scope.initiated = true;
         });
       };
 
-      $scope.searchButtonText = 'Query!';
+      $scope.searchButtonText = 'Run Query';
       $scope.showCrossTab = false;
       $scope.isQuerying = false;
       $scope.returnedError = false;
@@ -36,12 +38,14 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
       $scope.bhds_total = 0;
       $scope.fwm_total = 0;
 
+      $scope.draggingAttribute = {};
       $scope.chosenAttributes = [];
       $scope.submittedAttributes = [];
       $scope.crossTabsAttributes = [];
 
-      $scope.onDragComplete=function(data,evt){
-      };
+      $scope.$on('draggable:start', function(event, data){
+        $scope.draggingAttribute = data.data;
+      });
 
       $scope.onDropComplete=function(data,evt){
         $scope.chosenAttributes.push(data);
@@ -75,9 +79,9 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
             buildCrossTabsAttributes(res.data);
             $scope.isQuerying = false;
             $scope.showCrossTab = true;
-            $scope.searchButtonText = 'Query!';
+            $scope.searchButtonText = 'Run Query';
         },function(res){
-            $scope.searchButtonText = 'Query!';
+            $scope.searchButtonText = 'Run Query';
             $scope.isQuerying = false;
             $scope.returnedError = true;
             $scope.returnedErrorMessage = res.data;
@@ -159,6 +163,36 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
 
       $scope.exportToExcel=function(tableId){
         ExcelService.tableToExcel(tableId, 'Crosstab');
+      };
+
+      $scope.selectAttribute = function(attribute){
+        angular.forEach($scope.queryAttributes, function(value, key)
+        {
+           if(attribute.id == value.id){
+               $scope.queryAttributes[key].selected = true;
+           }else{
+               $scope.queryAttributes[key].selected = false;
+           }
+        });
+      };
+
+      $scope.addAttribute = function(){
+        angular.forEach($scope.queryAttributes, function(value)
+        {
+            if(value.selected){
+                $scope.chosenAttributes.push(value);
+            }
+        });
+      };
+
+      $scope.removeAttribute = function(){
+
+        var chosenAttributesCount = $scope.chosenAttributes.length;
+
+        if(chosenAttributesCount > 0){
+            $scope.chosenAttributes.splice(chosenAttributesCount - 1, 1);
+        }
+
       };
 
       $scope.init();

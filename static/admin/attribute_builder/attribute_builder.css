@@ -1,3 +1,9 @@
+.table {
+    padding-top: 5px;
+}
+.tabSubtitle {
+    font-size: 18px;
+}
 [ng-drop]{
   background: #E2E2E2;
   text-align: center;
@@ -30,5 +36,27 @@
 }
 
 .buttonSection > div{
-    top: 10%;
+    top: 15%;
+}
+
+.literalContainer{
+    clear: both;
+    padding: 10px 0px 0px;
+}
+
+.literalInput{
+    display: inline-block;
+    width: initial;
+}
+
+.inputContainer{
+    padding-left: 0px;
+}
+
+.inputContainer > div > input{
+    width: 100%;
+}
+
+.inputContainer > .fieldLevelLabel{
+    padding-top: 0px;
 }
