@@ -7,8 +7,8 @@
                 "username": "username",
                 "password": "password",
                 "database": "merkle",
-                "host":"aoabdlp00042.tfayd.com",
-                "port": 10001,
+                "host":"aoabdlp00004.tfayd.com",
+                "port": 10000,
                 "authMech": "LDAP"
             },
             "appData": {
