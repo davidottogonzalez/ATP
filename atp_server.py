@@ -113,7 +113,8 @@ def query_hive():
                                 expression2=attribute2.logical_expression.convert_to_string())
 
             query_string += '''
-                FROM bhds_nomc_nopii'''
+                FROM {tableName}'''\
+                .format(tableName=config.get_config()['development']['database']["bigData"]['tableName'])
 
             # Execute query
             cur.execute(query_string)
@@ -159,7 +160,8 @@ def query_hive_segments():
                 .format(expression=query_logical_expression.convert_to_string())
 
             query_string += '''
-                FROM bhds_nomc_nopii'''
+                FROM {tableName}'''\
+                .format(tableName=config.get_config()['development']['database']["bigData"]['tableName'])
 
             # Execute query
             cur.execute(query_string)
