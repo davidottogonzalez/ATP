@@ -1,3 +1,4 @@
+from pyhs2.error import Pyhs2Exception
 import atp_classes, pyhs2, re
 
 
@@ -18,25 +19,28 @@ class HiveDB:
         with pyhs2.connect(host=self.host, port=self.port, authMechanism=self.auth_mech,
                            user=self.username, password=self.password, database=self.database)as conn:
             with conn.cursor() as cur:
-                print "executing query"
+                try:
+                    print "executing query"
 
-                # Execute query
-                cur.execute(query_string)
+                    # Execute query
+                    cur.execute(query_string)
 
-                print "done executing query"
+                    print "done executing query"
 
-                # Get column names
-                columns = cur.getSchema()
+                    # Get column names
+                    columns = cur.getSchema()
 
-                # Fetch table results
-                for i in cur.fetch():
-                    result_obj = {}
-                    for index, val in enumerate(columns):
-                        val['columnName'] = val['columnName']
-                        result_obj[re.sub(r'.*[.]', '', val['columnName'])] = i[index]
-                    result_rows.append(result_obj)
+                    # Fetch table results
+                    for i in cur.fetch():
+                        result_obj = {}
+                        for index, val in enumerate(columns):
+                            val['columnName'] = val['columnName']
+                            result_obj[re.sub(r'.*[.]', '', val['columnName'])] = i[index]
+                        result_rows.append(result_obj)
 
-                cur.close()
+                    cur.close()
+                except Pyhs2Exception:
+                    return None
 
         conn.close()
         return result_rows
