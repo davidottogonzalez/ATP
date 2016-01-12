@@ -1,5 +1,5 @@
 import atp_classes
-import re, json, pyhs2
+import re, sys
 
 config = atp_classes.Config()
 app_db = atp_classes.AppDB()
@@ -9,29 +9,14 @@ FIELD_TABLE = 'fields'
 
 
 def get_columns_from_hive_table():
-    with pyhs2.connect(host=config.get_config()['development']['database']["bigData"]['host'],
-                       port=config.get_config()['development']['database']["bigData"]['port'],
-                       authMechanism=config.get_config()['development']['database']["bigData"]['authMech'],
-                       user=config.get_config()['development']['database']["bigData"]['username'],
-                       password=config.get_config()['development']['database']["bigData"]['password'],
-                       database=config.get_config()['development']['database']["bigData"]['database']) as conn:
-        with conn.cursor() as cur:
-            print "executing query"
+    hive_db = atp_classes.HiveDB()
 
-            query_string = '''SHOW COLUMNS FROM {tableName}'''\
-                .format(tableName=config.get_config()['development']['database']["bigData"]['tableName'])
+    query_string = '''SHOW COLUMNS FROM {tableName}'''\
+        .format(tableName=config.get_config()['development']['database']["bigData"]['tableName'])
 
-            # Execute query
-            cur.execute(query_string)
+    results = hive_db.execute_query(query_string)
 
-            print "done executing query"
-
-            # Fetch table results
-            result_row = []
-            for i in cur.fetch():
-                result_row.append({'name': i[0].strip()})
-
-    return result_row
+    return results
 
 
 def get_field_list_from_file():
@@ -57,16 +42,19 @@ def get_field_list_from_file():
 def remove_unused_fields(field_list):
     hive_columns = get_columns_from_hive_table()
 
-    for field in list(field_list):
-        keep_row = False
+    if hive_columns:
+        for field in list(field_list):
+            keep_row = False
 
-        for used_field in hive_columns:
-            if field['name'].lower() == used_field['name'].lower():
-                keep_row = True
-                break
+            for used_field in hive_columns:
+                if field['name'].lower() == used_field['field'].lower():
+                    keep_row = True
+                    break
 
-        if not keep_row:
-            field_list.remove(field)
+            if not keep_row:
+                field_list.remove(field)
+    else:
+        del field_list[:]
 
 
 def insert_fields_into_mongo(field_list):
@@ -84,5 +72,8 @@ remove_unused_fields(file_field_list)
 print(len(file_field_list))
 print(file_field_list)
 
-app_db.drop_collection(FIELD_TABLE)
-insert_fields_into_mongo(file_field_list)
+if len(file_field_list) != 0:
+    app_db.drop_collection(FIELD_TABLE)
+    insert_fields_into_mongo(file_field_list)
+else:
+    sys.stderr.write('Error occurred: Hive query returned error')
