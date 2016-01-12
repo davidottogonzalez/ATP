@@ -38,12 +38,12 @@
             </div>
             <div class="bodyText" ng-hide="formTitle == 'Edit Attribute'">
                 To add a new attribute to use in your queries, type a name for the attribute, select the fields and
-                operators for the attribute, adn then click <b>Save Attribute</b>. Each set of fields must be separated
+                operators for the attribute, and then click <b>Save Attribute</b>. Each set of fields must be separated
                 by an operator. To build more complex expressions, use additional parentheses.
             </div>
             <div class="bodyText" ng-show="formTitle == 'Edit Attribute'">
                 To edit an attribute to use in your queries, edit the name for the attribute, select the fields and
-                operators for the attribute, adn then click <b>Update Attribute</b>. Each set of fields must be separated
+                operators for the attribute, and then click <b>Update Attribute</b>. Each set of fields must be separated
                 by an operator. To build more complex expressions, use additional parentheses.
             </div>
         </div>
@@ -73,7 +73,7 @@
                     </div>
                 </div>
                 <div class="literalContainer">
-                    <span class="fieldLevelLabel">Add Literal:</span>
+                    <span class="fieldLevelLabel">Literal String:</span>
                     <input type="text" class="form-control literalInput" ng-model="newLiteral.name" />
                     <button type="submit" class="btn btn-primary" ng-click="saveLiteral()">Add</button>
                     <div ng-repeat="literal in literalLists track by $index">
