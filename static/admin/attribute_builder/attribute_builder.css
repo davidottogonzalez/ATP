@@ -32,8 +32,9 @@
 }
 
 .operatorsContainer{
-    padding-top: 10px;
+    padding-top: 15px;
 }
+
 
 .buttonSection > div{
     top: 15%;
@@ -41,22 +42,30 @@
 
 .literalContainer{
     clear: both;
-    padding: 10px 0px 0px;
+    padding: 15px 0px 0px;
+}
+
+.literalContainer > .fieldLevelLabel{
+    padding-top: 0px;
+    padding-right: 10px;
 }
 
 .literalInput{
     display: inline-block;
     width: initial;
+    margin-right: 10px;
 }
 
 .inputContainer{
-    padding-left: 0px;
+    padding: 0px 0px 15px;
 }
 
-.inputContainer > div > input{
-    width: 100%;
+.inputContainer > input{
+    width: 70%;
+    display: inline-block;
 }
 
 .inputContainer > .fieldLevelLabel{
     padding-top: 0px;
+    padding-right: 10px;
 }

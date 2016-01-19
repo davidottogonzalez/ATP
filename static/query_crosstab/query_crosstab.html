@@ -1,44 +1,48 @@
-<div class="col-md-12" ng-show="initiated">
-    <div class="col-md-12">
-        <div class="bodyText">
-            To run a cross-tab query, in the <b>Available attributes</b> list, select the attributes you want to query,
-            add them to the <b>Query attributes</b> list, and then click <b>Run Query</b>. To add a new attribute to use
-            in your queries, go to the <b>Attribute Builder</b> tab.
+<div ng-show="initiated">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="bodyText">
+                To run a cross-tab query, in the <b>Available attributes</b> list, select the attributes you want to query,
+                add them to the <b>Query attributes</b> list, and then click <b>Run Query</b>. To add a new attribute to use
+                in your queries, go to the <b>Attribute Builder</b> tab.
+            </div>
         </div>
-    </div>
-    <div class="col-md-12 sectionsContainer">
-        <div class="col-md-5 section">
-            <span class="fieldLevelLabel">Available attributes:</span>
-            <div class="dragDropContainer">
-                <div ng-repeat="attribute in queryAttributes track by $index">
-                    <div ng-drag="true" ng-drag-data="attribute" ng-center-anchor="true" class="dragBox"
-                         ng-click="selectAttribute(attribute)" ng-class="{selected: attribute.selected}">
-                        {{attribute.name}}
+        <div class="col-md-12 sectionsContainer">
+            <div class="row">
+                <div class="col-md-5 section">
+                    <span class="fieldLevelLabel">Available attributes:</span>
+                    <div class="dragDropContainer">
+                        <div ng-repeat="attribute in queryAttributes track by $index">
+                            <div ng-drag="true" ng-drag-data="attribute" ng-center-anchor="true" class="dragBox"
+                                 ng-click="selectAttribute(attribute)" ng-class="{selected: attribute.selected}">
+                                {{attribute.name}}
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-drag-clone>
+                        {{draggingAttribute.name}}
                     </div>
                 </div>
-            </div>
-            <div ng-drag-clone>
-                {{draggingAttribute.name}}
-            </div>
-        </div>
-        <div class="col-md-2 section buttonSection">
-            <div><button class="btn btn-primary" ng-click="addAttribute()">Add >></button></div>
-            <div><button class="btn btn-primary" ng-click="removeAttribute()"><< Remove</button></div>
-        </div>
-        <div class="col-md-5 section">
-            <span class="fieldLevelLabel">Query attributes:</span>
-            <div class="dragDropContainer" ng-drop="true" ng-drop-success="onDropComplete($data,$event)">
-                <div ng-repeat="attribute in chosenAttributes track by $index">
-                    <div ng-drag-data="attribute" ng-center-anchor="true" class="dragBox"
-                         ng-drag-success="onDragComplete($data,$event)">
-                        {{attribute.name}}
-                        <span class="glyphicon glyphicon-remove" ng-click="removeQueryAttr(attribute)"></span>
+                <div class="col-md-2 section buttonSection">
+                    <div><button class="btn btn-primary" ng-click="addAttribute()">Add >></button></div>
+                    <div><button class="btn btn-primary" ng-click="removeAttribute()"><< Remove</button></div>
+                </div>
+                <div class="col-md-5 section">
+                    <span class="fieldLevelLabel">Query attributes:</span>
+                    <div class="dragDropContainer" ng-drop="true" ng-drop-success="onDropComplete($data,$event)">
+                        <div ng-repeat="attribute in chosenAttributes track by $index">
+                            <div ng-drag-data="attribute" ng-center-anchor="true" class="dragBox"
+                                 ng-drag-success="onDragComplete($data,$event)">
+                                {{attribute.name}}
+                                <span class="glyphicon glyphicon-remove" ng-click="removeQueryAttr(attribute)"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="submitButtons">
+                        <button type="submit" class="btn btn-primary" ng-click="search()">{{ searchButtonText }}</button>
+                        <button type="submit" class="btn btn-primary" ng-click="clear()">Clear Query</button>
                     </div>
                 </div>
-            </div>
-            <div class="submitButtons">
-                <button type="submit" class="btn btn-primary" ng-click="search()">{{ searchButtonText }}</button>
-                <button type="submit" class="btn btn-primary" ng-click="clear()">Clear Query</button>
             </div>
         </div>
     </div>

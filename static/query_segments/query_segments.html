@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="static/query_segments/query_segments.css">
-<div class="col-md-12" ng-show="initiated">
+<div class="row" ng-show="initiated">
     <div class="col-md-12">
         <div class="bodyText">
             To run a segment query, in the <b>Available attributes</b> list, select the attributes you want to query and
@@ -9,48 +9,52 @@
         </div>
     </div>
     <div class="col-md-12 sectionsContainer">
-        <div class="col-md-5 halfSection">
-            <span class="fieldLevelLabel">Available attributes:</span>
-            <div class="dragDropContainer">
-                <div ng-repeat="attribute in queryAttributes track by $index">
-                    <div ng-drag="true" ng-drag-data="attribute" ng-center-anchor="true" class="dragBox"
-                         ng-drag-success="onDropComplete($data,$event)" ng-class="{selected: attribute.selected}"
-                         ng-click="selectAttribute(attribute)">
-                        {{attribute.name}}
+        <div class="row">
+            <div class="col-md-5 halfSection">
+                <span class="fieldLevelLabel">Available attributes:</span>
+                <div class="dragDropContainer">
+                    <div ng-repeat="attribute in queryAttributes track by $index">
+                        <div ng-drag="true" ng-drag-data="attribute" ng-center-anchor="true" class="dragBox"
+                             ng-drag-success="onDropComplete($data,$event)" ng-class="{selected: attribute.selected}"
+                             ng-click="selectAttribute(attribute)">
+                            {{attribute.name}}
+                        </div>
+                    </div>
+                </div>
+                <div ng-drag-clone ng-class="{operator: isDraggingOperator}">
+                    {{draggingObject.name}}
+                </div>
+                <div class="operatorsContainer">
+                    <span class="fieldLevelLabel">Operators:</span>
+                    <div class="operatorsListContainer">
+                        <div ng-repeat="boolean in booleanOperators track by $index">
+                            <div ng-drag="true" ng-drag-data="boolean" class="dragBox operator" ng-center-anchor="true" ng-drag-success="onDropComplete($data,$event)">
+                                {{boolean.name}}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div ng-drag-clone ng-class="{operator: isDraggingOperator}">
-                {{draggingObject.name}}
+            <div class="col-md-2 section buttonSection">
+                <div><button class="btn btn-primary" ng-click="addAttribute()">Add >></button></div>
+                <div><button class="btn btn-primary" ng-click="removeAttribute()"><< Remove</button></div>
             </div>
-            <div class="operatorsContainer">
-                <span class="fieldLevelLabel">Operators:</span>
-                <div ng-repeat="boolean in booleanOperators track by $index">
-                    <div ng-drag="true" ng-drag-data="boolean" class="dragBox operator" ng-center-anchor="true" ng-drag-success="onDropComplete($data,$event)">
-                        {{boolean.name}}
+            <div class="col-md-5 section">
+                <div ng-show="expressionIsEmpty" class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
+                    No part of the Logical Expression can be empty!
+                </div>
+                <span class="fieldLevelLabel">Query:</span>
+                <div class="dragDropContainer">
+                    <div class="queryContainer">
+                        <logical-expression-drop ng-model="topLogicalExpression" />
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-2 section buttonSection">
-            <div><button class="btn btn-primary" ng-click="addAttribute()">Add >></button></div>
-            <div><button class="btn btn-primary" ng-click="removeAttribute()"><< Remove</button></div>
-        </div>
-        <div class="col-md-5 section">
-            <div ng-show="expressionIsEmpty" class="alert alert-danger" role="alert">
-              <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-              <span class="sr-only">Error:</span>
-              No part of the Logical Expression can be empty!
-            </div>
-            <span class="fieldLevelLabel">Query:</span>
-            <div class="dragDropContainer">
-                <div class="queryContainer">
-                    <logical-expression-drop ng-model="topLogicalExpression" />
+                <div class="submitButtons">
+                    <button type="submit" class="btn btn-primary" ng-click="search()">{{ searchButtonText }}</button>
+                    <button type="submit" class="btn btn-primary" ng-click="clear()">Clear Query</button>
                 </div>
-            </div>
-            <div class="submitButtons">
-                <button type="submit" class="btn btn-primary" ng-click="search()">{{ searchButtonText }}</button>
-                <button type="submit" class="btn btn-primary" ng-click="clear()">Clear Query</button>
             </div>
         </div>
     </div>
