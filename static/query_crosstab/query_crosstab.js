@@ -66,7 +66,6 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
         $scope.isQuerying = true;
         $scope.returnedError = false;
         $scope.returnedErrorMessage = '';
-        $scope.searchButtonText = "Querying!";
         $scope.submittedAttributes = angular.copy($scope.chosenAttributes);
 
         ngDialog.open({
