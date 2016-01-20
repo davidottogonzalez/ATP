@@ -45,15 +45,15 @@ ul.nav-tabs{
 }
 
 .section{
-    height: 400px !important;
+    min-height: 400px !important;
 }
 
 .halfSection{
-    height: 250px !important;
+    min-height: 250px !important;
 }
 
 .threeFourthSection{
-    height: 325px !important;
+    min-height: 325px !important;
 }
 
 .buttonSection{
@@ -232,6 +232,7 @@ td {
 
 .operatorsListContainer{
     padding-top: 10px;
+    overflow: auto;
 }
 
 /*scrollbars css*/
