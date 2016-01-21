@@ -37,7 +37,7 @@
 
 
 .buttonSection > div{
-    top: 15%;
+    transform: translateY(150%);
 }
 
 .literalContainer{

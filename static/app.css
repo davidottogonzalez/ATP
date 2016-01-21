@@ -62,7 +62,7 @@ ul.nav-tabs{
 
 .buttonSection > div{
     position: relative;
-    top: 40%;
+    transform: translateY(300%);
     padding-top: 10px;
 }
 
@@ -75,10 +75,11 @@ ul.nav-tabs{
 }
 
 .topContainer {
-    padding-bottom: 10px;
+    padding-bottom: 7px;
 }
 
-.fullButton {
+.topContainerButton {
+    margin-top: -20px;
     width: 100%;
 }
 
