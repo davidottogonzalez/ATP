@@ -33,6 +33,9 @@ class AppDB:
 
         return results
 
+    def drop_collection(self, collection):
+        return self.db[collection].drop()
+
     def get_document_by_id(self, collection, id):
         if ObjectId.is_valid(id):
             return self.db[collection].find_one({"_id": ObjectId(id)})

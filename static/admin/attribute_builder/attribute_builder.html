@@ -1,124 +1,134 @@
 <link rel="stylesheet" href="static/admin/attribute_builder/attribute_builder.css">
-<div class="col-md-12" ng-show="initiated">
-    <div ng-hide="showForm">
+<div ng-show="initiated">
+    <div ng-hide="showForm" class="row">
         <div class="col-md-12 bodyTextContainer">
             <div class="bodyText">
                 Use the Attribute Builder to edit an existing attribute or add a new attribute to use in your audience
                 queries.
             </div>
         </div>
-        <div class="col-md-12 topContainer">
-            <span class="col-md-10 fieldLevelLabel">Existing attributes:</span>
-            <button type="submit" class="btn btn-primary col-md-2" ng-click="showAddAttribute()">
-                Add Attribute
-            </button>
-        </div>
-        <div class="col-md-12">
-            <table class="table table-bordered table-striped" ng-show="initiated">
-                <tr class="heading_row">
-                    <th class="col-md-3">Attribute Name</th>
-                    <th class="col-md-8">Expression Preview</th>
-                    <th class="col-md-1">Action</th>
-                </tr>
-                <tr ng-repeat="attribute in queryAttributes track by $index">
-                    <td class="col-md-3">{{attribute.name}}</td>
-                    <td class="col-md-8">{{attribute.expression_string}}</td>
-                    <td class="col-md-1">
-                        <span class="glyphicon glyphicon-pencil" aria-hidden="true" ng-click="loadEditAttribute(attribute)"></span>
-                        <span class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeAttribute(attribute)"></span>
-                    </td>
-                </tr>
-            </table>
+        <div class="col-md-12 sectionsContainer">
+            <div class="row">
+                <div class="col-md-12 topContainer">
+                    <div class="row">
+                        <span class="col-md-10 fieldLevelLabel">Existing attributes:</span>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary topContainerButton" ng-click="showAddAttribute()">
+                                Add Attribute
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <table class="table table-bordered table-striped" ng-show="initiated">
+                        <tr class="heading_row">
+                            <th class="col-md-3">Attribute Name</th>
+                            <th class="col-md-8">Expression Preview</th>
+                            <th class="col-md-1">Action</th>
+                        </tr>
+                        <tr ng-repeat="attribute in queryAttributes track by $index">
+                            <td class="col-md-3">{{attribute.name}}</td>
+                            <td class="col-md-8">{{attribute.expression_string}}</td>
+                            <td class="col-md-1">
+                                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ng-click="loadEditAttribute(attribute)"></span>
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeAttribute(attribute)"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-    <div ng-show="showForm">
+    <div ng-show="showForm" class="row">
         <div class="col-md-12 bodyTextContainer">
             <div class="tabSubtitle">
                 {{formTitle}}
             </div>
             <div class="bodyText" ng-hide="formTitle == 'Edit Attribute'">
                 To add a new attribute to use in your queries, type a name for the attribute, select the fields and
-                operators for the attribute, adn then click <b>Save Attribute</b>. Each set of fields must be separated
+                operators for the attribute, and then click <b>Save Attribute</b>. Each set of fields must be separated
                 by an operator. To build more complex expressions, use additional parentheses.
             </div>
             <div class="bodyText" ng-show="formTitle == 'Edit Attribute'">
                 To edit an attribute to use in your queries, edit the name for the attribute, select the fields and
-                operators for the attribute, adn then click <b>Update Attribute</b>. Each set of fields must be separated
+                operators for the attribute, and then click <b>Update Attribute</b>. Each set of fields must be separated
                 by an operator. To build more complex expressions, use additional parentheses.
             </div>
         </div>
         <div class="col-md-12 sectionsContainer">
-            <div class="col-md-5 halfSection">
-                <div class="sectionHeading">Attribute options</div>
-                <span class="fieldLevelLabel">Fields:</span>
-                <div class="dragDropContainer">
-                    <div ng-repeat="field in fieldsList track by $index">
-                        <div ng-drag="true" ng-drag-data="field" ng-center-anchor="true" class="dragBox"
-                             ng-drag-success="onDragComplete($data,$event)" ng-class="{selected: field.selected}"
-                             ng-click="selectField(field)">
-                            {{field.name}} ({{field.description}} | {{field.data_source}})
+            <div class="row">
+                <div class="col-md-5 halfSection">
+                    <div class="sectionHeading">Attribute options</div>
+                    <div class="fieldLevelLabel">Fields:</div>
+                    <div class="dragDropContainer">
+                        <div ng-repeat="field in fieldsList track by $index">
+                            <div ng-drag="true" ng-drag-data="field" ng-center-anchor="true" class="dragBox"
+                                 ng-drag-success="onDragComplete($data,$event)" ng-class="{selected: field.selected}"
+                                 ng-click="selectField(field)">
+                                {{field.name}} ({{field.description}} | {{field.data_source}})
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-drag-clone ng-class="{operator: isDraggingOperator}">
+                        {{draggingObject.displayName}}
+                    </div>
+                    <div class="operatorsContainer">
+                        <span class="fieldLevelLabel">Operators:</span>
+                        <div class="operatorsListContainer">
+                            <div ng-repeat="boolean in booleanOperators track by $index">
+                                <div ng-drag="true" ng-drag-data="boolean" class="dragBox operator" ng-center-anchor="true"
+                                     ng-drag-success="onDragComplete($data,$event)">
+                                    {{boolean.name}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="literalContainer">
+                        <span class="fieldLevelLabel">Literal String:</span>
+                        <input type="text" class="form-control literalInput" ng-model="newLiteral.name" />
+                        <button type="submit" class="btn btn-primary" ng-click="saveLiteral()">Add</button>
+                        <div ng-repeat="literal in literalLists track by $index">
+                            <div ng-drag="true" ng-drag-data="literal" ng-drag-success="onDragComplete($data,$event)"
+                                 ng-center-anchor="true" class="dragBox operator">
+                                {{literal.name}}
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div ng-drag-clone ng-class="{operator: isDraggingOperator}">
-                    {{draggingObject.displayName}}
+                <div class="col-md-2 section buttonSection">
+                    <div><button class="btn btn-primary" ng-click="addField()">Add >></button></div>
+                    <div><button class="btn btn-primary" ng-click="removeField()"><< Remove</button></div>
                 </div>
-                <div class="operatorsContainer">
-                    <span class="fieldLevelLabel">Operators:</span>
-                    <div ng-repeat="boolean in booleanOperators track by $index">
-                        <div ng-drag="true" ng-drag-data="boolean" class="dragBox operator" ng-center-anchor="true"
-                             ng-drag-success="onDragComplete($data,$event)">
-                            {{boolean.name}}
-                        </div>
+                <div class="col-md-5 threeFourthSection">
+                    <div class="sectionHeading">Attribute details</div>
+                    <div ng-show="editingNameEmpty" class="alert alert-danger" role="alert">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span class="sr-only">Error:</span>
+                        New Attribute name cannot be empty
                     </div>
-                </div>
-                <div class="literalContainer">
-                    <span class="fieldLevelLabel">Add Literal:</span>
-                    <input type="text" class="form-control literalInput" ng-model="newLiteral.name" />
-                    <button type="submit" class="btn btn-primary" ng-click="saveLiteral()">Add</button>
-                    <div ng-repeat="literal in literalLists track by $index">
-                        <div ng-drag="true" ng-drag-data="literal" ng-drag-success="onDragComplete($data,$event)"
-                             ng-center-anchor="true" class="dragBox operator">
-                            {{literal.name}}
-                        </div>
+                    <div ng-show="expressionIsEmpty" class="alert alert-danger" role="alert">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span class="sr-only">Error:</span>
+                        No part of the Logical Expression can be empty!
                     </div>
-                </div>
-            </div>
-            <div class="col-md-2 section buttonSection">
-                <div><button class="btn btn-primary" ng-click="addField()">Add >></button></div>
-                <div><button class="btn btn-primary" ng-click="removeField()"><< Remove</button></div>
-            </div>
-            <div class="col-md-5 threeFourthSection">
-                <div class="sectionHeading">Attribute details</div>
-                <div ng-show="editingNameEmpty" class="alert alert-danger" role="alert">
-                  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                  <span class="sr-only">Error:</span>
-                  New Attribute name cannot be empty
-                </div>
-                <div ng-show="expressionIsEmpty" class="alert alert-danger" role="alert">
-                  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                  <span class="sr-only">Error:</span>
-                  No part of the Logical Expression can be empty!
-                </div>
-                <div class="inputContainer col-md-12">
-                    <div class="fieldLevelLabel col-md-1">Name: </div>
-                    <div class="col-md-11">
+                    <div class="inputContainer">
+                        <span class="fieldLevelLabel">Name: </span>
                         <input type="text" class="form-control" ng-model="editingAttribute.name" ng-change="clearNameError()"/>
                     </div>
-                </div>
-                <div>
-                    <span class="fieldLevelLabel">Attribute expression: </span>
-                </div>
-                <div class="dragDropContainer">
-                    <div class="queryContainer">
-                        <logical-expression-drop ng-model="editingAttribute.logical_expression" />
+                    <div>
+                        <span class="fieldLevelLabel">Attribute expression: </span>
                     </div>
-                </div>
-                <div class="submitButtons">
-                    <button type="submit" class="btn btn-primary" ng-click="saveEditingAttribute()">{{saveAttributeButton}}
-                    </button>
-                    <button type="submit" class="btn btn-primary" ng-click="clearEditingAttribute()">Clear Expression</button>
-                    <button type="submit" class="btn btn-primary" ng-click="cancelEditing()">Cancel</button>
+                    <div class="dragDropContainer">
+                        <div class="queryContainer">
+                            <logical-expression-drop ng-model="editingAttribute.logical_expression" />
+                        </div>
+                    </div>
+                    <div class="submitButtons">
+                        <button type="submit" class="btn btn-primary" ng-click="saveEditingAttribute()">{{saveAttributeButton}}
+                        </button>
+                        <button type="submit" class="btn btn-primary" ng-click="clearEditingAttribute()">Clear Expression</button>
+                        <button type="submit" class="btn btn-primary" ng-click="cancelEditing()">Cancel</button>
+                    </div>
                 </div>
             </div>
         </div>

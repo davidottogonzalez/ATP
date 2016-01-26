@@ -4,11 +4,12 @@
         "port": 5000,
         "database": {
             "bigData": {
-                "username": "username",
-                "password": "password",
-                "database": "merkle",
                 "host":"aoabdlp00004.tfayd.com",
                 "port": 10000,
+                "database": "merkle",
+                "tableName": "table",
+                "username": "username",
+                "password": "password",
                 "authMech": "LDAP"
             },
             "appData": {
@@ -26,11 +27,12 @@
         "port": 5000,
         "database": {
             "bigData": {
-                "username": "username",
-                "password": "password",
-                "database": "merkle",
                 "host":"aoabdlp00042.tfayd.com",
                 "port": 10001,
+                "database": "merkle",
+                "tableName": "table",
+                "username": "username",
+                "password": "password",
                 "authMech": "LDAP"
             },
             "appData": {
@@ -48,11 +50,12 @@
         "port": 3001,
         "database": {
             "bigData": {
-                "username": "206438423",
-                "password": "NBCU2015bscs",
-                "database": "merkle",
                 "host":"aoabdlp00042.tfayd.com",
                 "port": 10001,
+                "database": "merkle",
+                "tableName": "table",
+                "username": "username",
+                "password": "password",
                 "authMech": "LDAP"
             },
             "appData": {

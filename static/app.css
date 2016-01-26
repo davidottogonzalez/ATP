@@ -31,7 +31,7 @@ ul.nav-tabs{
 }
 
 .viewContainer{
-    padding-top: 15px;
+    padding: 20px;
 }
 
 .sectionHeading {
@@ -41,21 +41,19 @@ ul.nav-tabs{
 }
 
 .sectionsContainer{
-    padding-top: 15px;
+    padding-top: 10px;
 }
 
 .section{
-    padding-left: 0px;
-    height: 400px !important;
+    min-height: 400px !important;
 }
 
 .halfSection{
-    padding-left: 0px;
-    height: 250px !important;
+    min-height: 250px !important;
 }
 
 .threeFourthSection{
-    height: 325px !important;
+    min-height: 325px !important;
 }
 
 .buttonSection{
@@ -64,13 +62,12 @@ ul.nav-tabs{
 
 .buttonSection > div{
     position: relative;
-    top: 45%;
+    transform: translateY(300%);
     padding-top: 10px;
 }
 
 .fieldLevelLabel{
     font-weight: bold;
-    padding: 14px 0px 0px 0px;
 }
 
 .overflowScroll{
@@ -78,14 +75,20 @@ ul.nav-tabs{
 }
 
 .topContainer {
-    padding-bottom: 10px;
+    padding-bottom: 7px;
+}
+
+.topContainerButton {
+    margin-top: -20px;
+    width: 100%;
 }
 
 .dragDropContainer{
     border: 1px solid;
     border-radius: 8px;
-    overflow: scroll;
-    height: inherit;
+    overflow-y: scroll;
+    height: 325px;
+    margin-top: 5px;
 }
 
 .dragBox, [ng-drag-clone]{
@@ -106,7 +109,11 @@ ul.nav-tabs{
 }
 
 .submitButtons{
-    padding-top: 10px;
+    padding-top: 15px;
+}
+
+.submitButtons > button{
+    margin-right: 20px;
 }
 
 *{
@@ -217,4 +224,29 @@ td {
 
 .table {
     table-layout: fixed;
+}
+
+.nopadding {
+    padding: 0px;
+    margin: 0px;
+}
+
+.operatorsListContainer{
+    padding-top: 10px;
+    overflow: auto;
+}
+
+/*scrollbars css*/
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
 }

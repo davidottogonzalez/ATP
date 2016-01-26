@@ -1,11 +1,12 @@
 from flask import Flask, url_for, redirect, json, request, make_response
-import pyhs2, atp_classes
+import atp_classes
 
 app = Flask(__name__)
 config = atp_classes.Config()
 app.secret_key = config.get_config()['development']['session_secret']
 cache = atp_classes.Cache()
 app_db = atp_classes.AppDB()
+hive_db = atp_classes.HiveDB()
 app_login = atp_classes.AppLogin(app)
 
 
@@ -81,55 +82,33 @@ def query_hive():
     chosen_attributes = []
     query_string = '''SELECT COUNT(*) total_bhds,
        SUM(CASE WHEN fwm_flag == '1' THEN 1 ELSE 0 END) total_fwm'''
-    result_row = []
-    return_results = {}
 
     for dbattribute in get_attributes_from_db():
         for cattribute in form_chosen_attributes:
             if str(dbattribute._id) == cattribute['id']:
                 chosen_attributes.append(dbattribute)
 
-    with pyhs2.connect(host=config.get_config()['development']['database']["bigData"]['host'],
-                       port=config.get_config()['development']['database']["bigData"]['port'],
-                       authMechanism=config.get_config()['development']['database']["bigData"]['authMech'],
-                       user=config.get_config()['development']['database']["bigData"]['username'],
-                       password=config.get_config()['development']['database']["bigData"]['password'],
-                       database=config.get_config()['development']['database']["bigData"]['database']) as conn:
-        with conn.cursor() as cur:
-            print "executing query"
+    for index, attribute in enumerate(chosen_attributes):
+        query_string += ''',
+        SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_{id},
+        SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_{id}_fwm''' \
+            .format(id=attribute._id, expression=attribute.logical_expression.convert_to_string())
 
-            for index, attribute in enumerate(chosen_attributes):
-                query_string += ''',
-                SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_{id},
-                SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_{id}_fwm''' \
-                    .format(id=attribute._id, expression=attribute.logical_expression.convert_to_string())
+        for index2, attribute2 in enumerate(chosen_attributes[(index + 1):]):
+            query_string += ''',
+            SUM(CASE WHEN ({expression} AND {expression2}) THEN 1 ELSE 0 END) total_{id1}_{id2},
+            SUM(CASE WHEN (({expression} AND {expression2}) AND fwm_flag == '1') THEN 1 ELSE 0 END) total_{id1}_{id2}_fwm''' \
+                .format(id1=attribute._id, id2=attribute2._id,
+                        expression=attribute.logical_expression.convert_to_string(),
+                        expression2=attribute2.logical_expression.convert_to_string())
 
-                for index2, attribute2 in enumerate(chosen_attributes[(index + 1):]):
-                    query_string += ''',
-                    SUM(CASE WHEN ({expression} AND {expression2}) THEN 1 ELSE 0 END) total_{id1}_{id2},
-                    SUM(CASE WHEN (({expression} AND {expression2}) AND fwm_flag == '1') THEN 1 ELSE 0 END) total_{id1}_{id2}_fwm''' \
-                        .format(id1=attribute._id, id2=attribute2._id,
-                                expression=attribute.logical_expression.convert_to_string(),
-                                expression2=attribute2.logical_expression.convert_to_string())
+    query_string += '''
+        FROM {tableName}'''\
+        .format(tableName=config.get_config()['development']['database']["bigData"]['tableName'])
 
-            query_string += '''
-                FROM bhds_nomc_nopii'''
+    results = hive_db.execute_query(query_string)
 
-            # Execute query
-            cur.execute(query_string)
-
-            print "done executing query"
-
-            columns = cur.getSchema()
-
-            # Fetch table results
-            for i in cur.fetch():
-                result_row = i
-
-    for index, val in enumerate(result_row):
-        return_results[columns[index]['columnName']] = str(val)
-
-    return json.dumps(return_results)
+    return json.dumps(results[0])
 
 
 @app.route('/queryHive/segments', methods=['POST'])
@@ -140,42 +119,20 @@ def query_hive_segments():
     query_logical_expression = atp_classes.LogicalExpression(form_logical_expression)
 
     query_string = ''
-    result_row = []
-    return_results = {}
 
-    with pyhs2.connect(host=config.get_config()['development']['database']["bigData"]['host'],
-                       port=config.get_config()['development']['database']["bigData"]['port'],
-                       authMechanism=config.get_config()['development']['database']["bigData"]['authMech'],
-                       user=config.get_config()['development']['database']["bigData"]['username'],
-                       password=config.get_config()['development']['database']["bigData"]['password'],
-                       database=config.get_config()['development']['database']["bigData"]['database']) as conn:
-        with conn.cursor() as cur:
-            print "executing query"
+    query_string += '''SELECT COUNT(*) total_bhds,
+        SUM(CASE WHEN fwm_flag == '1' THEN 1 ELSE 0 END) total_fwm,
+        SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_seg_bhds,
+        SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_seg_fwm''' \
+        .format(expression=query_logical_expression.convert_to_string())
 
-            query_string += '''SELECT COUNT(*) total_bhds,
-                SUM(CASE WHEN fwm_flag == '1' THEN 1 ELSE 0 END) total_fwm,
-                SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_seg_bhds,
-                SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_seg_fwm''' \
-                .format(expression=query_logical_expression.convert_to_string())
+    query_string += '''
+        FROM {tableName}'''\
+        .format(tableName=config.get_config()['development']['database']["bigData"]['tableName'])
 
-            query_string += '''
-                FROM bhds_nomc_nopii'''
+    results = hive_db.execute_query(query_string)
 
-            # Execute query
-            cur.execute(query_string)
-
-            print "done executing query"
-
-            columns = cur.getSchema()
-
-            # Fetch table results
-            for i in cur.fetch():
-                result_row = i
-
-    for index, val in enumerate(result_row):
-        return_results[columns[index]['columnName']] = str(val)
-
-    return json.dumps(return_results)
+    return json.dumps(results[0])
 
 
 @app.route('/getAttributesList/')
