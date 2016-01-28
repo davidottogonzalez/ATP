@@ -1,0 +1,25 @@
+<div class="ngdialog-message helpDialog">
+    <div class="dialogTitleBar">Help</div>
+    <div class="helpText">
+        This is the lists of operators one can use in an attribute expression. There are 3 types of operators here. First,
+        there are the boolean operators (AND and OR). These operators are used as conjunctions to combine comparisons in a
+        search. Second, there is the parentheses operator. This is used to grow the expression if one operator and two
+        operands are not enough. Third, there are the comparison operators (>=, <=, ==, <>, and REGEX). These operators
+        allow comparisons between two values. Two comparison operators that may not be intuitive are the <> and REGEX
+        operators. The "<>" operator means not equal to so you can query whether two values are not equal. The REGEX
+        (regular expression) is a little more complicated operator. It is used to find patterns in a string to quickly find
+        matches. For example, if one wants to check if a zip code contains a non-numeric character, we can use the following
+        expression: F004 REGEX '[^0-9]'. This expression will look at the values in the F004 column and run the pattern
+        across the value and return true or false depending if there is a match.
+        <a target="_blank" href="http://www.regular-expressions.info/quickstart.html">Click here</a> for a quick start
+        reference guide to regular expressions and
+        <a target="_blank" href="http://www.cheatography.com/davechild/cheat-sheets/regular-expressions/">Click here</a>
+        for a cheat sheet to a regular expressions.
+    </div>
+    <div class="helpText">
+        Here is a quick example of how to build an expression to search the data set with a state abbreviation of 'FL' and
+        Experian Person 1's age between 20-30
+        <br/>
+        <img class="helpGif" src="/static/images/ab_operators_help.gif"/>
+    </div>
+</div>

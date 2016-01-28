@@ -16,8 +16,8 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
   });
 }])
 
-.controller('AttributeBuilderCtrl', ['$scope', '$http', 'LogicalExpressionService', '$sce', '$compile', 'ngDialog',
- function($scope, $http, LogicalExpressionService, $sce, $compile, ngDialog) {
+.controller('AttributeBuilderCtrl', ['$scope', '$http', 'LogicalExpressionService', '$sce', '$compile',
+'ngDialog', 'HelpService', function($scope, $http, LogicalExpressionService, $sce, $compile, ngDialog, HelpService) {
       $scope.queryAttributes = [];
       $scope.chosenFieldsList = [];
       $scope.literalLists = [];
@@ -247,6 +247,10 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
             $scope.editingAttribute.logical_expression.changeBasedOnHierarchy('', null, $scope.booleanOperators);
         }
 
+      };
+
+      $scope.openHelp = function(file){
+        HelpService.openHelpDialog(file, $scope)
       };
 
       $scope.init();
