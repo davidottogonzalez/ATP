@@ -255,6 +255,10 @@ td {
     overflow: auto;
 }
 
+td.resultQuery {
+    font-size: 18px;
+}
+
 /*scrollbars css*/
 ::-webkit-scrollbar {
     width: 12px;
