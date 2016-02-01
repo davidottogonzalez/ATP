@@ -6,11 +6,13 @@ class Config:
 
     def __init__(self):
         with open(os.path.join(os.path.dirname(__file__), '../config.json')) as data_file:
-            self.__config = self.stringify(json.load(data_file, 'utf-8'))
+            env = os.environ['ATP_ENV'] if 'ATP_ENV' in os.environ else 'development'
+            self.__config = self.stringify(json.load(data_file, 'utf-8'))[env]
 
     def set_config(self, config_path):
         with open(config_path) as data_file:
-            self.__config = self.stringify(json.load(data_file, 'utf-8'))
+            env = os.environ['ATP_ENV'] if 'ATP_ENV' in os.environ else 'development'
+            self.__config = self.stringify(json.load(data_file, 'utf-8'))[env]
 
     def get_config(self):
         return self.__config

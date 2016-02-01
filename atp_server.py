@@ -3,7 +3,7 @@ import atp_classes
 
 app = Flask(__name__)
 config = atp_classes.Config()
-app.secret_key = config.get_config()['development']['session_secret']
+app.secret_key = config.get_config()['session_secret']
 cache = atp_classes.Cache()
 app_db = atp_classes.AppDB()
 hive_db = atp_classes.HiveDB()
@@ -104,7 +104,7 @@ def query_hive():
 
     query_string += '''
         FROM {tableName}'''\
-        .format(tableName=config.get_config()['development']['database']["bigData"]['tableName'])
+        .format(tableName=config.get_config()['database']["bigData"]['tableName'])
 
     results = hive_db.execute_query(query_string)
 
@@ -131,7 +131,7 @@ def query_hive_segments():
 
     query_string += '''
         FROM {tableName}'''\
-        .format(tableName=config.get_config()['development']['database']["bigData"]['tableName'])
+        .format(tableName=config.get_config()['database']["bigData"]['tableName'])
 
     results = hive_db.execute_query(query_string)
 
@@ -254,5 +254,5 @@ def handle_exceptions(err):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host=config.get_config()['development']['host'], threaded=True,
-            port=config.get_config()['development']['port'])
+    app.run(debug=True, host=config.get_config()['host'], threaded=True,
+            port=config.get_config()['port'])

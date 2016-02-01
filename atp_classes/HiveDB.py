@@ -6,12 +6,12 @@ class HiveDB:
 
     def __init__(self, host=None, port=None, username=None, password=None, database=None, auth_mech=None):
         config = atp_classes.Config()
-        self.host = host or config.get_config()['development']['database']['bigData']['host']
-        self.port = port or config.get_config()['development']['database']["bigData"]['port']
-        self.username = username or config.get_config()['development']['database']['bigData']['username']
-        self.password = password or config.get_config()['development']['database']['bigData']['password']
-        self.database = database or config.get_config()['development']['database']["bigData"]['database']
-        self.auth_mech = auth_mech or config.get_config()['development']['database']['bigData']['authMech']
+        self.host = host or config.get_config()['database']['bigData']['host']
+        self.port = port or config.get_config()['database']["bigData"]['port']
+        self.username = username or config.get_config()['database']['bigData']['username']
+        self.password = password or config.get_config()['database']['bigData']['password']
+        self.database = database or config.get_config()['database']["bigData"]['database']
+        self.auth_mech = auth_mech or config.get_config()['database']['bigData']['authMech']
 
     def execute_query(self, query_string):
         result_rows = []
