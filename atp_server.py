@@ -108,6 +108,9 @@ def query_hive():
 
     results = hive_db.execute_query(query_string)
 
+    if not isinstance(results, list):
+        raise Exception(results)
+
     return json.dumps(results[0])
 
 
@@ -131,6 +134,9 @@ def query_hive_segments():
         .format(tableName=config.get_config()['development']['database']["bigData"]['tableName'])
 
     results = hive_db.execute_query(query_string)
+
+    if not isinstance(results, list):
+        raise Exception(results)
 
     return json.dumps(results[0])
 

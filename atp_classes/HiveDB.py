@@ -39,8 +39,8 @@ class HiveDB:
                         result_rows.append(result_obj)
 
                     cur.close()
-                except Pyhs2Exception:
-                    return None
+                except Pyhs2Exception, e:
+                    return e
 
         conn.close()
         return result_rows
