@@ -59,11 +59,24 @@
             <div class="row">
                 <div class="col-md-5 halfSection">
                     <div class="sectionHeading">Attribute options</div>
+                    <div class="inputContainer">
+                        <span class="fieldLevelLabel">Data Source: </span>
+                        <select class="form-control" ng-model="search.data_source">
+                            <option value="">No Filter</option>
+                            <option ng-repeat="ds in dataSourceList" value="{{ds}}">{{ds}}</option>
+                        </select>
+                    </div>
                     <div class="fieldLevelLabel">Fields:
                         <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_fields')"></span>
                     </div>
                     <div class="dragDropContainer">
-                        <div ng-repeat="field in fieldsList track by $index">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <span class="btn btn-default glyphicon glyphicon-search" type="button"></span>
+                            </span>
+                            <input type="text" class="form-control" placeholder="Search for..." ng-model="search.$">
+                        </div>
+                        <div ng-repeat="field in fieldsList | filter:search track by $index">
                             <div ng-drag="true" ng-drag-data="field" ng-center-anchor="true" class="dragBox"
                                  ng-drag-success="onDragComplete($data,$event)" ng-class="{selected: field.selected}"
                                  ng-click="selectField(field)">

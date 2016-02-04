@@ -60,7 +60,7 @@
     padding: 0px 0px 15px;
 }
 
-.inputContainer > input{
+.inputContainer > input, .inputContainer > select{
     width: 70%;
     display: inline-block;
 }
@@ -68,4 +68,8 @@
 .inputContainer > .fieldLevelLabel{
     padding-top: 0px;
     padding-right: 10px;
+}
+
+.input-group{
+    padding: 5px;
 }
