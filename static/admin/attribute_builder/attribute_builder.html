@@ -20,13 +20,19 @@
                     </div>
                 </div>
                 <div class="col-md-12">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <span class="btn btn-default glyphicon glyphicon-search" type="button"></span>
+                        </span>
+                        <input type="text" class="form-control" placeholder="Search for..." ng-model="searchABTable.$">
+                    </div>
                     <table class="table table-bordered table-striped" ng-show="initiated">
                         <tr class="heading_row">
                             <th class="col-md-3">Attribute Name</th>
                             <th class="col-md-8">Expression Preview</th>
                             <th class="col-md-1">Action</th>
                         </tr>
-                        <tr ng-repeat="attribute in queryAttributes track by $index">
+                        <tr ng-repeat="attribute in queryAttributes | filter:searchABTable track by $index">
                             <td class="col-md-3">{{attribute.name}}</td>
                             <td class="col-md-8">{{attribute.expression_string}}</td>
                             <td class="col-md-1">
@@ -61,7 +67,7 @@
                     <div class="sectionHeading">Attribute options</div>
                     <div class="inputContainer">
                         <span class="fieldLevelLabel">Data Source: </span>
-                        <select class="form-control" ng-model="search.data_source">
+                        <select class="form-control" ng-model="searchAB.data_source">
                             <option value="">No Filter</option>
                             <option ng-repeat="ds in dataSourceList" value="{{ds}}">{{ds}}</option>
                         </select>
@@ -74,9 +80,9 @@
                             <span class="input-group-btn">
                                 <span class="btn btn-default glyphicon glyphicon-search" type="button"></span>
                             </span>
-                            <input type="text" class="form-control" placeholder="Search for..." ng-model="search.$">
+                            <input type="text" class="form-control" placeholder="Search for..." ng-model="searchAB.$">
                         </div>
-                        <div ng-repeat="field in fieldsList | filter:search track by $index">
+                        <div ng-repeat="field in fieldsList | filter:searchAB track by $index">
                             <div ng-drag="true" ng-drag-data="field" ng-center-anchor="true" class="dragBox"
                                  ng-drag-success="onDragComplete($data,$event)" ng-class="{selected: field.selected}"
                                  ng-click="selectField(field)">
