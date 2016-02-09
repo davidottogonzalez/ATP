@@ -12,7 +12,7 @@ def get_columns_from_hive_table():
     hive_db = atp_classes.HiveDB()
 
     query_string = '''SHOW COLUMNS FROM {tableName}'''\
-        .format(tableName=config.get_config()['development']['database']["bigData"]['tableName'])
+        .format(tableName=config.get_config()['database']["bigData"]['tableName'])
 
     results = hive_db.execute_query(query_string)
 

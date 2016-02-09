@@ -16,12 +16,13 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
   });
 }])
 
-.controller('AttributeBuilderCtrl', ['$scope', '$http', 'LogicalExpressionService', '$sce', '$compile', 'ngDialog',
- function($scope, $http, LogicalExpressionService, $sce, $compile, ngDialog) {
+.controller('AttributeBuilderCtrl', ['$scope', '$http', 'LogicalExpressionService', '$sce', '$compile',
+'ngDialog', 'HelpService', function($scope, $http, LogicalExpressionService, $sce, $compile, ngDialog, HelpService) {
       $scope.queryAttributes = [];
       $scope.chosenFieldsList = [];
       $scope.literalLists = [];
       $scope.fieldsList = [];
+      $scope.dataSourceList = [];
       $scope.toAddField = {name : 'id'};
       $scope.initiated = false;
       $scope.booleanOperators = [
@@ -65,6 +66,7 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
 
         $http.get('/admin/getFieldsList/').then(function(res){
             $scope.fieldsList = res.data;
+            $scope.buildDataSourceList();
         });
       };
 
@@ -74,6 +76,18 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
         $http.get('/admin/getAttributesList/').then(function(res){
             $scope.queryAttributes = res.data;
             $scope.initiated = true;
+        });
+      };
+
+      $scope.buildDataSourceList = function() {
+        angular.forEach($scope.fieldsList, function(value)
+        {
+           if(typeof value.data_source != 'undefined' &&
+              $scope.dataSourceList.indexOf(value.data_source) == -1 &&
+              value.data_source != '')
+           {
+                $scope.dataSourceList.push(value.data_source);
+           }
         });
       };
 
@@ -247,6 +261,10 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
             $scope.editingAttribute.logical_expression.changeBasedOnHierarchy('', null, $scope.booleanOperators);
         }
 
+      };
+
+      $scope.openHelp = function(file){
+        HelpService.openHelpDialog(file, $scope)
       };
 
       $scope.init();

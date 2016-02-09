@@ -11,16 +11,16 @@ class AppDB:
 
     def __init__(self):
         config = atp_classes.Config()
-        host = config.get_config()['development']['database']['appData']['host']
-        username = config.get_config()['development']['database']['appData']['username']
-        password = config.get_config()['development']['database']['appData']['password']
-        auth_db = config.get_config()['development']['database']['appData']['authDB']
+        host = config.get_config()['database']['appData']['host']
+        username = config.get_config()['database']['appData']['username']
+        password = config.get_config()['database']['appData']['password']
+        auth_db = config.get_config()['database']['appData']['authDB']
 
         uri = "mongodb://{u}:{p}@{h}/?authSource={dbAuth}".format(
             u=username, p=password, h=host, dbAuth=auth_db
         )
         self.client = MongoClient(uri)
-        self.db = self.client[config.get_config()['development']['database']['appData']['database']]
+        self.db = self.client[config.get_config()['database']['appData']['database']]
 
     def set_db(self, db):
         self.db = self.client[db]

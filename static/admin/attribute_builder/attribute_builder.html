@@ -20,13 +20,19 @@
                     </div>
                 </div>
                 <div class="col-md-12">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <span class="btn btn-default glyphicon glyphicon-search" type="button"></span>
+                        </span>
+                        <input type="text" class="form-control" placeholder="Search for..." ng-model="searchABTable.$">
+                    </div>
                     <table class="table table-bordered table-striped" ng-show="initiated">
                         <tr class="heading_row">
                             <th class="col-md-3">Attribute Name</th>
                             <th class="col-md-8">Expression Preview</th>
                             <th class="col-md-1">Action</th>
                         </tr>
-                        <tr ng-repeat="attribute in queryAttributes track by $index">
+                        <tr ng-repeat="attribute in queryAttributes | filter:searchABTable track by $index">
                             <td class="col-md-3">{{attribute.name}}</td>
                             <td class="col-md-8">{{attribute.expression_string}}</td>
                             <td class="col-md-1">
@@ -59,9 +65,24 @@
             <div class="row">
                 <div class="col-md-5 halfSection">
                     <div class="sectionHeading">Attribute options</div>
-                    <div class="fieldLevelLabel">Fields:</div>
+                    <div class="inputContainer">
+                        <span class="fieldLevelLabel">Data Source: </span>
+                        <select class="form-control" ng-model="searchAB.data_source">
+                            <option value="">No Filter</option>
+                            <option ng-repeat="ds in dataSourceList" value="{{ds}}">{{ds}}</option>
+                        </select>
+                    </div>
+                    <div class="fieldLevelLabel">Fields:
+                        <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_fields')"></span>
+                    </div>
                     <div class="dragDropContainer">
-                        <div ng-repeat="field in fieldsList track by $index">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <span class="btn btn-default glyphicon glyphicon-search" type="button"></span>
+                            </span>
+                            <input type="text" class="form-control" placeholder="Search for..." ng-model="searchAB.$">
+                        </div>
+                        <div ng-repeat="field in fieldsList | filter:searchAB track by $index">
                             <div ng-drag="true" ng-drag-data="field" ng-center-anchor="true" class="dragBox"
                                  ng-drag-success="onDragComplete($data,$event)" ng-class="{selected: field.selected}"
                                  ng-click="selectField(field)">
@@ -73,7 +94,8 @@
                         {{draggingObject.displayName}}
                     </div>
                     <div class="operatorsContainer">
-                        <span class="fieldLevelLabel">Operators:</span>
+                        <span class="fieldLevelLabel">Operators: </span>
+                        <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_operators')"></span>
                         <div class="operatorsListContainer">
                             <div ng-repeat="boolean in booleanOperators track by $index">
                                 <div ng-drag="true" ng-drag-data="boolean" class="dragBox operator" ng-center-anchor="true"
@@ -84,7 +106,9 @@
                         </div>
                     </div>
                     <div class="literalContainer">
-                        <span class="fieldLevelLabel">Literal String:</span>
+                        <span class="fieldLevelLabel">Literal String:
+                            <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_literals')"></span>
+                        </span>
                         <input type="text" class="form-control literalInput" ng-model="newLiteral.name" />
                         <button type="submit" class="btn btn-primary" ng-click="saveLiteral()">Add</button>
                         <div ng-repeat="literal in literalLists track by $index">
@@ -117,6 +141,7 @@
                     </div>
                     <div>
                         <span class="fieldLevelLabel">Attribute expression: </span>
+                        <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_expression')"></span>
                     </div>
                     <div class="dragDropContainer">
                         <div class="queryContainer">

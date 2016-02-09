@@ -74,6 +74,7 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
         $scope.showResults = false;
         $scope.returnedError = false;
         $scope.returnedErrorMessage = '';
+        $scope.expressionString = LogicalExpressionService.convertToString($scope.topLogicalExpression);
 
         ngDialog.open({
             template:'static/partials/segments_table.html',
