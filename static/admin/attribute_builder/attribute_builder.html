@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-md-12 topContainer">
                     <div class="row">
-                        <span class="col-md-10 fieldLevelLabel">Existing attributes:</span>
+                        <span class="col-md-10 fieldLevelLabel">Existing attributes</span>
                         <div class="col-md-2">
                             <button type="submit" class="btn btn-primary topContainerButton" ng-click="showAddAttribute()">
                                 Add Attribute
@@ -64,13 +64,13 @@
                 <div class="col-md-5 halfSection">
                     <div class="sectionHeading">Attribute options</div>
                     <div class="inputContainer">
-                        <span class="fieldLevelLabel">Data Source: </span>
+                        <span class="fieldLevelLabel">Data Source </span>
                         <select class="form-control" ng-model="searchAB.data_source">
-                            <option value="">No Filter</option>
+                            <option value="">All</option>
                             <option ng-repeat="ds in dataSourceList" value="{{ds}}">{{ds}}</option>
                         </select>
                     </div>
-                    <div class="fieldLevelLabel">Fields:
+                    <div class="fieldLevelLabel">Fields
                         <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_fields')"></span>
                     </div>
                     <div class="dragDropContainer">
@@ -90,7 +90,7 @@
                         {{draggingObject.displayName}}
                     </div>
                     <div class="operatorsContainer">
-                        <span class="fieldLevelLabel">Operators: </span>
+                        <span class="fieldLevelLabel">Operators </span>
                         <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_operators')"></span>
                         <div class="operatorsListContainer">
                             <div ng-repeat="boolean in booleanOperators track by $index">
@@ -102,7 +102,7 @@
                         </div>
                     </div>
                     <div class="literalContainer">
-                        <span class="fieldLevelLabel">Literal String:
+                        <span class="fieldLevelLabel">Literal String
                             <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_literals')"></span>
                         </span>
                         <input type="text" class="form-control literalInput" ng-model="newLiteral.name" />
@@ -132,11 +132,11 @@
                         No part of the Logical Expression can be empty!
                     </div>
                     <div class="inputContainer">
-                        <span class="fieldLevelLabel">Name: </span>
+                        <span class="fieldLevelLabel">Name </span>
                         <input type="text" class="form-control" ng-model="editingAttribute.name" ng-change="clearNameError()"/>
                     </div>
                     <div>
-                        <span class="fieldLevelLabel">Attribute expression: </span>
+                        <span class="fieldLevelLabel">Attribute expression </span>
                         <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_expression')"></span>
                     </div>
                     <div class="dragDropContainer">
