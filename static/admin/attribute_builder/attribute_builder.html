@@ -21,9 +21,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="input-group">
-                        <span class="input-group-btn">
-                            <span class="btn btn-default glyphicon glyphicon-search" type="button"></span>
-                        </span>
+                        <span class="input-group-addon glyphicon glyphicon-search"></span>
                         <input type="text" class="form-control" placeholder="Search for..." ng-model="searchABTable.$">
                     </div>
                     <table class="table table-bordered table-striped" ng-show="initiated">
@@ -77,9 +75,7 @@
                     </div>
                     <div class="dragDropContainer">
                         <div class="input-group">
-                            <span class="input-group-btn">
-                                <span class="btn btn-default glyphicon glyphicon-search" type="button"></span>
-                            </span>
+                            <span class="input-group-addon glyphicon glyphicon-search"></span>
                             <input type="text" class="form-control" placeholder="Search for..." ng-model="searchAB.$">
                         </div>
                         <div ng-repeat="field in fieldsList | filter:searchAB track by $index">

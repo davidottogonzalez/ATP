@@ -14,9 +14,7 @@
                 <span class="fieldLevelLabel">Available attributes:</span>
                 <div class="dragDropContainer">
                     <div class="input-group">
-                        <span class="input-group-btn">
-                            <span class="btn btn-default glyphicon glyphicon-search" type="button"></span>
-                        </span>
+                        <span class="input-group-addon glyphicon glyphicon-search"></span>
                         <input type="text" class="form-control" placeholder="Search for..." ng-model="searchSegments.$">
                     </div>
                     <div ng-repeat="attribute in queryAttributes | filter:searchSegments track by $index">

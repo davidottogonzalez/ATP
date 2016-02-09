@@ -279,6 +279,7 @@ td.resultQuery {
     padding: 5px;
 }
 
-.input-group-btn > .glyphicon{
+.input-group-addon.glyphicon{
     top: 0px;
+    cursor: default;
 }
