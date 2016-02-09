@@ -27,13 +27,13 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
       $scope.initiated = false;
       $scope.booleanOperators = [
         {
+            name:'Parentheses'
+        },
+        {
             name:'AND'
         },
         {
             name:'OR'
-        },
-        {
-            name:'Parentheses'
         },
         {
             name:'>='
