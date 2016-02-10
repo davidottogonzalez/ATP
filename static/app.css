@@ -79,7 +79,6 @@ ul.nav-tabs{
 }
 
 .topContainerButton {
-    margin-top: -20px;
     width: 100%;
 }
 
@@ -285,5 +284,5 @@ td.resultQuery {
 }
 
 .input-group.topTable{
-    padding: 5px 0px;
+    padding-bottom: 10px;
 }

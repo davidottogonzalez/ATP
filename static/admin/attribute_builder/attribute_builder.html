@@ -11,18 +11,22 @@
             <div class="row">
                 <div class="col-md-12 topContainer">
                     <div class="row">
-                        <span class="col-md-10 fieldLevelLabel">Existing attributes</span>
-                        <div class="col-md-2">
+                        <span class="col-md-12 fieldLevelLabel">Existing attributes</span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="input-group topTable">
+                                <span class="input-group-addon glyphicon glyphicon-search"></span>
+                                <input type="text" class="form-control" placeholder="Search for..." ng-model="searchABTable.$">
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-md-offset-6">
                             <button type="submit" class="btn btn-primary topContainerButton" ng-click="showAddAttribute()">
                                 Add Attribute
                             </button>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="input-group topTable">
-                        <span class="input-group-addon glyphicon glyphicon-search"></span>
-                        <input type="text" class="form-control" placeholder="Search for..." ng-model="searchABTable.$">
                     </div>
                     <table class="table table-bordered table-striped" ng-show="initiated">
                         <tr class="heading_row">
