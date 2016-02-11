@@ -18,6 +18,10 @@
                             <div class="input-group topTable">
                                 <span class="input-group-addon glyphicon glyphicon-search"></span>
                                 <input type="text" class="form-control" placeholder="Search for..." ng-model="searchUETable.$">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default glyphicon glyphicon-remove-circle" type="button"
+                                            ng-click="searchUETable = {}" title="Clear"></button>
+                                </span>
                             </div>
                         </div>
                         <div class="col-md-2 col-md-offset-6">

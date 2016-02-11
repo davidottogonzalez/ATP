@@ -16,6 +16,10 @@
                     <div class="input-group insideContainer">
                         <span class="input-group-addon glyphicon glyphicon-search"></span>
                         <input type="text" class="form-control" placeholder="Search for..." ng-model="searchSegments.$">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default glyphicon glyphicon-remove-circle" type="button"
+                                    ng-click="searchSegments = {}" title="Clear"></button>
+                        </span>
                     </div>
                     <div ng-repeat="attribute in queryAttributes | filter:searchSegments track by $index">
                         <div ng-drag="true" ng-drag-data="attribute" ng-center-anchor="true" class="dragBox"

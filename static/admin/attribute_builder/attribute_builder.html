@@ -20,6 +20,10 @@
                             <div class="input-group topTable">
                                 <span class="input-group-addon glyphicon glyphicon-search"></span>
                                 <input type="text" class="form-control" placeholder="Search for..." ng-model="searchABTable.$">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default glyphicon glyphicon-remove-circle" type="button"
+                                            ng-click="searchABTable = {}" title="Clear"></button>
+                                </span>
                             </div>
                         </div>
                         <div class="col-md-2 col-md-offset-6">
@@ -81,6 +85,10 @@
                         <div class="input-group insideContainer">
                             <span class="input-group-addon glyphicon glyphicon-search"></span>
                             <input type="text" class="form-control" placeholder="Search for..." ng-model="searchAB.$">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default glyphicon glyphicon-remove-circle" type="button"
+                                        ng-click="searchAB = {}" title="Clear"></button>
+                            </span>
                         </div>
                         <div ng-repeat="field in fieldsList | filter:searchAB track by $index">
                             <div ng-drag="true" ng-drag-data="field" ng-center-anchor="true" class="dragBox"
