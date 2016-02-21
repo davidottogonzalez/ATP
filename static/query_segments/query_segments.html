@@ -21,11 +21,13 @@
                                     ng-click="searchSegments = {}" title="Clear"></button>
                         </span>
                     </div>
-                    <div ng-repeat="attribute in queryAttributes | filter:searchSegments track by $index">
-                        <div ng-drag="true" ng-drag-data="attribute" ng-center-anchor="true" class="dragBox"
-                             ng-drag-success="onDropComplete($data,$event)" ng-class="{selected: attribute.selected}"
-                             ng-click="selectAttribute(attribute)">
-                            {{attribute.name}}
+                    <div class="scrollableInnerContainer">
+                        <div ng-repeat="attribute in queryAttributes | filter:searchSegments track by $index">
+                            <div ng-drag="true" ng-drag-data="attribute" ng-center-anchor="true" class="dragBox"
+                                 ng-drag-success="onDropComplete($data,$event)" ng-class="{selected: attribute.selected}"
+                                 ng-click="selectAttribute(attribute)">
+                                {{attribute.name}}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -54,7 +56,7 @@
                     No part of the Logical Expression can be empty!
                 </div>
                 <span class="fieldLevelLabel">Query</span>
-                <div class="dragDropContainer">
+                <div class="dragDropContainer scrollableOuterContainer">
                     <div class="queryContainer">
                         <logical-expression-drop ng-model="topLogicalExpression" />
                     </div>

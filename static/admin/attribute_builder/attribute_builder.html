@@ -90,11 +90,13 @@
                                         ng-click="searchAB = {}" title="Clear"></button>
                             </span>
                         </div>
-                        <div ng-repeat="field in fieldsList | filter:searchAB track by $index">
-                            <div ng-drag="true" ng-drag-data="field" ng-center-anchor="true" class="dragBox"
-                                 ng-drag-success="onDragComplete($data,$event)" ng-class="{selected: field.selected}"
-                                 ng-click="selectField(field)">
-                                {{field.name}} ({{field.description}} | {{field.data_source}})
+                        <div class="scrollableInnerContainer">
+                            <div ng-repeat="field in fieldsList | filter:searchAB track by $index">
+                                <div ng-drag="true" ng-drag-data="field" ng-center-anchor="true" class="dragBox"
+                                     ng-drag-success="onDragComplete($data,$event)" ng-class="{selected: field.selected}"
+                                     ng-click="selectField(field)">
+                                    {{field.name}} ({{field.description}} | {{field.data_source}})
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -151,7 +153,7 @@
                         <span class="fieldLevelLabel">Attribute expression </span>
                         <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_expression')"></span>
                     </div>
-                    <div class="dragDropContainer">
+                    <div class="dragDropContainer scrollableOuterContainer">
                         <div class="queryContainer">
                             <logical-expression-drop ng-model="editingAttribute.logical_expression" />
                         </div>

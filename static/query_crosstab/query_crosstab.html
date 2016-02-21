@@ -20,10 +20,12 @@
                                         ng-click="searchCrosstab = {}" title="Clear"></button>
                             </span>
                         </div>
-                        <div ng-repeat="attribute in queryAttributes | filter:searchCrosstab track by $index">
-                            <div ng-drag="true" ng-drag-data="attribute" ng-center-anchor="true" class="dragBox"
-                                 ng-click="selectAttribute(attribute)" ng-class="{selected: attribute.selected}">
-                                {{attribute.name}}
+                        <div class="scrollableInnerContainer">
+                            <div ng-repeat="attribute in queryAttributes | filter:searchCrosstab track by $index">
+                                <div ng-drag="true" ng-drag-data="attribute" ng-center-anchor="true" class="dragBox"
+                                     ng-click="selectAttribute(attribute)" ng-class="{selected: attribute.selected}">
+                                    {{attribute.name}}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -37,7 +39,7 @@
                 </div>
                 <div class="col-md-5 section">
                     <span class="fieldLevelLabel">Query attributes</span>
-                    <div class="dragDropContainer" ng-drop="true" ng-drop-success="onDropComplete($data,$event)">
+                    <div class="dragDropContainer scrollableOuterContainer" ng-drop="true" ng-drop-success="onDropComplete($data,$event)">
                         <div ng-repeat="attribute in chosenAttributes track by $index">
                             <div ng-drag-data="attribute" ng-center-anchor="true" class="dragBox"
                                  ng-drag-success="onDragComplete($data,$event)">
