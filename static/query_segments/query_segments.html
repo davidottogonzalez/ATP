@@ -11,19 +11,23 @@
     <div class="col-md-12 sectionsContainer">
         <div class="row">
             <div class="col-md-5 halfSection">
-                <span class="fieldLevelLabel">Available attributes:</span>
+                <span class="fieldLevelLabel">Available attributes</span>
                 <div class="dragDropContainer">
-                    <div class="input-group">
+                    <div class="input-group insideContainer">
+                        <span class="input-group-addon glyphicon glyphicon-search"></span>
+                        <input type="text" class="form-control" placeholder="Search" ng-model="searchSegments.$">
                         <span class="input-group-btn">
-                            <span class="btn btn-default glyphicon glyphicon-search" type="button"></span>
+                            <button class="btn btn-default glyphicon glyphicon-remove-circle" type="button"
+                                    ng-click="searchSegments = {}" title="Clear"></button>
                         </span>
-                        <input type="text" class="form-control" placeholder="Search for..." ng-model="searchSegments.$">
                     </div>
-                    <div ng-repeat="attribute in queryAttributes | filter:searchSegments track by $index">
-                        <div ng-drag="true" ng-drag-data="attribute" ng-center-anchor="true" class="dragBox"
-                             ng-drag-success="onDropComplete($data,$event)" ng-class="{selected: attribute.selected}"
-                             ng-click="selectAttribute(attribute)">
-                            {{attribute.name}}
+                    <div class="scrollableInnerContainer">
+                        <div ng-repeat="attribute in queryAttributes | filter:searchSegments track by $index">
+                            <div ng-drag="true" ng-drag-data="attribute" ng-center-anchor="true" class="dragBox"
+                                 ng-drag-success="onDropComplete($data,$event)" ng-class="{selected: attribute.selected}"
+                                 ng-click="selectAttribute(attribute)">
+                                {{attribute.name}}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -31,7 +35,7 @@
                     {{draggingObject.name}}
                 </div>
                 <div class="operatorsContainer">
-                    <span class="fieldLevelLabel">Operators:</span>
+                    <span class="fieldLevelLabel">Operators</span>
                     <div class="operatorsListContainer">
                         <div ng-repeat="boolean in booleanOperators track by $index">
                             <div ng-drag="true" ng-drag-data="boolean" class="dragBox operator" ng-center-anchor="true" ng-drag-success="onDropComplete($data,$event)">
@@ -51,8 +55,8 @@
                     <span class="sr-only">Error:</span>
                     No part of the Logical Expression can be empty!
                 </div>
-                <span class="fieldLevelLabel">Query:</span>
-                <div class="dragDropContainer">
+                <span class="fieldLevelLabel">Query</span>
+                <div class="dragDropContainer scrollableOuterContainer">
                     <div class="queryContainer">
                         <logical-expression-drop ng-model="topLogicalExpression" />
                     </div>

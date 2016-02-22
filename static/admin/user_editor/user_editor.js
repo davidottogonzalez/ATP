@@ -82,8 +82,14 @@ angular.module('myApp.user_editor', ['ngRoute', 'ngDialog'])
     };
 
     $scope.removeUser = function(user) {
+        $scope.deletingGeneralLabel = 'user';
+        $scope.deletingSpecificLabel = '"' + user.username + '" user';
+        $scope.confirmButtonLabel = 'Delete User';
+
         ngDialog.openConfirm({
-            template:'static/partials/dialogs/confirm.html'
+            template:'static/partials/dialogs/confirm.html',
+            scope: $scope,
+            className: 'smallDialog ngdialog ngdialog-theme-plain'
         }).then(function (confirm) {
             $scope.editingUser = {
                 id: 0,

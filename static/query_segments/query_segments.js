@@ -23,7 +23,7 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
       $scope.booleanOperators = [
         {
             id:1,
-            name:'AND'
+            name:'Parentheses'
         },
         {
             id:2,
@@ -31,7 +31,7 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
         },
         {
             id:3,
-            name:'Parentheses'
+            name:'AND'
         }
       ];
 

@@ -9,20 +9,26 @@
             <div class="row">
                 <div class="col-md-12 topContainer">
                     <div class="row">
-                        <span class="col-md-10 fieldLevelLabel">Existing users:</span>
-                        <div class="col-md-2">
+                        <span class="col-md-10 fieldLevelLabel">Existing users</span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="input-group topTable">
+                                <span class="input-group-addon glyphicon glyphicon-search"></span>
+                                <input type="text" class="form-control" placeholder="Search" ng-model="searchUETable.$">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default glyphicon glyphicon-remove-circle" type="button"
+                                            ng-click="searchUETable = {}" title="Clear"></button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-md-offset-6">
                             <button type="submit" class="btn btn-primary topContainerButton" ng-click="showNewUserForm()">
                                 Add User
                             </button>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="input-group">
-                        <span class="input-group-btn">
-                            <span class="btn btn-default glyphicon glyphicon-search" type="button"></span>
-                        </span>
-                        <input type="text" class="form-control" placeholder="Search for..." ng-model="searchUETable.$">
                     </div>
                     <table class="table table-bordered table-striped" ng-show="initiated">
                         <tr>

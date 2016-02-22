@@ -27,13 +27,13 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
       $scope.initiated = false;
       $scope.booleanOperators = [
         {
+            name:'Parentheses'
+        },
+        {
             name:'AND'
         },
         {
             name:'OR'
-        },
-        {
-            name:'Parentheses'
         },
         {
             name:'>='
@@ -192,8 +192,14 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
       };
 
       $scope.removeAttribute = function(attribute) {
+        $scope.deletingGeneralLabel = 'attribute';
+        $scope.deletingSpecificLabel = '"' + attribute.name + '" attribute';
+        $scope.confirmButtonLabel = 'Delete Attribute';
+
         ngDialog.openConfirm({
-            template:'static/partials/dialogs/confirm.html'
+            template:'static/partials/dialogs/confirm.html',
+            scope: $scope,
+            className: 'smallDialog ngdialog ngdialog-theme-plain'
         }).then(function (confirm) {
             $scope.editingAttribute = {
                 id : 0,

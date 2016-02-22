@@ -11,20 +11,26 @@
             <div class="row">
                 <div class="col-md-12 topContainer">
                     <div class="row">
-                        <span class="col-md-10 fieldLevelLabel">Existing attributes:</span>
-                        <div class="col-md-2">
+                        <span class="col-md-12 fieldLevelLabel">Existing attributes</span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="input-group topTable">
+                                <span class="input-group-addon glyphicon glyphicon-search"></span>
+                                <input type="text" class="form-control" placeholder="Search" ng-model="searchABTable.$">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default glyphicon glyphicon-remove-circle" type="button"
+                                            ng-click="searchABTable = {}" title="Clear"></button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-md-offset-6">
                             <button type="submit" class="btn btn-primary topContainerButton" ng-click="showAddAttribute()">
                                 Add Attribute
                             </button>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="input-group">
-                        <span class="input-group-btn">
-                            <span class="btn btn-default glyphicon glyphicon-search" type="button"></span>
-                        </span>
-                        <input type="text" class="form-control" placeholder="Search for..." ng-model="searchABTable.$">
                     </div>
                     <table class="table table-bordered table-striped" ng-show="initiated">
                         <tr class="heading_row">
@@ -66,27 +72,31 @@
                 <div class="col-md-5 halfSection">
                     <div class="sectionHeading">Attribute options</div>
                     <div class="inputContainer">
-                        <span class="fieldLevelLabel">Data Source: </span>
+                        <span class="fieldLevelLabel">Data Source </span>
                         <select class="form-control" ng-model="searchAB.data_source">
-                            <option value="">No Filter</option>
+                            <option value="">All</option>
                             <option ng-repeat="ds in dataSourceList" value="{{ds}}">{{ds}}</option>
                         </select>
                     </div>
-                    <div class="fieldLevelLabel">Fields:
+                    <div class="fieldLevelLabel">Fields
                         <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_fields')"></span>
                     </div>
                     <div class="dragDropContainer">
-                        <div class="input-group">
+                        <div class="input-group insideContainer">
+                            <span class="input-group-addon glyphicon glyphicon-search"></span>
+                            <input type="text" class="form-control" placeholder="Search" ng-model="searchAB.$">
                             <span class="input-group-btn">
-                                <span class="btn btn-default glyphicon glyphicon-search" type="button"></span>
+                                <button class="btn btn-default glyphicon glyphicon-remove-circle" type="button"
+                                        ng-click="searchAB = {}" title="Clear"></button>
                             </span>
-                            <input type="text" class="form-control" placeholder="Search for..." ng-model="searchAB.$">
                         </div>
-                        <div ng-repeat="field in fieldsList | filter:searchAB track by $index">
-                            <div ng-drag="true" ng-drag-data="field" ng-center-anchor="true" class="dragBox"
-                                 ng-drag-success="onDragComplete($data,$event)" ng-class="{selected: field.selected}"
-                                 ng-click="selectField(field)">
-                                {{field.name}} ({{field.description}} | {{field.data_source}})
+                        <div class="scrollableInnerContainer">
+                            <div ng-repeat="field in fieldsList | filter:searchAB track by $index">
+                                <div ng-drag="true" ng-drag-data="field" ng-center-anchor="true" class="dragBox"
+                                     ng-drag-success="onDragComplete($data,$event)" ng-class="{selected: field.selected}"
+                                     ng-click="selectField(field)">
+                                    {{field.name}} ({{field.description}} | {{field.data_source}})
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -94,7 +104,7 @@
                         {{draggingObject.displayName}}
                     </div>
                     <div class="operatorsContainer">
-                        <span class="fieldLevelLabel">Operators: </span>
+                        <span class="fieldLevelLabel">Operators </span>
                         <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_operators')"></span>
                         <div class="operatorsListContainer">
                             <div ng-repeat="boolean in booleanOperators track by $index">
@@ -106,7 +116,7 @@
                         </div>
                     </div>
                     <div class="literalContainer">
-                        <span class="fieldLevelLabel">Literal String:
+                        <span class="fieldLevelLabel">Literal String
                             <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_literals')"></span>
                         </span>
                         <input type="text" class="form-control literalInput" ng-model="newLiteral.name" />
@@ -136,14 +146,14 @@
                         No part of the Logical Expression can be empty!
                     </div>
                     <div class="inputContainer">
-                        <span class="fieldLevelLabel">Name: </span>
+                        <span class="fieldLevelLabel">Name </span>
                         <input type="text" class="form-control" ng-model="editingAttribute.name" ng-change="clearNameError()"/>
                     </div>
                     <div>
-                        <span class="fieldLevelLabel">Attribute expression: </span>
+                        <span class="fieldLevelLabel">Attribute expression </span>
                         <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_expression')"></span>
                     </div>
-                    <div class="dragDropContainer">
+                    <div class="dragDropContainer scrollableOuterContainer">
                         <div class="queryContainer">
                             <logical-expression-drop ng-model="editingAttribute.logical_expression" />
                         </div>
