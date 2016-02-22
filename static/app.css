@@ -112,7 +112,8 @@ ul.nav-tabs{
 }
 
 .dragBox.selected {
-    outline: 1px solid blue;
+    background-color: blue;
+    color: white;
 }
 
 .submitButtons{
