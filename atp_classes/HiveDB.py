@@ -1,5 +1,5 @@
-from pyhs2.error import Pyhs2Exception
-import atp_classes, pyhs2, re
+from impala.dbapi import connect
+import atp_classes, re
 
 
 class HiveDB:
@@ -16,8 +16,8 @@ class HiveDB:
     def execute_query(self, query_string):
         result_rows = []
 
-        with pyhs2.connect(host=self.host, port=self.port, authMechanism=self.auth_mech,
-                           user=self.username, password=self.password, database=self.database)as conn:
+        with connect(host=self.host, port=self.port, auth_mechanism=self.auth_mech, user=self.username,
+                     password=self.password, database=self.database)as conn:
             with conn.cursor() as cur:
                 try:
                     print "executing query"
@@ -28,18 +28,18 @@ class HiveDB:
                     print "done executing query"
 
                     # Get column names
-                    columns = cur.getSchema()
+                    columns = cur.description
 
                     # Fetch table results
-                    for i in cur.fetch():
+                    for row in cur:
                         result_obj = {}
                         for index, val in enumerate(columns):
-                            val['columnName'] = val['columnName']
-                            result_obj[re.sub(r'.*[.]', '', val['columnName'])] = i[index]
+                            # Remove characters and dot which precedes column name for key values
+                            result_obj[re.sub(r'.*[.]', '', val[0])] = row[index]
                         result_rows.append(result_obj)
 
-                    cur.close()
-                except Pyhs2Exception, e:
+                    conn.close()
+                except Exception, e:
                     return e
 
         conn.close()
