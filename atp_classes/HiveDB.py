@@ -37,8 +37,6 @@ class HiveDB:
                             # Remove characters and dot which precedes column name for key values
                             result_obj[re.sub(r'.*[.]', '', val[0])] = row[index]
                         result_rows.append(result_obj)
-
-                    conn.close()
                 except Exception, e:
                     return e
 
