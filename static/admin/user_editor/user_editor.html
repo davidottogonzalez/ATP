@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-md-12 topContainer">
                     <div class="row">
-                        <span class="col-md-10 fieldLevelLabel">Existing users</span>
+                        <span class="col-md-10 fieldLevelLabel brandingFontColor">Existing users</span>
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -60,7 +60,7 @@
         </div>
         <div class="col-md-12 sectionsContainer">
             <form name="userForm" class="form-signin" ng-submit="userForm.$valid && saveUser()">
-                <h2 class="form-signin-heading">{{formTitle}}</h2>
+                <h2 class="form-signin-heading brandingFontColor">{{formTitle}}</h2>
                 <label>Username</label>
                 <input ng-model="editingUser.username" class="form-control" placeholder="Username" required="" autofocus="">
                 <br />
@@ -68,7 +68,7 @@
                 <input ng-model="editingUser.password" type="password" class="form-control" placeholder="Password" required="">
                 <br />
                 <button class="btn btn-primary btn-block" type="submit">{{formButton}}</button>
-                <button class="btn btn-primary btn-block" type="button" ng-click="cancelEditing()">Cancel</button>
+                <button class="btn btn-danger btn-block" type="button" ng-click="cancelEditing()">Cancel</button>
             </form>
         </div>
     </div>

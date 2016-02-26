@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-md-12 topContainer">
                     <div class="row">
-                        <span class="col-md-12 fieldLevelLabel">Existing attributes</span>
+                        <span class="col-md-12 fieldLevelLabel brandingFontColor">Existing attributes</span>
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -70,61 +70,65 @@
         <div class="col-md-12 sectionsContainer">
             <div class="row">
                 <div class="col-md-5 halfSection">
-                    <div class="sectionHeading">Attribute options</div>
-                    <div class="inputContainer">
-                        <span class="fieldLevelLabel">Data Source </span>
-                        <select class="form-control" ng-model="searchAB.data_source">
-                            <option value="">All</option>
-                            <option ng-repeat="ds in dataSourceList" value="{{ds}}">{{ds}}</option>
-                        </select>
-                    </div>
-                    <div class="fieldLevelLabel">Fields
-                        <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_fields')"></span>
-                    </div>
-                    <div class="dragDropContainer">
-                        <div class="input-group insideContainer">
-                            <span class="input-group-addon glyphicon glyphicon-search"></span>
-                            <input type="text" class="form-control" placeholder="Search" ng-model="searchAB.$">
+                    <div class="borderedGroup">
+                        <div class="sectionHeading">
+                            <span class="brandingFontColor">Attribute options</span>
+                        </div>
+                        <div class="inputContainer">
+                            <span class="fieldLevelLabel">Data Source </span>
+                            <select class="form-control" ng-model="searchAB.data_source">
+                                <option value="">All</option>
+                                <option ng-repeat="ds in dataSourceList" value="{{ds}}">{{ds}}</option>
+                            </select>
+                        </div>
+                        <div class="fieldLevelLabel">Fields
+                            <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_fields')"></span>
+                        </div>
+                        <div class="dragDropContainer">
+                            <div class="input-group insideContainer">
+                                <span class="input-group-addon glyphicon glyphicon-search"></span>
+                                <input type="text" class="form-control" placeholder="Search" ng-model="searchAB.$">
                             <span class="input-group-btn">
                                 <button class="btn btn-default glyphicon glyphicon-remove-circle" type="button"
                                         ng-click="searchAB = {}" title="Clear"></button>
                             </span>
-                        </div>
-                        <div class="scrollableInnerContainer">
-                            <div ng-repeat="field in fieldsList | filter:searchAB track by $index">
-                                <div ng-drag="true" ng-drag-data="field" ng-center-anchor="true" class="dragBox"
-                                     ng-drag-success="onDragComplete($data,$event)" ng-class="{selected: field.selected}"
-                                     ng-click="selectField(field)">
-                                    {{field.name}} ({{field.description}} | {{field.data_source}})
+                            </div>
+                            <div class="scrollableInnerContainer">
+                                <div ng-repeat="field in fieldsList | filter:searchAB track by $index">
+                                    <div ng-drag="true" ng-drag-data="field" ng-center-anchor="true" class="dragBox"
+                                         ng-drag-success="onDragComplete($data,$event)" ng-class="{selected: field.selected}"
+                                         ng-click="selectField(field)">
+                                        {{field.name}} ({{field.description}} | {{field.data_source}})
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div ng-drag-clone ng-class="{operator: isDraggingOperator}">
-                        {{draggingObject.displayName}}
-                    </div>
-                    <div class="operatorsContainer">
-                        <span class="fieldLevelLabel">Operators </span>
-                        <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_operators')"></span>
-                        <div class="operatorsListContainer">
-                            <div ng-repeat="boolean in booleanOperators track by $index">
-                                <div ng-drag="true" ng-drag-data="boolean" class="dragBox operator" ng-center-anchor="true"
-                                     ng-drag-success="onDragComplete($data,$event)">
-                                    {{boolean.name}}
+                        <div ng-drag-clone ng-class="{operator: isDraggingOperator}">
+                            {{draggingObject.displayName}}
+                        </div>
+                        <div class="operatorsContainer">
+                            <span class="fieldLevelLabel">Operators </span>
+                            <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_operators')"></span>
+                            <div class="operatorsListContainer">
+                                <div ng-repeat="boolean in booleanOperators track by $index">
+                                    <div ng-drag="true" ng-drag-data="boolean" class="dragBox operator" ng-center-anchor="true"
+                                         ng-drag-success="onDragComplete($data,$event)">
+                                        {{boolean.name}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="literalContainer">
+                        <div class="literalContainer">
                         <span class="fieldLevelLabel">Literal String
                             <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_literals')"></span>
                         </span>
-                        <input type="text" class="form-control literalInput" ng-model="newLiteral.name" />
-                        <button type="submit" class="btn btn-primary" ng-click="saveLiteral()">Add</button>
-                        <div ng-repeat="literal in literalLists track by $index">
-                            <div ng-drag="true" ng-drag-data="literal" ng-drag-success="onDragComplete($data,$event)"
-                                 ng-center-anchor="true" class="dragBox operator">
-                                {{literal.name}}
+                            <input type="text" class="form-control literalInput" ng-model="newLiteral.name" />
+                            <button type="submit" class="btn btn-primary" ng-click="saveLiteral()">Add</button>
+                            <div ng-repeat="literal in literalLists track by $index">
+                                <div ng-drag="true" ng-drag-data="literal" ng-drag-success="onDragComplete($data,$event)"
+                                     ng-center-anchor="true" class="dragBox operator">
+                                    {{literal.name}}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -134,35 +138,41 @@
                     <div><button class="btn btn-primary" ng-click="removeField()"><< Remove</button></div>
                 </div>
                 <div class="col-md-5 threeFourthSection">
-                    <div class="sectionHeading">Attribute details</div>
-                    <div ng-show="editingNameEmpty" class="alert alert-danger" role="alert">
-                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                        <span class="sr-only">Error:</span>
-                        New Attribute name cannot be empty
-                    </div>
-                    <div ng-show="expressionIsEmpty" class="alert alert-danger" role="alert">
-                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                        <span class="sr-only">Error:</span>
-                        No part of the Logical Expression can be empty!
-                    </div>
-                    <div class="inputContainer">
-                        <span class="fieldLevelLabel">Name </span>
-                        <input type="text" class="form-control" ng-model="editingAttribute.name" ng-change="clearNameError()"/>
-                    </div>
-                    <div>
-                        <span class="fieldLevelLabel">Attribute expression </span>
-                        <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_expression')"></span>
-                    </div>
-                    <div class="dragDropContainer scrollableOuterContainer">
-                        <div class="queryContainer">
-                            <logical-expression-drop ng-model="editingAttribute.logical_expression" />
+                    <div class="borderedGroup">
+                        <div class="sectionHeading">
+                            <span class="brandingFontColor">Attribute details</span>
+                        </div>
+                        <div ng-show="editingNameEmpty" class="alert alert-danger" role="alert">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span class="sr-only">Error:</span>
+                            New Attribute name cannot be empty
+                        </div>
+                        <div ng-show="expressionIsEmpty" class="alert alert-danger" role="alert">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span class="sr-only">Error:</span>
+                            No part of the Logical Expression can be empty!
+                        </div>
+                        <div class="inputContainer">
+                            <span class="fieldLevelLabel">Name </span>
+                            <input type="text" class="form-control" ng-model="editingAttribute.name" ng-change="clearNameError()"/>
+                        </div>
+                        <div>
+                            <span class="fieldLevelLabel">Attribute expression </span>
+                            <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_expression')"></span>
+                        </div>
+                        <div class="dragDropContainer scrollableOuterContainer">
+                            <div class="queryContainer">
+                                <logical-expression-drop ng-model="editingAttribute.logical_expression" />
+                            </div>
+                        </div>
+                        <div class="submitButtons">
+                            <button type="submit" class="btn btn-primary" ng-click="clearEditingAttribute()">Clear Expression</button>
                         </div>
                     </div>
                     <div class="submitButtons">
                         <button type="submit" class="btn btn-primary" ng-click="saveEditingAttribute()">{{saveAttributeButton}}
                         </button>
-                        <button type="submit" class="btn btn-primary" ng-click="clearEditingAttribute()">Clear Expression</button>
-                        <button type="submit" class="btn btn-primary" ng-click="cancelEditing()">Cancel</button>
+                        <button type="submit" class="btn btn-danger" ng-click="cancelEditing()">Cancel</button>
                     </div>
                 </div>
             </div>

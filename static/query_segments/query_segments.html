@@ -11,7 +11,7 @@
     <div class="col-md-12 sectionsContainer">
         <div class="row">
             <div class="col-md-5 halfSection">
-                <span class="fieldLevelLabel">Available attributes</span>
+                <span class="fieldLevelLabel brandingFontColor">Available attributes</span>
                 <div class="dragDropContainer">
                     <div class="input-group insideContainer">
                         <span class="input-group-addon glyphicon glyphicon-search"></span>
@@ -35,7 +35,7 @@
                     {{draggingObject.name}}
                 </div>
                 <div class="operatorsContainer">
-                    <span class="fieldLevelLabel">Operators</span>
+                    <span class="fieldLevelLabel brandingFontColor">Operators</span>
                     <div class="operatorsListContainer">
                         <div ng-repeat="boolean in booleanOperators track by $index">
                             <div ng-drag="true" ng-drag-data="boolean" class="dragBox operator" ng-center-anchor="true" ng-drag-success="onDropComplete($data,$event)">
@@ -55,7 +55,7 @@
                     <span class="sr-only">Error:</span>
                     No part of the Logical Expression can be empty!
                 </div>
-                <span class="fieldLevelLabel">Query</span>
+                <span class="fieldLevelLabel brandingFontColor">Query</span>
                 <div class="dragDropContainer scrollableOuterContainer">
                     <div class="queryContainer">
                         <logical-expression-drop ng-model="topLogicalExpression" />

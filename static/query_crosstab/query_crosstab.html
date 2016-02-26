@@ -10,7 +10,7 @@
         <div class="col-md-12 sectionsContainer">
             <div class="row">
                 <div class="col-md-5 section">
-                    <span class="fieldLevelLabel">Available attributes</span>
+                    <span class="fieldLevelLabel brandingFontColor">Available attributes</span>
                     <div class="dragDropContainer">
                         <div class="input-group insideContainer">
                             <span class="input-group-addon glyphicon glyphicon-search"></span>
@@ -38,7 +38,7 @@
                     <div><button class="btn btn-primary" ng-click="removeAttribute()"><< Remove</button></div>
                 </div>
                 <div class="col-md-5 section">
-                    <span class="fieldLevelLabel">Query attributes</span>
+                    <span class="fieldLevelLabel brandingFontColor">Query attributes</span>
                     <div class="dragDropContainer scrollableOuterContainer" ng-drop="true" ng-drop-success="onDropComplete($data,$event)">
                         <div ng-repeat="attribute in chosenAttributes track by $index">
                             <div ng-drag-data="attribute" ng-center-anchor="true" class="dragBox"

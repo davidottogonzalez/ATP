@@ -3,6 +3,7 @@
 }
 .tabSubtitle {
     font-size: 18px;
+    color: #542E91;
 }
 [ng-drop]{
   background: #E2E2E2;
@@ -35,6 +36,9 @@
     padding-top: 15px;
 }
 
+.sectionsContainer{
+    padding-top: 25px;
+}
 
 .buttonSection > div{
     transform: translateY(150%);

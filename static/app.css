@@ -14,10 +14,13 @@ ul.nav-tabs{
     font-size: 16px;
     padding: 5px 15px;
     color: #555;
+    background-color: #B2B3B3;
 }
 
-.nav-tabs>li.active>a{
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
     font-weight: bold;
+    color: #542E91;
+    background-color: #EDEEEF;
 }
 
 .nav-tabs>li{
@@ -32,12 +35,24 @@ ul.nav-tabs{
 
 .viewContainer{
     padding: 20px;
+    background-color: #EDEEEF;
+    min-height: 579px;
 }
 
 .sectionHeading {
     font-size: 16px;
     text-decoration: underline;
     padding-bottom: 10px;
+}
+
+.borderedGroup .sectionHeading span{
+    background-color: #EDEEEF;
+    padding: 0px 5px;
+}
+
+.borderedGroup .sectionHeading{
+    margin-top: -25px;
+    text-decoration: none;
 }
 
 .sectionsContainer{
@@ -64,6 +79,12 @@ ul.nav-tabs{
     position: relative;
     transform: translateY(300%);
     padding-top: 10px;
+}
+
+.borderedGroup{
+    border: solid #999999 1px;
+    border-radius: 8px;
+    padding: 10px;
 }
 
 .fieldLevelLabel{
@@ -167,7 +188,7 @@ div.coffeeBreak
   height: 40px;
   line-height: 40px;
   border-bottom: 2px solid #999999;
-  background: #EFEDED;
+  background-color: #EFEDED;
 }
 .ngdialog.ngdialog-theme-plain .ngdialog-close:before {
   border: 2px solid #999999;
@@ -300,4 +321,14 @@ td.resultQuery {
 
 .input-group.topTable{
     padding-bottom: 10px;
+}
+
+/*Branding Button Colors*/
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:focus, .btn-primary:active:focus{
+    background-color: #542E91;
+    border-color: #542E91;
+}
+
+.brandingFontColor{
+    color: #542E91;
 }
