@@ -25,7 +25,7 @@
                         <div ng-repeat="attribute in queryAttributes | filter:searchSegments track by $index">
                             <div ng-drag="true" ng-drag-data="attribute" ng-center-anchor="true" class="dragBox"
                                  ng-drag-success="onDropComplete($data,$event)" ng-class="{selected: attribute.selected}"
-                                 ng-click="selectAttribute(attribute)">
+                                 ng-click="selectObject(attribute, 'attribute')">
                                 {{attribute.name}}
                             </div>
                         </div>
@@ -38,7 +38,9 @@
                     <span class="fieldLevelLabel brandingFontColor">Operators</span>
                     <div class="operatorsListContainer">
                         <div ng-repeat="boolean in booleanOperators track by $index">
-                            <div ng-drag="true" ng-drag-data="boolean" class="dragBox operator" ng-center-anchor="true" ng-drag-success="onDropComplete($data,$event)">
+                            <div ng-drag="true" ng-drag-data="boolean" class="dragBox operator" ng-center-anchor="true"
+                                 ng-drag-success="onDropComplete($data,$event)" ng-click="selectObject(boolean, 'operator')"
+                                 ng-class="{selected: boolean.selected}">
                                 {{boolean.name}}
                             </div>
                         </div>
@@ -46,8 +48,8 @@
                 </div>
             </div>
             <div class="col-md-2 section buttonSection">
-                <div><button class="btn btn-primary" ng-click="addAttribute()">Add >></button></div>
-                <div><button class="btn btn-primary" ng-click="removeAttribute()"><< Remove</button></div>
+                <div><button class="btn btn-primary" ng-click="addObject()">Add >></button></div>
+                <div><button class="btn btn-primary" ng-click="removeObject()"><< Remove</button></div>
             </div>
             <div class="col-md-5 section">
                 <div ng-show="expressionIsEmpty" class="alert alert-danger" role="alert">

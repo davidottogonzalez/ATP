@@ -116,39 +116,83 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
         }
       });
 
-      $scope.selectAttribute = function(attribute){
-        angular.forEach($scope.queryAttributes, function(value, key)
+      $scope.selectObject = function(selectedObject, type){
+        if(type == 'attribute')
         {
-           if(attribute.id == value.id){
-               $scope.queryAttributes[key].selected = true;
-           }else{
+            angular.forEach($scope.booleanOperators, function(value, key)
+            {
+               $scope.booleanOperators[key].selected = false;
+            });
+
+            angular.forEach($scope.queryAttributes, function(value, key)
+            {
+               if(selectedObject.id == value.id){
+                   $scope.queryAttributes[key].selected = true;
+               }else{
+                   $scope.queryAttributes[key].selected = false;
+               }
+            });
+        }
+
+        if(type == 'operator')
+        {
+            angular.forEach($scope.queryAttributes, function(value, key)
+            {
                $scope.queryAttributes[key].selected = false;
-           }
-        });
+            });
+
+            angular.forEach($scope.booleanOperators, function(value, key)
+            {
+               if(selectedObject.id == value.id){
+                   $scope.booleanOperators[key].selected = true;
+               }else{
+                   $scope.booleanOperators[key].selected = false;
+               }
+            });
+        }
+
       };
 
-      $scope.addAttribute = function(){
-        angular.element(LogicalExpressionService.getFirstEmptyDrop('operand')).addClass('drag-enter');
-        $scope.expressionIsEmpty = false;
+      $scope.addObject = function(){
+        var type = '';
+        var selectedObject = {};
 
         angular.forEach($scope.queryAttributes, function(value)
         {
             if(value.selected){
-                $scope.topLogicalExpression.changeBasedOnHierarchy(value, null, $scope.booleanOperators);
+                type = 'operand';
+                selectedObject = value;
             }
         });
 
-        angular.element(LogicalExpressionService.getFirstEmptyDrop('operand')).removeClass('drag-enter');
+        if(type == '')
+        {
+            angular.forEach($scope.booleanOperators, function(value)
+            {
+                if(value.selected){
+                    type = value.name == 'Parentheses' ? 'operand' : 'operator';
+                    selectedObject = value;
+                }
+            });
+        }
+
+        if(type != '')
+        {
+            angular.element(LogicalExpressionService.getFirstEmptyDrop(type)).addClass('drag-enter');
+            $scope.expressionIsEmpty = false;
+            $scope.topLogicalExpression.changeBasedOnHierarchy(selectedObject, null, $scope.booleanOperators);
+            angular.element(LogicalExpressionService.getFirstEmptyDrop(type)).removeClass('drag-enter');
+        }
       };
 
-      $scope.removeAttribute = function(){
-        var lastOperandDrop = LogicalExpressionService.getLastDrop('operand');
+      $scope.removeObject = function(){
+        var lastOperandDrop = LogicalExpressionService.getLastDrop('all');
 
         if(typeof lastOperandDrop != 'undefined') {
             angular.element(lastOperandDrop).addClass('drag-enter');
             $scope.expressionIsEmpty = false;
 
-            $scope.topLogicalExpression.changeBasedOnHierarchy('', null, $scope.booleanOperators);
+            $scope.topLogicalExpression.changeBasedOnHierarchy({name:''}, null, $scope.booleanOperators);
         }
 
       };
