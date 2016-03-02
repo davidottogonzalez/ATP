@@ -289,7 +289,7 @@ td {
 
 .operatorsListContainer{
     padding-top: 10px;
-    overflow: auto;
+    overflow: hidden;
 }
 
 td.resultQuery {

@@ -123,11 +123,13 @@
                             <span class="glyphicon glyphicon-question-sign" title="Click me for help" ng-click="openHelp('ab_literals')"></span>
                         </span>
                             <input type="text" class="form-control literalInput" ng-model="newLiteral.name" />
-                            <button type="submit" class="btn btn-primary" ng-click="saveLiteral()">Add</button>
-                            <div ng-repeat="literal in literalLists track by $index">
-                                <div ng-drag="true" ng-drag-data="literal" ng-drag-success="onDragComplete($data,$event)"
-                                     ng-center-anchor="true" class="dragBox operator">
-                                    {{literal.name}}
+                            <button type="submit" class="btn btn-primary" ng-click="saveLiteral()">Save</button>
+                            <div class="operatorsListContainer">
+                                <div ng-repeat="literal in literalLists track by $index">
+                                    <div ng-drag="true" ng-drag-data="literal" ng-drag-success="onDragComplete($data,$event)"
+                                         ng-center-anchor="true" class="dragBox operator">
+                                        {{literal.name}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
