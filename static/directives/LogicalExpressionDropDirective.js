@@ -7,19 +7,19 @@ angular.module('myApp').directive('logicalExpressionDrop', function($compile) {
             html += getDropHTML(logicalExpression.operand1, class_prefix + 'op1_');
         }else{
             output = logicalExpression.operand1 == null || logicalExpression.operand1 == '' ? '' : logicalExpression.operand1.name
-            var classes = class_prefix + 'op1' + (output == '' ? ' empty' : ' operandDrop');
+            var classes = class_prefix + 'op1' + (output == '' ? ' empty_operand' : ' operandDrop fullDrop');
             html += '<span ng-drop="true" class="' + classes + '">' + output + '</span>'
         }
 
         output = logicalExpression.operator == null ? '' : logicalExpression.operator.name
-        var classes = class_prefix + 'op';
+        var classes = class_prefix + 'op' + (output == '' ? ' empty_operator' : ' operatorDrop fullDrop');
         html += '<span ng-drop="true" class="' + classes + '">' + output + '</span>'
 
         if(logicalExpression.operand2 != null && logicalExpression.operand2.constructor.name == 'LogicalExpressionInstance') {
             html += getDropHTML(logicalExpression.operand2, class_prefix + 'op2_');
         }else{
             output = logicalExpression.operand2 == null || logicalExpression.operand2 == '' ? '' : logicalExpression.operand2.name
-            var classes = class_prefix + 'op2' + (output == '' ? ' empty' : ' operandDrop');
+            var classes = class_prefix + 'op2' + (output == '' ? ' empty_operand' : ' operandDrop fullDrop');
             html += '<span ng-drop="true" class="' + classes + '">' + output + '</span>'
         }
 

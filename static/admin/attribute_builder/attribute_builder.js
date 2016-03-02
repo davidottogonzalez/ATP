@@ -244,7 +244,7 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
       };
 
       $scope.addField = function(){
-        angular.element(LogicalExpressionService.getFirstEmptyOperandDrop()).addClass('drag-enter');
+        angular.element(LogicalExpressionService.getFirstEmptyDrop('operand')).addClass('drag-enter');
         $scope.expressionIsEmpty = false;
 
         angular.forEach($scope.fieldsList, function(value)
@@ -254,11 +254,11 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
             }
         });
 
-        angular.element(LogicalExpressionService.getFirstEmptyOperandDrop()).removeClass('drag-enter');
+        angular.element(LogicalExpressionService.getFirstEmptyDrop('operand')).removeClass('drag-enter');
       };
 
       $scope.removeField = function(){
-        var lastOperandDrop = LogicalExpressionService.getLastOperandDrop();
+        var lastOperandDrop = LogicalExpressionService.getLastDrop('operand');
 
         if(typeof lastOperandDrop != 'undefined') {
             angular.element(lastOperandDrop).addClass('drag-enter');

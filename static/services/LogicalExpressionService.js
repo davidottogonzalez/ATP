@@ -106,7 +106,7 @@ angular.module('ServicesModule', ['ngFileSaver']).factory('LogicalExpressionServ
         switch(dropType) {
             case 'op':
                 angular.forEach(arrayToCheck, function(operator){
-                    if(dragObj.name != 'Parentheses' && dragObj.name == operator.name){
+                    if((dragObj.name != 'Parentheses' && dragObj.name == operator.name) || dragObj.name == ''){
                         isValidDrop = true;
                     }
                 });
@@ -164,30 +164,54 @@ angular.module('ServicesModule', ['ngFileSaver']).factory('LogicalExpressionServ
         return true;
     };
 
-    var getFirstEmptyOperandDrop = function() {
-        var emptyDrops = document.getElementsByClassName("empty");
+    var getFirstEmptyDrop = function(type) {
+        var emptyDrops = document.getElementsByClassName("empty_"+type);
         var firstEmpty = null;
 
         angular.forEach(emptyDrops, function(emptyDrop){
             var classList = emptyDrop.classList;
 
             angular.forEach(classList, function(classString){
-                if(firstEmpty == null && (classString.indexOf('op1') != -1 || classString.indexOf('op2') != -1)){
-                    firstEmpty = emptyDrop;
+                if(type == 'operand')
+                {
+                    if(firstEmpty == null && (classString.indexOf('op1') != -1 || classString.indexOf('op2') != -1)){
+                        firstEmpty = emptyDrop;
+                    }
+                }
+
+                if(type == 'operator')
+                {
+                    if(firstEmpty == null && (classString.indexOf('op') != -1)){
+                        firstEmpty = emptyDrop;
+                    }
                 }
             });
         });
 
         if(firstEmpty == null) {
-            return getLastOperandDrop();
+            return getLastDrop(type);
         }
 
         return firstEmpty;
     };
 
-    var getLastOperandDrop = function() {
-        var operandDrops = document.getElementsByClassName("operandDrop");
-        return operandDrops[operandDrops.length - 1];
+    var getLastDrop = function(type) {
+        if(type == 'operand')
+        {
+            var drops = document.getElementsByClassName("operandDrop");
+        }
+
+        if(type == 'operator')
+        {
+            var drops = document.getElementsByClassName("operatorDrop");
+        }
+
+        if(type == 'all')
+        {
+            var drops = document.getElementsByClassName("fullDrop");
+        }
+
+        return drops[drops.length - 1];
     };
 
     var convertToString = function(expression) {
@@ -224,8 +248,8 @@ angular.module('ServicesModule', ['ngFileSaver']).factory('LogicalExpressionServ
         },
         isValidDrop: isValidDrop,
         isExpressionNotEmpty: isExpressionNotEmpty,
-        getFirstEmptyOperandDrop: getFirstEmptyOperandDrop,
-        getLastOperandDrop: getLastOperandDrop,
+        getFirstEmptyDrop: getFirstEmptyDrop,
+        getLastDrop: getLastDrop,
         convertToString: convertToString
     };
 });

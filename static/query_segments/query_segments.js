@@ -128,7 +128,7 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
       };
 
       $scope.addAttribute = function(){
-        angular.element(LogicalExpressionService.getFirstEmptyOperandDrop()).addClass('drag-enter');
+        angular.element(LogicalExpressionService.getFirstEmptyDrop('operand')).addClass('drag-enter');
         $scope.expressionIsEmpty = false;
 
         angular.forEach($scope.queryAttributes, function(value)
@@ -138,11 +138,11 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
             }
         });
 
-        angular.element(LogicalExpressionService.getFirstEmptyOperandDrop()).removeClass('drag-enter');
+        angular.element(LogicalExpressionService.getFirstEmptyDrop('operand')).removeClass('drag-enter');
       };
 
       $scope.removeAttribute = function(){
-        var lastOperandDrop = LogicalExpressionService.getLastOperandDrop();
+        var lastOperandDrop = LogicalExpressionService.getLastDrop('operand');
 
         if(typeof lastOperandDrop != 'undefined') {
             angular.element(lastOperandDrop).addClass('drag-enter');
