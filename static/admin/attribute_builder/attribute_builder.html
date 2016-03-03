@@ -97,7 +97,7 @@
                                 <div ng-repeat="field in fieldsList | filter:searchAB track by $index">
                                     <div ng-drag="true" ng-drag-data="field" ng-center-anchor="true" class="dragBox"
                                          ng-drag-success="onDragComplete($data,$event)" ng-class="{selected: field.selected}"
-                                         ng-click="selectField(field)">
+                                         ng-click="selectObject(field, 'field')">
                                         {{field.name}} ({{field.description}} | {{field.data_source}})
                                     </div>
                                 </div>
@@ -112,7 +112,8 @@
                             <div class="operatorsListContainer">
                                 <div ng-repeat="boolean in booleanOperators track by $index">
                                     <div ng-drag="true" ng-drag-data="boolean" class="dragBox operator" ng-center-anchor="true"
-                                         ng-drag-success="onDragComplete($data,$event)">
+                                         ng-drag-success="onDragComplete($data,$event)" ng-class="{selected: boolean.selected}"
+                                         ng-click="selectObject(boolean, 'operator')">
                                         {{boolean.name}}
                                     </div>
                                 </div>
@@ -127,7 +128,8 @@
                             <div class="operatorsListContainer">
                                 <div ng-repeat="literal in literalLists track by $index">
                                     <div ng-drag="true" ng-drag-data="literal" ng-drag-success="onDragComplete($data,$event)"
-                                         ng-center-anchor="true" class="dragBox operator">
+                                         ng-center-anchor="true" class="dragBox operator" ng-class="{selected: literal.selected}"
+                                         ng-click="selectObject(literal, 'literal')">
                                         {{literal.name}}
                                     </div>
                                 </div>
@@ -136,8 +138,8 @@
                     </div>
                 </div>
                 <div class="col-md-2 section buttonSection">
-                    <div><button class="btn btn-primary" ng-click="addField()">Add >></button></div>
-                    <div><button class="btn btn-primary" ng-click="removeField()"><< Remove</button></div>
+                    <div><button class="btn btn-primary" ng-click="addObject()">Add >></button></div>
+                    <div><button class="btn btn-primary" ng-click="removeObject()"><< Remove</button></div>
                 </div>
                 <div class="col-md-5 threeFourthSection">
                     <div class="borderedGroup">

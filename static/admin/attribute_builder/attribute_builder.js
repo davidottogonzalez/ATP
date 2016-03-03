@@ -57,6 +57,7 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
         logical_expression : LogicalExpressionService.createNew()
       };
       $scope.newLiteral = {
+        id: 0,
         name : ''
       }
       $scope.draggingObject = {};
@@ -213,8 +214,10 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
       };
 
       $scope.saveLiteral = function() {
+        $scope.newLiteral.id = Math.floor((Math.random() * 1000) + 1);
         $scope.literalLists.push($scope.newLiteral)
         $scope.newLiteral = {
+            id: 0,
             name : ''
         }
       };
@@ -232,39 +235,125 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
         }
       });
 
-      $scope.selectField = function(field){
-        angular.forEach($scope.fieldsList, function(value, key)
+      $scope.selectObject = function(selectedObject, type){
+        if(type == 'field')
         {
-           if(field._id == value._id){
-               $scope.fieldsList[key].selected = true;
-           }else{
+            angular.forEach($scope.booleanOperators, function(value, key)
+            {
+               $scope.booleanOperators[key].selected = false;
+            });
+
+            angular.forEach($scope.literalLists, function(value, key)
+            {
+               $scope.literalLists[key].selected = false;
+            });
+
+            angular.forEach($scope.fieldsList, function(value, key)
+            {
+               if(selectedObject._id == value._id){
+                   $scope.fieldsList[key].selected = true;
+               }else{
+                   $scope.fieldsList[key].selected = false;
+               }
+            });
+        }
+
+        if(type == 'operator')
+        {
+            angular.forEach($scope.fieldsList, function(value, key)
+            {
                $scope.fieldsList[key].selected = false;
-           }
-        });
+            });
+
+            angular.forEach($scope.literalLists, function(value, key)
+            {
+               $scope.literalLists[key].selected = false;
+            });
+
+            angular.forEach($scope.booleanOperators, function(value, key)
+            {
+               if(selectedObject.name == value.name){
+                   $scope.booleanOperators[key].selected = true;
+               }else{
+                   $scope.booleanOperators[key].selected = false;
+               }
+            });
+        }
+
+        if(type == 'literal')
+        {
+            angular.forEach($scope.fieldsList, function(value, key)
+            {
+               $scope.fieldsList[key].selected = false;
+            });
+
+            angular.forEach($scope.booleanOperators, function(value, key)
+            {
+               $scope.booleanOperators[key].selected = false;
+            });
+
+            angular.forEach($scope.literalLists, function(value, key)
+            {
+               if(selectedObject.id == value.id){
+                   $scope.literalLists[key].selected = true;
+               }else{
+                   $scope.literalLists[key].selected = false;
+               }
+            });
+        }
       };
 
-      $scope.addField = function(){
-        angular.element(LogicalExpressionService.getFirstEmptyDrop('operand')).addClass('drag-enter');
-        $scope.expressionIsEmpty = false;
+      $scope.addObject = function(){
+        var type = '';
+        var selectedObject = {};
 
         angular.forEach($scope.fieldsList, function(value)
         {
             if(value.selected){
-                $scope.editingAttribute.logical_expression.changeBasedOnHierarchy(value, null, $scope.booleanOperators);
+                type = 'operand';
+                selectedObject = value;
             }
         });
 
-        angular.element(LogicalExpressionService.getFirstEmptyDrop('operand')).removeClass('drag-enter');
+        if(type == '')
+        {
+            angular.forEach($scope.booleanOperators, function(value)
+            {
+                if(value.selected){
+                    type = value.name == 'Parentheses' ? 'operand' : 'operator';
+                    selectedObject = value;
+                }
+            });
+        }
+
+        if(type == '')
+        {
+            angular.forEach($scope.literalLists, function(value)
+            {
+                if(value.selected){
+                    type = 'operand';
+                    selectedObject = value;
+                }
+            });
+        }
+
+        if(type != '')
+        {
+            angular.element(LogicalExpressionService.getFirstEmptyDrop(type)).addClass('drag-enter');
+            $scope.expressionIsEmpty = false;
+            $scope.editingAttribute.logical_expression.changeBasedOnHierarchy(selectedObject, null, $scope.booleanOperators);
+            angular.element(LogicalExpressionService.getFirstEmptyDrop(type)).removeClass('drag-enter');
+        }
       };
 
-      $scope.removeField = function(){
-        var lastOperandDrop = LogicalExpressionService.getLastDrop('operand');
+      $scope.removeObject = function(){
+        var lastOperandDrop = LogicalExpressionService.getLastDrop('all');
 
         if(typeof lastOperandDrop != 'undefined') {
             angular.element(lastOperandDrop).addClass('drag-enter');
             $scope.expressionIsEmpty = false;
 
-            $scope.editingAttribute.logical_expression.changeBasedOnHierarchy('', null, $scope.booleanOperators);
+            $scope.editingAttribute.logical_expression.changeBasedOnHierarchy({name:''}, null, $scope.booleanOperators);
         }
 
       };
