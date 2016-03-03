@@ -140,7 +140,7 @@ angular.module('ServicesModule', ['ngFileSaver']).factory('LogicalExpressionServ
         }
 
         if(logical_expression.operator != null && typeof logical_expression.operator == 'object') {
-            if (typeof logical_expression.operator.name == 'undefined') {
+            if (typeof logical_expression.operator.name == 'undefined' || logical_expression.operator.name == '') {
                 return false;
             }
         } else {
