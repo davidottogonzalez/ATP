@@ -211,6 +211,10 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
                 $scope.reloadQueryAttributes();
             });
         });
+
+        $scope.$on('ngDialog.opened', function(e, $dialog) {
+            $dialog.find('button')[0].blur();
+        });
       };
 
       $scope.saveLiteral = function() {

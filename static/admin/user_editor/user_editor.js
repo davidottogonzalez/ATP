@@ -100,6 +100,10 @@ angular.module('myApp.user_editor', ['ngRoute', 'ngDialog'])
                 $scope.reloadUsers();
             });
         });
+
+        $scope.$on('ngDialog.opened', function(e, $dialog) {
+            $dialog.find('button')[0].blur();
+        });
     };
 
     $scope.cancelEditing = function(){
