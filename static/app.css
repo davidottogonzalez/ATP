@@ -188,11 +188,11 @@ div.coffeeBreak
 .dialogTitleBar {
   height: 40px;
   line-height: 40px;
-  border-bottom: 2px solid #999999;
+  border-bottom: 1px solid #999999;
   background-color: #EFEDED;
 }
 .ngdialog.ngdialog-theme-plain .ngdialog-close:before {
-  border: 2px solid #999999;
+  border: 1px solid #999999;
   height: 32px;
   border-radius: 7px;
 
@@ -216,6 +216,15 @@ div.coffeeBreak
 
 .helpText {
     padding: 10px;
+}
+
+/* Confirm Dialog CSS */
+.confirmDialog {
+    padding: 20px 20px 12px;
+}
+
+.confirmDialogButtons button {
+    margin: 10px 0px 0px 10px;
 }
 
 /* Added to speedup dialog animations and prevent focus delays */
