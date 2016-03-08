@@ -11,7 +11,7 @@
     <div class="col-md-12 sectionsContainer">
         <div class="row">
             <div class="col-md-5 halfSection">
-                <span class="fieldLevelLabel">Available attributes</span>
+                <span class="fieldLevelLabel brandingFontColor">Available attributes</span>
                 <div class="dragDropContainer">
                     <div class="input-group insideContainer">
                         <span class="input-group-addon glyphicon glyphicon-search"></span>
@@ -25,7 +25,7 @@
                         <div ng-repeat="attribute in queryAttributes | filter:searchSegments track by $index">
                             <div ng-drag="true" ng-drag-data="attribute" ng-center-anchor="true" class="dragBox"
                                  ng-drag-success="onDropComplete($data,$event)" ng-class="{selected: attribute.selected}"
-                                 ng-click="selectAttribute(attribute)">
+                                 ng-click="selectObject(attribute, 'attribute')">
                                 {{attribute.name}}
                             </div>
                         </div>
@@ -35,10 +35,12 @@
                     {{draggingObject.name}}
                 </div>
                 <div class="operatorsContainer">
-                    <span class="fieldLevelLabel">Operators</span>
+                    <span class="fieldLevelLabel brandingFontColor">Operators</span>
                     <div class="operatorsListContainer">
                         <div ng-repeat="boolean in booleanOperators track by $index">
-                            <div ng-drag="true" ng-drag-data="boolean" class="dragBox operator" ng-center-anchor="true" ng-drag-success="onDropComplete($data,$event)">
+                            <div ng-drag="true" ng-drag-data="boolean" class="dragBox operator" ng-center-anchor="true"
+                                 ng-drag-success="onDropComplete($data,$event)" ng-click="selectObject(boolean, 'operator')"
+                                 ng-class="{selected: boolean.selected}">
                                 {{boolean.name}}
                             </div>
                         </div>
@@ -46,8 +48,8 @@
                 </div>
             </div>
             <div class="col-md-2 section buttonSection">
-                <div><button class="btn btn-primary" ng-click="addAttribute()">Add >></button></div>
-                <div><button class="btn btn-primary" ng-click="removeAttribute()"><< Remove</button></div>
+                <div><button class="btn btn-primary" ng-click="addObject()">Add >></button></div>
+                <div><button class="btn btn-primary" ng-click="removeObject()"><< Remove</button></div>
             </div>
             <div class="col-md-5 section">
                 <div ng-show="expressionIsEmpty" class="alert alert-danger" role="alert">
@@ -55,7 +57,7 @@
                     <span class="sr-only">Error:</span>
                     No part of the Logical Expression can be empty!
                 </div>
-                <span class="fieldLevelLabel">Query</span>
+                <span class="fieldLevelLabel brandingFontColor">Query</span>
                 <div class="dragDropContainer scrollableOuterContainer">
                     <div class="queryContainer">
                         <logical-expression-drop ng-model="topLogicalExpression" />

@@ -14,10 +14,13 @@ ul.nav-tabs{
     font-size: 16px;
     padding: 5px 15px;
     color: #555;
+    background-color: #B2B3B3;
 }
 
-.nav-tabs>li.active>a{
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
     font-weight: bold;
+    color: #542E91;
+    background-color: #EDEEEF;
 }
 
 .nav-tabs>li{
@@ -32,12 +35,24 @@ ul.nav-tabs{
 
 .viewContainer{
     padding: 20px;
+    background-color: #EDEEEF;
+    min-height: 579px;
 }
 
 .sectionHeading {
     font-size: 16px;
     text-decoration: underline;
     padding-bottom: 10px;
+}
+
+.borderedGroup .sectionHeading span{
+    background-color: #EDEEEF;
+    padding: 0px 5px;
+}
+
+.borderedGroup .sectionHeading{
+    margin-top: -25px;
+    text-decoration: none;
 }
 
 .sectionsContainer{
@@ -66,6 +81,12 @@ ul.nav-tabs{
     padding-top: 10px;
 }
 
+.borderedGroup{
+    border: solid #999999 1px;
+    border-radius: 8px;
+    padding: 15px;
+}
+
 .fieldLevelLabel{
     font-weight: bold;
 }
@@ -86,6 +107,7 @@ ul.nav-tabs{
     border: 1px solid #999999;
     border-radius: 8px;
     margin-top: 5px;
+    background-color: #FFFFFF;
 }
 
 .scrollableOuterContainer{
@@ -166,11 +188,11 @@ div.coffeeBreak
 .dialogTitleBar {
   height: 40px;
   line-height: 40px;
-  border-bottom: 2px solid #999999;
-  background: #EFEDED;
+  border-bottom: 1px solid #999999;
+  background-color: #EFEDED;
 }
 .ngdialog.ngdialog-theme-plain .ngdialog-close:before {
-  border: 2px solid #999999;
+  border: 1px solid #999999;
   height: 32px;
   border-radius: 7px;
 
@@ -194,6 +216,15 @@ div.coffeeBreak
 
 .helpText {
     padding: 10px;
+}
+
+/* Confirm Dialog CSS */
+.confirmDialog {
+    padding: 20px 20px 12px;
+}
+
+.confirmDialogButtons button {
+    margin: 10px 0px 0px 10px;
 }
 
 /* Added to speedup dialog animations and prevent focus delays */
@@ -246,7 +277,7 @@ div.coffeeBreak
 }
 
 .table-striped>tbody>tr:nth-of-type(odd) {
-    background-color: #F0F0F0;
+    background-color: #F3F3F3;
 }
 
 td {
@@ -257,6 +288,7 @@ td {
 
 .table {
     table-layout: fixed;
+    background-color: #FFFFFF;
 }
 
 .nopadding {
@@ -266,7 +298,7 @@ td {
 
 .operatorsListContainer{
     padding-top: 10px;
-    overflow: auto;
+    overflow: hidden;
 }
 
 td.resultQuery {
@@ -296,8 +328,19 @@ td.resultQuery {
 .input-group .glyphicon{
     top: 0px;
     cursor: default;
+    background-color: #FFFFFF;
 }
 
 .input-group.topTable{
     padding-bottom: 10px;
+}
+
+/*Branding Button Colors*/
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:focus, .btn-primary:active:focus{
+    background-color: #542E91;
+    border-color: #542E91;
+}
+
+.brandingFontColor{
+    color: #542E91;
 }

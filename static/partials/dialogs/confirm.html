@@ -1,16 +1,19 @@
-<div class="ngdialog-message ngdialog-message helpDialog">
-    <div class="dialogTitleBar">Delete {{deletingGeneralLabel.charAt(0).toUpperCase() + deletingGeneralLabel.substr(1).toLowerCase()}}</div>
-    <div>
-        <span class="glyphicon glyphicon-warning-sign largeIcon"></span>
-        You are about to delete the {{deletingSpecificLabel}}
-    </div>
-    <br/>
-    <div>If you click <strong>{{confirmButtonLabel}}</strong>, the {{deletingGeneralLabel.charAt(0).toLowerCase() +
-        deletingGeneralLabel.substr(1).toLowerCase()}}
-        will be deleted immediately and cannot be restored.
-    </div>
-    <div>
-        <button class="btn btn-primary" type="button" ng-click="confirm(confirmValue)">{{confirmButtonLabel}}</button>
-        <button class="btn btn-danger" type="button" ng-click="closeThisDialog()">Cancel</button>
+<div class="ngdialog-message ngdialog-message">
+    <div class="dialogTitleBar" align="center">Delete
+        {{deletingGeneralLabel.charAt(0).toUpperCase() + deletingGeneralLabel.substr(1).toLowerCase()}}</div>
+    <div class="confirmDialog">
+        <div>
+            <span class="glyphicon glyphicon-warning-sign largeIcon"></span>
+            You are about to delete the {{deletingSpecificLabel}}.
+        </div>
+        <br/>
+        <div>If you click <strong>{{confirmButtonLabel}}</strong>, the {{deletingGeneralLabel.charAt(0).toLowerCase() +
+            deletingGeneralLabel.substr(1).toLowerCase()}}
+            will be deleted immediately and cannot be restored.
+        </div>
+        <div align="right" class="confirmDialogButtons">
+            <button class="btn btn-primary" type="button" ng-click="confirm(confirmValue)">{{confirmButtonLabel}}</button>
+            <button class="btn btn-danger" type="button" ng-click="closeThisDialog()">Cancel</button>
+        </div>
     </div>
 </div>
