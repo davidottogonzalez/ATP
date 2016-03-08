@@ -57,7 +57,7 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
         logical_expression : LogicalExpressionService.createNew()
       };
       $scope.newLiteral = {
-        id: 0,
+        l_id: 0,
         name : ''
       }
       $scope.draggingObject = {};
@@ -218,10 +218,10 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
       };
 
       $scope.saveLiteral = function() {
-        $scope.newLiteral.id = Math.floor((Math.random() * 1000) + 1);
+        $scope.newLiteral.l_id = Math.floor((Math.random() * 1000) + 1);
         $scope.literalLists.push($scope.newLiteral)
         $scope.newLiteral = {
-            id: 0,
+            l_id: 0,
             name : ''
         }
       };
@@ -298,7 +298,7 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
 
             angular.forEach($scope.literalLists, function(value, key)
             {
-               if(selectedObject.id == value.id){
+               if(selectedObject.l_id == value.l_id){
                    $scope.literalLists[key].selected = true;
                }else{
                    $scope.literalLists[key].selected = false;
