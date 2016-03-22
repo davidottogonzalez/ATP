@@ -124,9 +124,9 @@ def query_hive_segments():
     query_string = ''
 
     query_string += '''SELECT COUNT(1) total_bhds,
-        SUM(CASE WHEN fwm_flag == '1' THEN 1 ELSE 0 END) total_fwm,
+        SUM(CASE WHEN fwm_key == '1' THEN 1 ELSE 0 END) total_fwm,
         SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_seg_bhds,
-        SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_seg_fwm''' \
+        SUM(CASE WHEN ({expression} AND fwm_key == '1') THEN 1 ELSE 0 END) total_seg_fwm''' \
         .format(expression=query_logical_expression.convert_to_string())
 
     query_string += '''
