@@ -34,7 +34,7 @@ def get_field_list_from_file():
             else:
                 line_split = line.split(',')
 
-            file_field_desc.append({'name': line_split[0], 'description': line_split[1]})
+            file_field_desc.append({'name': line_split[0].upper(), 'description': line_split[1]})
 
     return file_field_desc
 
