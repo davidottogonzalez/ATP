@@ -1,0 +1,12 @@
+logs/*
+!.gitkeep
+node_modules/
+tmp
+.DS_Store
+.idea
+venv/
+*.pyc
+one_off_script/
+e2e-tests/
+dump/
+dump.zip
