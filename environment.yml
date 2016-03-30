@@ -1,0 +1,6 @@
+name: cloudfoundry-conda
+channels:
+  - blaze
+dependencies:
+  - impyla
+  - sasl
