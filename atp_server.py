@@ -25,11 +25,8 @@ def get_attributes_from_db():
 @app.route('/')
 @app.route('/<path:path>')
 @app_login.required_login
-def index(path=None):
-    if path and path[-4:] == '.ico':
-        return make_response(open('static/favicon.ico').read())
-    else:
-        return make_response(open('static/index.html').read())
+def index():
+    return make_response(open('static/index.html').read())
 
 
 @app.route('/handleLogin', methods=['GET', 'POST'])
