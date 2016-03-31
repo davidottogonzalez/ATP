@@ -17,7 +17,7 @@ class HiveDB:
         result_rows = []
 
         with connect(host=self.host, port=self.port, auth_mechanism=self.auth_mech, user=self.username,
-                     password=self.password, database=self.database)as conn:
+                     password=self.password, database=self.database, timeout=900)as conn:
             with conn.cursor() as cur:
                 try:
                     print "executing query"
