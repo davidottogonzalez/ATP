@@ -25,7 +25,7 @@ def get_attributes_from_db():
 @app.route('/')
 @app.route('/<path:path>')
 @app_login.required_login
-def index():
+def index(path=None):
     return make_response(open('static/index.html').read())
 
 
