@@ -1,5 +1,5 @@
 from flask import Flask, url_for, redirect, json, request, make_response
-import atp_classes
+import atp_classes, os
 
 app = Flask(__name__)
 config = atp_classes.Config()
@@ -26,10 +26,7 @@ def get_attributes_from_db():
 @app.route('/<path:path>')
 @app_login.required_login
 def index(path=None):
-    if path and path[-4:] == '.ico':
-        return make_response(open('static/favicon.ico').read())
-    else:
-        return make_response(open('static/index.html').read())
+    return make_response(open('static/index.html').read())
 
 
 @app.route('/handleLogin', methods=['GET', 'POST'])
@@ -80,8 +77,7 @@ def logout():
 def query_hive():
     form_chosen_attributes = json.loads(request.data)['chosenAttributes']
     chosen_attributes = []
-    query_string = '''SELECT COUNT(1) total_bhds,
-       SUM(CASE WHEN fwm_flag == '1' THEN 1 ELSE 0 END) total_fwm'''
+    query_string = '''SELECT COUNT(1) total_idp'''
 
     for dbattribute in get_attributes_from_db():
         for cattribute in form_chosen_attributes:
@@ -90,14 +86,12 @@ def query_hive():
 
     for index, attribute in enumerate(chosen_attributes):
         query_string += ''',
-        SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_{id},
-        SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_{id}_fwm''' \
+        SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_{id}''' \
             .format(id=attribute._id, expression=attribute.logical_expression.convert_to_string())
 
         for index2, attribute2 in enumerate(chosen_attributes[(index + 1):]):
             query_string += ''',
-            SUM(CASE WHEN ({expression} AND {expression2}) THEN 1 ELSE 0 END) total_{id1}_{id2},
-            SUM(CASE WHEN (({expression} AND {expression2}) AND fwm_flag == '1') THEN 1 ELSE 0 END) total_{id1}_{id2}_fwm''' \
+            SUM(CASE WHEN ({expression} AND {expression2}) THEN 1 ELSE 0 END) total_{id1}_{id2}''' \
                 .format(id1=attribute._id, id2=attribute2._id,
                         expression=attribute.logical_expression.convert_to_string(),
                         expression2=attribute2.logical_expression.convert_to_string())
@@ -123,10 +117,8 @@ def query_hive_segments():
 
     query_string = ''
 
-    query_string += '''SELECT COUNT(1) total_bhds,
-        SUM(CASE WHEN fwm_flag == '1' THEN 1 ELSE 0 END) total_fwm,
-        SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_seg_bhds,
-        SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_seg_fwm''' \
+    query_string += '''SELECT COUNT(1) total_idp,
+        SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_seg_idp''' \
         .format(expression=query_logical_expression.convert_to_string())
 
     query_string += '''
@@ -255,4 +247,4 @@ def handle_exceptions(err):
 
 if __name__ == '__main__':
     app.run(debug=True, host=config.get_config()['host'], threaded=True,
-            port=config.get_config()['port'])
+            port=int(os.getenv('PORT', config.get_config()['port'])))

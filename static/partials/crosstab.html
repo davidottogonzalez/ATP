@@ -38,73 +38,41 @@
             </th>
         </tr>
         <tr>
-            <th rowspan="5">Total</th>
+            <th rowspan="3">Total</th>
         </tr>
         <tr>
             <td>Data source</td>
-            <td>BHDS (201507)</td>
+            <td>IDP</td>
             <td>Count</td>
             <td ng-repeat="attribute in crossTabsAttributes track by $index">
-                <formatting-data data="attribute.bhds_total" type="'number'"/>
+                <formatting-data data="attribute.idp_total" type="'number'"/>
             </td>
         </tr>
         <tr>
             <td>Base</td>
-            <td><formatting-data data="bhds_total" type="'number'"/></td>
+            <td><formatting-data data="idp_total" type="'number'"/></td>
             <td>Row % of Base</td>
             <td ng-repeat="attribute in crossTabsAttributes track by $index">
-                <formatting-data data="attribute.bhds_percent" type="'percent'"/>
-            </td>
-        </tr>
-        <tr>
-            <td>Data source</td>
-            <td>FWM (201507)</td>
-            <td>Count</td>
-            <td ng-repeat="attribute in crossTabsAttributes track by $index">
-                <formatting-data data="attribute.fwm_total" type="'number'"/>
-            </td>
-        </tr>
-        <tr>
-            <td>Base</td>
-            <td><formatting-data data="fwm_total" type="'number'"/></td>
-            <td>Row % of Base</td>
-            <td ng-repeat="attribute in crossTabsAttributes track by $index">
-                <formatting-data data="attribute.fwm_percent" type="'percent'"/>
+                <formatting-data data="attribute.idp_percent" type="'percent'"/>
             </td>
         </tr>
         <tr ng-repeat-start="attribute in crossTabsAttributes">
-            <th rowspan="5">{{attribute.name}}</th>
+            <th rowspan="3">{{attribute.name}}</th>
         </tr>
         <tr>
             <td>Data source</td>
-            <td>BHDS (201507)</td>
+            <td>IDP</td>
             <td>Count</td>
             <td ng-repeat="attribute in crossTabsAttributes track by $index">
-                <formatting-data data="getAssociatedAttribute(attribute, $parent.$index).bhds_total" type="'number'"/>
-            </td>
-        </tr>
-        <tr>
-            <td>Base</td>
-            <td><formatting-data data="attribute.bhds_total" type="'number'"/></td>
-            <td>Row % of Base</td>
-            <td ng-repeat="attribute in crossTabsAttributes track by $index">
-                <formatting-data data="getAssociatedAttribute(attribute, $parent.$index).bhds_percent" type="'percent'"/>
-            </td>
-        </tr>
-        <tr>
-            <td>Data source</td>
-            <td>FWM (201507)</td>
-            <td>Count</td>
-            <td ng-repeat="attribute in crossTabsAttributes track by $index">
-                <formatting-data data="getAssociatedAttribute(attribute, $parent.$index).fwm_total" type="'number'"/>
+                <formatting-data data="getAssociatedAttribute(attribute, $parent.$index).idp_total" type="'number'"/>
             </td>
         </tr>
         <tr ng-repeat-end>
             <td>Base</td>
-            <td><formatting-data data="attribute.fwm_total" type="'number'"/></td>
+            <td><formatting-data data="attribute.idp_total" type="'number'"/></td>
             <td>Row % of Base</td>
             <td ng-repeat="attribute in crossTabsAttributes track by $index">
-                <formatting-data data="getAssociatedAttribute(attribute, $parent.$index).fwm_percent" type="'percent'"/>
+                <formatting-data data="getAssociatedAttribute(attribute, $parent.$index).idp_percent" type="'percent'"/>
             </td>
         </tr>
     </table>
