@@ -77,8 +77,7 @@ def logout():
 def query_hive():
     form_chosen_attributes = json.loads(request.data)['chosenAttributes']
     chosen_attributes = []
-    query_string = '''SELECT COUNT(1) total_bhds,
-       SUM(CASE WHEN fwm_key == '1' THEN 1 ELSE 0 END) total_fwm'''
+    query_string = '''SELECT COUNT(1) total_idp'''
 
     for dbattribute in get_attributes_from_db():
         for cattribute in form_chosen_attributes:
@@ -87,14 +86,12 @@ def query_hive():
 
     for index, attribute in enumerate(chosen_attributes):
         query_string += ''',
-        SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_{id},
-        SUM(CASE WHEN ({expression} AND fwm_key == '1') THEN 1 ELSE 0 END) total_{id}_fwm''' \
+        SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_{id}''' \
             .format(id=attribute._id, expression=attribute.logical_expression.convert_to_string())
 
         for index2, attribute2 in enumerate(chosen_attributes[(index + 1):]):
             query_string += ''',
-            SUM(CASE WHEN ({expression} AND {expression2}) THEN 1 ELSE 0 END) total_{id1}_{id2},
-            SUM(CASE WHEN (({expression} AND {expression2}) AND fwm_key == '1') THEN 1 ELSE 0 END) total_{id1}_{id2}_fwm''' \
+            SUM(CASE WHEN ({expression} AND {expression2}) THEN 1 ELSE 0 END) total_{id1}_{id2}''' \
                 .format(id1=attribute._id, id2=attribute2._id,
                         expression=attribute.logical_expression.convert_to_string(),
                         expression2=attribute2.logical_expression.convert_to_string())
@@ -120,10 +117,8 @@ def query_hive_segments():
 
     query_string = ''
 
-    query_string += '''SELECT COUNT(1) total_bhds,
-        SUM(CASE WHEN fwm_key == '1' THEN 1 ELSE 0 END) total_fwm,
-        SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_seg_bhds,
-        SUM(CASE WHEN ({expression} AND fwm_key == '1') THEN 1 ELSE 0 END) total_seg_fwm''' \
+    query_string += '''SELECT COUNT(1) total_idp,
+        SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_seg_idp''' \
         .format(expression=query_logical_expression.convert_to_string())
 
     query_string += '''

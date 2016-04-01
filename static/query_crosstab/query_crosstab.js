@@ -35,8 +35,7 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
       $scope.isQuerying = false;
       $scope.returnedError = false;
       $scope.returnedErrorMessage = '';
-      $scope.bhds_total = 0;
-      $scope.fwm_total = 0;
+      $scope.idp_total = 0;
 
       $scope.draggingAttribute = {};
       $scope.chosenAttributes = [];
@@ -93,8 +92,7 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
           if(baseAttribute.name == $scope.crossTabsAttributes[associatedIndex].name)
           {
               associatedAttribute = angular.copy(baseAttribute);
-              associatedAttribute.bhds_percent = 1.0
-              associatedAttribute.fwm_percent = 1.0
+              associatedAttribute.idp_percent = 1.0;
           }else{
               var mergedAttribute = {}
 
@@ -118,16 +116,13 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
 
       var buildCrossTabsAttributes = function(totals){
         $scope.crossTabsAttributes = [];
-        $scope.bhds_total = totals.total_bhds;
-        $scope.fwm_total = totals.total_fwm;
+        $scope.idp_total = totals.total_idp;
 
         $scope.submittedAttributes.map(function(obj){
             var attrObj = angular.copy(obj);
 
-            attrObj.bhds_total = totals['total_' + attrObj.id];
-            attrObj.bhds_percent = parseInt(attrObj.bhds_total) / parseInt($scope.bhds_total);
-            attrObj.fwm_total = totals['total_' + attrObj.id + "_fwm"];
-            attrObj.fwm_percent = parseInt(attrObj.fwm_total) / parseInt($scope.fwm_total);
+            attrObj.idp_total = totals['total_' + attrObj.id];
+            attrObj.idp_percent = parseInt(attrObj.idp_total) / parseInt($scope.idp_total);
 
             attrObj.joins = [];
 
@@ -138,15 +133,12 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
 
                     if(totals.hasOwnProperty('total_' + attrObj.id + '_' + obj2.id))
                     {
-                        joinObj.bhds_total = totals['total_' + attrObj.id + '_' + obj2.id];
-                        joinObj.fwm_total = totals['total_' + attrObj.id + '_' + obj2.id + '_fwm'];
+                        joinObj.idp_total = totals['total_' + attrObj.id + '_' + obj2.id];
                     }else{
-                        joinObj.bhds_total = totals['total_' + obj2.id + '_' + attrObj.id];
-                        joinObj.fwm_total = totals['total_' + obj2.id + '_' + attrObj.id + '_fwm'];
+                        joinObj.idp_total = totals['total_' + obj2.id + '_' + attrObj.id];
                     }
 
-                    joinObj.bhds_percent = parseInt(joinObj.bhds_total) / parseInt(totals['total_' + obj2.id]);
-                    joinObj.fwm_percent = parseInt(joinObj.fwm_total) / parseInt(totals['total_' + obj2.id + '_fwm']);
+                    joinObj.idp_percent = parseInt(joinObj.idp_total) / parseInt(totals['total_' + obj2.id]);
 
                     attrObj.joins.push(joinObj);
                 }
