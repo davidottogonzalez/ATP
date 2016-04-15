@@ -4,9 +4,10 @@ applications:
   memory: 256MB
   random-route: true
   buildpack: https://github.com/davidottogonzalez/python-conda-buildpack
-  command: .conda/bin/python atp_server.py
+  command: null
   env:
    http_proxy: http://173.213.216.20:80
    https_proxy: http://173.213.216.20:80
    FTP_PROXY: http://173.213.216.20:80
    ATP_ENV: production
+   PYTHONPATH: .:$PYTHONPATH
