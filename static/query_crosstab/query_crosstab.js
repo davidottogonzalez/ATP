@@ -18,8 +18,8 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
   $locationProvider.html5Mode(true);
 }])
 
-.controller('QueryCrosstabCtrl', ['$scope', '$http', 'ExcelService', 'ngDialog',
-    function($scope, $http, ExcelService, ngDialog) {
+.controller('QueryCrosstabCtrl', ['$scope', '$http', 'FileService', 'ngDialog',
+    function($scope, $http, FileService, ngDialog) {
       $scope.queryAttributes = [];
       $scope.initiated = false;
 
@@ -161,7 +161,7 @@ angular.module('myApp.query_crosstab', ['ngRoute', 'ServicesModule', 'ngDialog']
       };
 
       $scope.exportToExcel=function(tableId){
-        ExcelService.tableToExcel(tableId, 'Crosstab');
+        FileService.tableToExcel(tableId, 'Crosstab');
       };
 
       $scope.selectAttribute = function(attribute){

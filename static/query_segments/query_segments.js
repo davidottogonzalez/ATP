@@ -16,8 +16,8 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
   });
 }])
 
-.controller('QuerySegmentsCtrl', ['$scope', '$http', 'LogicalExpressionService', '$sce', '$compile', 'ExcelService', 'ngDialog',
- function($scope, $http, LogicalExpressionService, $sce, $compile, ExcelService, ngDialog) {
+.controller('QuerySegmentsCtrl', ['$scope', '$http', 'LogicalExpressionService', '$sce', '$compile', 'FileService', 'ngDialog',
+ function($scope, $http, LogicalExpressionService, $sce, $compile, FileService, ngDialog) {
       $scope.queryAttributes = [];
       $scope.initiated = false;
       $scope.booleanOperators = [
@@ -86,6 +86,7 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
             $scope.totals.total_seg_bhds = res.data.total_seg_bhds;
             $scope.totals.total_fwm = res.data.total_fwm;
             $scope.totals.total_seg_fwm = res.data.total_seg_fwm;
+            $scope.totals.id_list = res.data.id_list;
             $scope.totals.seg_bhds_percent = (parseInt($scope.totals.total_seg_bhds) / parseInt($scope.totals.total_bhds));
             $scope.totals.seg_fwm_percent = (parseInt($scope.totals.total_seg_fwm) / parseInt($scope.totals.total_fwm));
             $scope.isQuerying = false;
@@ -100,7 +101,7 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
       };
 
       $scope.exportToExcel=function(tableId){
-        ExcelService.tableToExcel(tableId, 'Segments');
+        FileService.tableToExcel(tableId, 'Segments');
       };
 
       $scope.clear = function() {
@@ -196,6 +197,10 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
         }
 
       };
+
+      $scope.exportIds = function(){
+            FileService.dataToFile($scope.totals.id_list.join("\n"), 'ids_list.txt');
+      }
 
       $scope.init();
 }]);

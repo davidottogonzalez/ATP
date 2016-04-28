@@ -123,17 +123,19 @@ def query_hive_segments():
     query_string += '''SELECT COUNT(1) total_bhds,
         SUM(CASE WHEN fwm_flag == '1' THEN 1 ELSE 0 END) total_fwm,
         SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_seg_bhds,
-        SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_seg_fwm''' \
+        SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_seg_fwm,
+        COLLECT_LIST(CASE WHEN {expression} THEN id ELSE NULL END) id_list''' \
         .format(expression=query_logical_expression.convert_to_string())
 
-    query_string += '''
-        FROM {tableName}'''\
+    query_string += '''FROM {tableName}'''\
         .format(tableName=config.get_config()['database']["bigData"]['tableName'])
 
     results = hive_db.execute_query(query_string)
 
     if not isinstance(results, list):
         raise Exception(results)
+
+    results[0]['id_list'] = json.loads(results[0]['id_list'])
 
     return json.dumps(results[0])
 
