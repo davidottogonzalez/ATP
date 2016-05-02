@@ -118,13 +118,11 @@ def query_hive_segments():
     form_logical_expression = json.loads(request.data)['logical_expression']
     query_logical_expression = atp_classes.LogicalExpression(form_logical_expression)
 
-    query_string = ''
-
-    query_string += '''SELECT COUNT(1) total_bhds,
+    query_string = '''SELECT COUNT(1) total_bhds,
         SUM(CASE WHEN fwm_flag == '1' THEN 1 ELSE 0 END) total_fwm,
         SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_seg_bhds,
-        SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_seg_fwm,
-        COLLECT_LIST(CASE WHEN {expression} THEN id ELSE NULL END) id_list''' \
+        SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_seg_fwm
+        ''' \
         .format(expression=query_logical_expression.convert_to_string())
 
     query_string += '''FROM {tableName}'''\
@@ -135,7 +133,30 @@ def query_hive_segments():
     if not isinstance(results, list):
         raise Exception(results)
 
-    results[0]['id_list'] = json.loads(results[0]['id_list'])
+    return json.dumps(results[0])
+
+
+@app.route('/queryHive/segments/ids', methods=['POST'])
+@app_login.required_login
+def query_hive_segments_ids():
+    form_logical_expression = json.loads(request.data)['logical_expression']
+    query_logical_expression = atp_classes.LogicalExpression(form_logical_expression)
+
+    query_string = '''SELECT COUNT(1) total_bhds,
+        SUM(CASE WHEN fwm_flag == '1' THEN 1 ELSE 0 END) total_fwm,
+        SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_seg_bhds,
+        SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_seg_fwm,
+        COLLECT_LIST(CASE WHEN {expression} THEN id ELSE NULL END) id_list
+        ''' \
+        .format(expression=query_logical_expression.convert_to_string())
+
+    query_string += '''FROM {tableName}'''\
+        .format(tableName=config.get_config()['database']["bigData"]['tableName'])
+
+    results = hive_db.execute_query(query_string)
+
+    if not isinstance(results, list):
+        raise Exception(results)
 
     return json.dumps(results[0])
 
