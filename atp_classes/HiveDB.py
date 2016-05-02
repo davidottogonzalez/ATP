@@ -1,4 +1,5 @@
 from impala.dbapi import connect
+from impala.hiveserver2 import _TTypeId_to_TColumnValue_getters
 import atp_classes, re
 
 
@@ -29,6 +30,13 @@ class HiveDB:
 
                     # Get column names
                     columns = cur.description
+
+                    # Impyla library under conda (used in PCF) does not support ARRAY data type. Therefore in order to
+                    # patch, we will treat array types as strings
+                    if 'ARRAY' not in _TTypeId_to_TColumnValue_getters:
+                        for index, val in enumerate(columns):
+                            if val[1] == 'ARRAY':
+                                cur._description[index] = (val[0], 'STRING', val[2], val[3], val[4], val[5], val[6])
 
                     # Fetch table results
                     for row in cur:

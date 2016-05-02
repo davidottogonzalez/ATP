@@ -55,6 +55,7 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
         seg_idp_percent: 0
       };
       $scope.draggingObject = {};
+      $scope.queryWithIDs = false;
 
       $scope.onDropComplete=function(data,evt){
         $scope.expressionIsEmpty = false;
@@ -78,10 +79,16 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
             scope: $scope
         });
 
-        $http.post('/queryHive/segments',{logical_expression: $scope.topLogicalExpression}).then(function(res){
+        var postURL = '/queryHive/segments';
+
+        if( $scope.queryWithIDs ){
+            postURL = '/queryHive/segments/ids'
+        }
+
+        $http.post(postURL,{logical_expression: $scope.topLogicalExpression}).then(function(res){
             $scope.totals.total_idp = res.data.total_idp;
             $scope.totals.total_seg_idp = res.data.total_seg_idp;
-            $scope.totals.id_list = res.data.id_list;
+            $scope.totals.id_list = angular.fromJson(res.data.id_list);
             $scope.totals.seg_idp_percent = (parseInt($scope.totals.total_seg_idp) / parseInt($scope.totals.total_idp));
             $scope.isQuerying = false;
             $scope.showResults = true;
