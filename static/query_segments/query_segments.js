@@ -88,7 +88,7 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
         $http.post(postURL,{logical_expression: $scope.topLogicalExpression}).then(function(res){
             $scope.totals.total_idp = res.data.total_idp;
             $scope.totals.total_seg_idp = res.data.total_seg_idp;
-            $scope.totals.id_list = (typeof $scope.totals.id_list == 'undefined') ? '' : res.data.id_list.replace(/(\[|\])/g,'').replace(/,/g,"\n");
+            $scope.totals.id_list = (typeof res.data.id_list == 'undefined') ? '' : res.data.id_list.replace(/(\[|\])/g,'').replace(/,/g,"\n");
             $scope.totals.seg_idp_percent = (parseInt($scope.totals.total_seg_idp) / parseInt($scope.totals.total_idp));
             $scope.isQuerying = false;
             $scope.showResults = true;
