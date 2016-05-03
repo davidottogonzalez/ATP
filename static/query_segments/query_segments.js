@@ -93,7 +93,7 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
             $scope.totals.total_seg_bhds = res.data.total_seg_bhds;
             $scope.totals.total_fwm = res.data.total_fwm;
             $scope.totals.total_seg_fwm = res.data.total_seg_fwm;
-            $scope.totals.id_list = res.data.id_list.replace(/(\[|\])/g,'').replace(/,/g,"\n");
+            $scope.totals.id_list = (typeof $scope.totals.id_list == 'undefined') ? '' : res.data.id_list.replace(/(\[|\])/g,'').replace(/,/g,"\n");
             $scope.totals.seg_bhds_percent = (parseInt($scope.totals.total_seg_bhds) / parseInt($scope.totals.total_bhds));
             $scope.totals.seg_fwm_percent = (parseInt($scope.totals.total_seg_fwm) / parseInt($scope.totals.total_fwm));
             $scope.isQuerying = false;
