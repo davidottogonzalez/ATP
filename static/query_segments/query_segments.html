@@ -64,6 +64,10 @@
                     </div>
                 </div>
                 <div class="submitButtons">
+                    <input type="checkbox" ng-model="queryWithIDs"/>
+                    <span class="fieldLevelLabel"> Query with IDs</span>
+                </div>
+                <div class="submitButtons">
                     <button type="submit" class="btn btn-primary" ng-click="search()">{{ searchButtonText }}</button>
                     <button type="submit" class="btn btn-primary" ng-click="clear()">Clear Query</button>
                 </div>
