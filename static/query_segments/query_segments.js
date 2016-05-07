@@ -55,7 +55,8 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
         total_seg_bhds: 0,
         total_seg_fwm: 0,
         seg_bhds_percent: 0,
-        seg_fwm_percent: 0
+        seg_fwm_percent: 0,
+        id_list: ''
       };
       $scope.draggingObject = {};
       $scope.queryWithIDs = false;
@@ -77,6 +78,16 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
         $scope.returnedErrorMessage = '';
         $scope.expressionString = LogicalExpressionService.convertToString($scope.topLogicalExpression);
 
+        $scope.totals = {
+            total_bhds: 0,
+            total_fwm: 0,
+            total_seg_bhds: 0,
+            total_seg_fwm: 0,
+            seg_bhds_percent: 0,
+            seg_fwm_percent: 0,
+            id_list: ''
+        };
+
         ngDialog.open({
             template:'static/partials/segments_table.html',
             scope: $scope
@@ -89,6 +100,7 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
         }
 
         $http.post(postURL,{logical_expression: $scope.topLogicalExpression}).then(function(res){
+            res.data = angular.fromJson(res.data);
             $scope.totals.total_bhds = res.data.total_bhds;
             $scope.totals.total_seg_bhds = res.data.total_seg_bhds;
             $scope.totals.total_fwm = res.data.total_fwm;

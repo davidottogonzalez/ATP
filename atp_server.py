@@ -1,4 +1,4 @@
-from flask import Flask, url_for, redirect, json, request, make_response
+from flask import Flask, url_for, redirect, json, request, make_response, Response, stream_with_context
 import atp_classes, os
 
 app = Flask(__name__)
@@ -142,23 +142,31 @@ def query_hive_segments_ids():
     form_logical_expression = json.loads(request.data)['logical_expression']
     query_logical_expression = atp_classes.LogicalExpression(form_logical_expression)
 
-    query_string = '''SELECT COUNT(1) total_bhds,
-        SUM(CASE WHEN fwm_flag == '1' THEN 1 ELSE 0 END) total_fwm,
-        SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_seg_bhds,
-        SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_seg_fwm,
-        COLLECT_LIST(CASE WHEN {expression} THEN id ELSE NULL END) id_list
+    query_string = '''SELECT id, total_bhds, total_fwm, total_seg_bhds, total_seg_fwm
+        FROM (SELECT COUNT(1) total_bhds,
+                SUM(CASE WHEN fwm_flag == '1' THEN 1 ELSE 0 END) total_fwm,
+                SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_seg_bhds,
+                SUM(CASE WHEN ({expression} AND fwm_flag == '1') THEN 1 ELSE 0 END) total_seg_fwm,
+                COLLECT_LIST(CASE WHEN {expression} THEN id ELSE NULL END) id_list
+                FROM {tableName}) aggregateTable
+        LATERAL VIEW explode(id_list) idTable as id
         ''' \
-        .format(expression=query_logical_expression.convert_to_string())
+        .format(expression=query_logical_expression.convert_to_string(),
+                tableName=config.get_config()['database']["bigData"]['tableName'])
 
-    query_string += '''FROM {tableName}'''\
-        .format(tableName=config.get_config()['database']["bigData"]['tableName'])
+    # Function to pass to generator to format data from results returned by Hive
+    def result_formatter(row, index):
+        if index == 1:
+            return '{{"total_bhds":{bhds_count},"total_fwm":{fwm_count},"total_seg_bhds":{bhds_seg_count},' \
+                   '"total_seg_fwm":{fwm_seg_count},"id_list":"{firstId}'\
+                .format(bhds_count=row['total_bhds'], fwm_count=row['total_fwm'], bhds_seg_count=row['total_seg_bhds'],
+                        fwm_seg_count=row['total_seg_fwm'], firstId=row['id'])
+        elif index == int(row['total_seg_bhds']):
+            return "," + str(row['id']) + '"}'
+        else:
+            return "," + str(row['id'])
 
-    results = hive_db.execute_query(query_string)
-
-    if not isinstance(results, list):
-        raise Exception(results)
-
-    return json.dumps(results[0])
+    return Response(stream_with_context(hive_db.generator_execute_query(query_string, result_formatter, 3000000)))
 
 
 @app.route('/getAttributesList/')

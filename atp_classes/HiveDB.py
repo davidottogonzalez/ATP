@@ -50,3 +50,57 @@ class HiveDB:
 
         conn.close()
         return result_rows
+
+    # This method is to mimic the same functionality as execute_query (above)
+    # but streaming the results instead of a one off
+    def generator_execute_query(self, query_string, formatter=None, chunk_row_size=1):
+        with connect(host=self.host, port=self.port, auth_mechanism=self.auth_mech, user=self.username,
+                     password=self.password, database=self.database, timeout=900)as conn:
+            with conn.cursor() as cur:
+                try:
+                    print "executing query"
+
+                    # Execute query
+                    cur.execute(query_string)
+
+                    print "done executing query"
+
+                    # Get column names
+                    columns = cur.description
+
+                    # Impyla library under conda (used in PCF) does not support ARRAY data type. Therefore in order to
+                    # patch, we will treat array types as strings
+                    if 'ARRAY' not in _TTypeId_to_TColumnValue_getters:
+                        for index, val in enumerate(columns):
+                            if val[1] == 'ARRAY':
+                                cur._description[index] = (val[0], 'STRING', val[2], val[3], val[4], val[5], val[6])
+
+                    # Fetch table results
+                    row_num = 1
+                    streamed_response = ''
+
+                    for row in cur:
+                        result_obj = {}
+                        for index, val in enumerate(columns):
+                            # Remove characters and dot which precedes column name for key values
+                            result_obj[re.sub(r'.*[.]', '', val[0])] = row[index]
+
+                        if formatter:
+                            streamed_response += formatter(result_obj, row_num)
+                        else:
+                            streamed_response += str(result_obj)
+
+                        if row_num % chunk_row_size == 0:
+                            yield streamed_response
+                            streamed_response = ''
+
+                        row_num += 1
+
+                    if streamed_response != '':
+                        yield streamed_response
+
+                    print str(row_num)
+                except Exception, e:
+                    raise e
+
+        conn.close()
