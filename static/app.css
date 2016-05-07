@@ -91,6 +91,12 @@ ul.nav-tabs{
     font-weight: bold;
 }
 
+.sidenoteMessage{
+    font-style: italic;
+    font-weight: 300;
+    font-size: small;
+}
+
 .overflowScroll{
     overflow-y: scroll;
 }

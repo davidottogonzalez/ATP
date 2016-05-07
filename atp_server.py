@@ -1,4 +1,4 @@
-from flask import Flask, url_for, redirect, json, request, make_response
+from flask import Flask, url_for, redirect, json, request, make_response, Response, stream_with_context
 import atp_classes, os
 
 app = Flask(__name__)
@@ -137,21 +137,27 @@ def query_hive_segments_ids():
     form_logical_expression = json.loads(request.data)['logical_expression']
     query_logical_expression = atp_classes.LogicalExpression(form_logical_expression)
 
-    query_string = '''SELECT COUNT(1) total_idp,
-        SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_seg_idp,
-        COLLECT_LIST(CASE WHEN {expression} THEN id ELSE NULL END) id_list
+    query_string = '''SELECT id, total_idp, total_seg_idp
+        FROM (SELECT COUNT(1) total_idp,
+                SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_seg_idp,
+                COLLECT_LIST(CASE WHEN {expression} THEN id ELSE NULL END) id_list
+                FROM {tableName}) aggregateTable
+        LATERAL VIEW explode(id_list) idTable as id
         ''' \
-        .format(expression=query_logical_expression.convert_to_string())
+        .format(expression=query_logical_expression.convert_to_string(),
+                tableName=config.get_config()['database']["bigData"]['tableName'])
 
-    query_string += '''FROM {tableName}'''\
-        .format(tableName=config.get_config()['database']["bigData"]['tableName'])
+    # Function to pass to generator to format data from results returned by Hive
+    def result_formatter(row, index):
+        if index == 1:
+            return '{{"total_idp":{idp_count},"total_seg_idp":{seg_count},"id_list":"{firstId}'\
+                .format(idp_count=row['total_idp'], seg_count=row['total_seg_idp'], firstId=row['id'])
+        elif index == int(row['total_seg_idp']):
+            return "," + str(row['id']) + '"}'
+        else:
+            return "," + str(row['id'])
 
-    results = hive_db.execute_query(query_string)
-
-    if not isinstance(results, list):
-        raise Exception(results)
-
-    return json.dumps(results[0])
+    return Response(stream_with_context(hive_db.generator_execute_query(query_string, result_formatter, 3000000)))
 
 
 @app.route('/getAttributesList/')
