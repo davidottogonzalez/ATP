@@ -16,8 +16,8 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
   });
 }])
 
-.controller('QuerySegmentsCtrl', ['$scope', '$http', 'LogicalExpressionService', '$sce', '$compile', 'FileService', 'ngDialog',
- function($scope, $http, LogicalExpressionService, $sce, $compile, FileService, ngDialog) {
+.controller('QuerySegmentsCtrl', ['$scope', '$http', 'LogicalExpressionService', '$sce', '$compile', 'FileService', 'ngDialog', '$interval',
+ function($scope, $http, LogicalExpressionService, $sce, $compile, FileService, ngDialog, $interval) {
       $scope.queryAttributes = [];
       $scope.initiated = false;
       $scope.booleanOperators = [
@@ -105,12 +105,26 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
             $scope.totals.total_seg_bhds = res.data.total_seg_bhds;
             $scope.totals.total_fwm = res.data.total_fwm;
             $scope.totals.total_seg_fwm = res.data.total_seg_fwm;
-            $scope.totals.id_list = (typeof res.data.id_list == 'undefined') ? '' : res.data.id_list.replace(/(\[|\])/g,'').replace(/,/g,"\n");
+            $scope.totals.id_zip = res.data.filename;
             $scope.totals.seg_bhds_percent = (parseInt($scope.totals.total_seg_bhds) / parseInt($scope.totals.total_bhds));
             $scope.totals.seg_fwm_percent = (parseInt($scope.totals.total_seg_fwm) / parseInt($scope.totals.total_fwm));
             $scope.isQuerying = false;
             $scope.showResults = true;
             $scope.searchButtonText = 'Run Query';
+
+            if($scope.totals.id_zip){
+                var checkStatus = $interval(function(){
+                    $http.get('/downloadIDsStatus/' + $scope.totals.id_zip).then(function(res){
+                        console.log("check and got " + res.data);
+                        if(res.data == 'done'){
+                            $scope.isQuerying = false;
+                            $scope.showResults = true;
+                            $scope.searchButtonText = 'Run Query';
+                            $interval.cancel(checkStatus);
+                        }
+                    })
+                }, 5000)
+            }
         },function(res){
             $scope.searchButtonText = 'Run Query';
             $scope.isQuerying = false;

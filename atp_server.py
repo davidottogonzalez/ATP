@@ -1,5 +1,5 @@
 from flask import Flask, url_for, redirect, json, request, make_response, Response, stream_with_context
-import atp_classes, os
+import atp_classes, os, gzip
 
 app = Flask(__name__)
 config = atp_classes.Config()
@@ -155,18 +155,17 @@ def query_hive_segments_ids():
                 tableName=config.get_config()['database']["bigData"]['tableName'])
 
     # Function to pass to generator to format data from results returned by Hive
-    def result_formatter(row, index):
+    def result_formatter(row, index, filename=''):
         if index == 1:
-            return '{{"total_bhds":{bhds_count},"total_fwm":{fwm_count},"total_seg_bhds":{bhds_seg_count},' \
-                   '"total_seg_fwm":{fwm_seg_count},"id_list":"{firstId}'\
+            format_string = '{{"total_bhds":{bhds_count},"total_fwm":{fwm_count},"total_seg_bhds":{bhds_seg_count},' \
+                   '"total_seg_fwm":{fwm_seg_count},"filename":"{output_file}"}}'\
                 .format(bhds_count=row['total_bhds'], fwm_count=row['total_fwm'], bhds_seg_count=row['total_seg_bhds'],
-                        fwm_seg_count=row['total_seg_fwm'], firstId=row['id'])
-        elif index == int(row['total_seg_bhds']):
-            return "," + str(row['id']) + '"}'
+                        fwm_seg_count=row['total_seg_fwm'], output_file=filename)
+            return format_string, str(row['id'])
         else:
-            return "," + str(row['id'])
+            return None, "\n" + str(row['id'])
 
-    return Response(stream_with_context(hive_db.generator_execute_query(query_string, result_formatter, 3000000)))
+    return Response(hive_db.to_file_generator_execute_query(query_string, result_formatter, 3000000))
 
 
 @app.route('/getAttributesList/')
@@ -177,7 +176,7 @@ def get_attributes():
     for attribute in get_attributes_from_db():
         attribute_list.append({"id": attribute._id, "name": attribute.name})
 
-    return json.dumps(attribute_list,default=atp_classes.JSONHandler.JSONHandler)
+    return json.dumps(attribute_list, default=atp_classes.JSONHandler.JSONHandler)
 
 
 @app.route('/admin/getAttributesList/')
@@ -269,6 +268,34 @@ def remove_user():
         return json.dumps({"status": True})
     else:
         return json.dumps({"status": False})
+
+
+@app.route("/downloadIDs/<filename>")
+@app_login.required_login
+def download_ids(filename):
+    def read_file():
+        tmp_dir = os.environ['TMPDIR'] or './tmp'
+
+        f = gzip.open(tmp_dir + '/' + filename + '.txt.gz', 'rb')
+        while True:
+            piece = f.read(1024)
+            if not piece:
+                break
+            yield piece
+        f.close()
+
+    return Response(stream_with_context(read_file()))
+
+
+@app.route("/downloadIDsStatus/<filename>")
+@app_login.required_login
+def download_ids_status(filename):
+    tmp_dir = os.environ['TMPDIR'] or './tmp'
+
+    if os.path.isfile(tmp_dir + '/' + filename + '.txt.build'):
+        return 'processing'
+    else:
+        return 'done'
 
 
 @app.errorhandler(Exception)

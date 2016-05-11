@@ -17,7 +17,7 @@
     <a class="btn btn-link" ng-click="exportToExcel('segments_table')">
         <span class="glyphicon glyphicon-share"></span> Export to Excel
     </a>
-    <a ng-show="totals.id_list" class="btn btn-link" ng-click="exportIds()">
+    <a target="_self" ng-show="totals.id_zip" class="btn btn-link" href="/downloadIDs/{{totals.id_zip}}" download="IDs.txt">
         <span class="glyphicon glyphicon-share"></span> Export IDs
     </a>
     <table id="segments_table" class="table table-bordered crosstab">
