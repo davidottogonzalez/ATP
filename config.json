@@ -6,6 +6,7 @@
             "bigData": {
                 "host":"aoabdlp00004.tfayd.com",
                 "port": 10000,
+                "timeout": 3600,
                 "database": "merkle",
                 "tableName": "table",
                 "username": "username",
@@ -29,6 +30,7 @@
             "bigData": {
                 "host":"aoabdlp00042.tfayd.com",
                 "port": 10001,
+                "timeout": 3600,
                 "database": "merkle",
                 "tableName": "table",
                 "username": "username",
@@ -52,6 +54,7 @@
             "bigData": {
                 "host":"aoabdlp00042.tfayd.com",
                 "port": 10001,
+                "timeout": 3600,
                 "database": "merkle",
                 "tableName": "table",
                 "username": "username",
