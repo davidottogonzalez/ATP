@@ -1,7 +1,6 @@
 from impala.dbapi import connect
 from impala.hiveserver2 import _TTypeId_to_TColumnValue_getters
-import atp_classes, re, os, gc, uuid
-import gzip
+import atp_classes, re, os, gc, uuid, gzip, time, glob
 
 
 class HiveDB:
@@ -81,8 +80,12 @@ class HiveDB:
 
                     # Fetch table results
                     row_num = 1
+                    chunk_num = 1
                     to_file_string = ''
                     return_string = ''
+
+                    #cleanup old gzip files
+                    self.cleanup_old_files()
 
                     for row in cur:
                         result_obj = {}
@@ -102,8 +105,10 @@ class HiveDB:
                             return_string += str(result_obj)
 
                         if row_num % chunk_row_size == 0:
-                            with open(self.tmp_dir + '/' + unique_filename + '.txt', 'ab') as tmp_file:
-                                tmp_file.write(to_file_string)
+                            with gzip.open(self.tmp_dir + '/' + unique_filename + '_' + str(chunk_num) + '.txt.gz', 'wb') as f_out:
+                                f_out.write(to_file_string)
+
+                            chunk_num += 1
 
                             with open(self.tmp_dir + '/' + unique_filename + '.txt.build', 'w') as tmp_file:
                                 tmp_file.write('building')
@@ -119,11 +124,11 @@ class HiveDB:
                         row_num += 1
 
                     if to_file_string != '':
-                        with open(self.tmp_dir + '/' + unique_filename + '.txt', 'ab') as tmp_file:
-                                tmp_file.write(to_file_string)
+                        with gzip.open(self.tmp_dir + '/' + unique_filename + '_' + str(chunk_num) + '.txt.gz', 'wb') as f_out:
+                            f_out.write(to_file_string)
 
                         with open(self.tmp_dir + '/' + unique_filename + '.txt.build', 'w') as tmp_file:
-                                tmp_file.write('building')
+                            tmp_file.write('building')
 
                         yield return_string
 
@@ -133,21 +138,18 @@ class HiveDB:
                         # Force garbage collect
                         gc.collect()
 
-                    # Make GZ file and delete uncompressed
-                    blocksize = 1 << 16 #64kB
-                    with open(self.tmp_dir + '/' + unique_filename + '.txt', 'rb') as f_in:
-                        f_out = gzip.open(self.tmp_dir + '/' + unique_filename + '.txt.gz', 'wb')
-                        while True:
-                            block = f_in.read(blocksize)
-                            if block == '':
-                                break
-                            f_out.write(block)
-                        f_out.close()
-
-                    os.remove(self.tmp_dir + '/' + unique_filename + '.txt')
                     os.remove(self.tmp_dir + '/' + unique_filename + '.txt.build')
 
                 except Exception, e:
                     raise e
 
         conn.close()
+
+    # Cleanups gzip files created by to_file_generator_execute_query method if last accessed more than 2 hours ago
+    def cleanup_old_files(self):
+        now = time.time()
+        two_hours_ago = now - 60 * 60 * 2
+
+        for file_path in glob.glob(os.environ['TMPDIR'] + '/*.txt.gz'):
+            if os.path.getatime(file_path) < two_hours_ago:
+                os.remove(file_path)

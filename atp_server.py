@@ -1,5 +1,5 @@
 from flask import Flask, url_for, redirect, json, request, make_response, Response, stream_with_context
-import atp_classes, os, gzip
+import atp_classes, os, gzip, glob
 
 app = Flask(__name__)
 config = atp_classes.Config()
@@ -276,13 +276,14 @@ def download_ids(filename):
     def read_file():
         tmp_dir = os.environ['TMPDIR'] or './tmp'
 
-        f = gzip.open(tmp_dir + '/' + filename + '.txt.gz', 'rb')
-        while True:
-            piece = f.read(1024)
-            if not piece:
-                break
-            yield piece
-        f.close()
+        for file_part in glob.glob(tmp_dir + '/' + filename + '*.txt.gz'):
+            f = gzip.open(file_part, 'rb')
+            while True:
+                piece = f.read(1024)
+                if not piece:
+                    break
+                yield piece
+            f.close()
 
     return Response(stream_with_context(read_file()))
 
