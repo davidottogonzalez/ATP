@@ -1,5 +1,5 @@
-from flask import Flask, url_for, redirect, json, request, make_response
-import atp_classes, os
+from flask import Flask, url_for, redirect, json, request, make_response, Response, stream_with_context
+import atp_classes, os, gzip, glob
 
 app = Flask(__name__)
 config = atp_classes.Config()
@@ -77,7 +77,7 @@ def logout():
 def query_hive():
     form_chosen_attributes = json.loads(request.data)['chosenAttributes']
     chosen_attributes = []
-    query_string = '''SELECT COUNT(1) total_idp'''
+    query_string = ''
 
     for dbattribute in get_attributes_from_db():
         for cattribute in form_chosen_attributes:
@@ -85,16 +85,35 @@ def query_hive():
                 chosen_attributes.append(dbattribute)
 
     for index, attribute in enumerate(chosen_attributes):
-        query_string += ''',
-        SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_{id}''' \
-            .format(id=attribute._id, expression=attribute.logical_expression.convert_to_string())
+        if config.get_config()['database']["bigData"]['partitionCondition'] != '':
+            if not query_string:
+                query_string = 'SELECT SUM(CASE WHEN {partitionCondition} THEN 1 ELSE 0 END) total_idp'\
+                    .format(partitionCondition=config.get_config()['database']["bigData"]['partitionCondition'])
 
-        for index2, attribute2 in enumerate(chosen_attributes[(index + 1):]):
             query_string += ''',
-            SUM(CASE WHEN ({expression} AND {expression2}) THEN 1 ELSE 0 END) total_{id1}_{id2}''' \
-                .format(id1=attribute._id, id2=attribute2._id,
-                        expression=attribute.logical_expression.convert_to_string(),
-                        expression2=attribute2.logical_expression.convert_to_string())
+            SUM(CASE WHEN {expression} AND {partitionCondition} THEN 1 ELSE 0 END) total_{id}'''\
+                .format(id=attribute._id, expression=attribute.logical_expression.convert_to_string(),
+                        partitionCondition=config.get_config()['database']["bigData"]['partitionCondition'])
+
+            for index2, attribute2 in enumerate(chosen_attributes[(index + 1):]):
+                query_string += ''',
+                SUM(CASE WHEN ({expression} AND {expression2} AND {partitionCondition}) THEN 1 ELSE 0 END) total_{id1}_{id2}''' \
+                    .format(id1=attribute._id, id2=attribute2._id,
+                            expression=attribute.logical_expression.convert_to_string(),
+                            expression2=attribute2.logical_expression.convert_to_string(),
+                            partitionCondition=config.get_config()['database']["bigData"]['partitionCondition'])
+        else:
+            query_string = '''SELECT COUNT(1) total_idp'''
+            query_string += ''',
+            SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_{id}''' \
+                .format(id=attribute._id, expression=attribute.logical_expression.convert_to_string())
+
+            for index2, attribute2 in enumerate(chosen_attributes[(index + 1):]):
+                query_string += ''',
+                SUM(CASE WHEN ({expression} AND {expression2}) THEN 1 ELSE 0 END) total_{id1}_{id2}''' \
+                    .format(id1=attribute._id, id2=attribute2._id,
+                            expression=attribute.logical_expression.convert_to_string(),
+                            expression2=attribute2.logical_expression.convert_to_string())
 
     query_string += '''
         FROM {tableName}'''\
@@ -115,13 +134,23 @@ def query_hive_segments():
     form_logical_expression = json.loads(request.data)['logical_expression']
     query_logical_expression = atp_classes.LogicalExpression(form_logical_expression)
 
-    query_string = '''SELECT COUNT(1) total_idp,
-        SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_seg_idp
-        ''' \
-        .format(expression=query_logical_expression.convert_to_string())
+    if config.get_config()['database']["bigData"]['partitionCondition'] != '':
+        query_string = '''SELECT SUM(CASE WHEN {partitionCondition} THEN 1 ELSE 0 END) total_idp,
+            SUM(CASE WHEN {expression} AND {partitionCondition} THEN 1 ELSE 0 END) total_seg_idp
+            ''' \
+            .format(expression=query_logical_expression.convert_to_string(),
+                    partitionCondition=config.get_config()['database']["bigData"]['partitionCondition'])
 
-    query_string += '''FROM {tableName}'''\
-        .format(tableName=config.get_config()['database']["bigData"]['tableName'])
+        query_string += '''FROM {tableName}'''\
+            .format(tableName=config.get_config()['database']["bigData"]['tableName'])
+    else:
+        query_string = '''SELECT COUNT(1) total_idp,
+            SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_seg_idp
+            ''' \
+            .format(expression=query_logical_expression.convert_to_string())
+
+        query_string += '''FROM {tableName}'''\
+            .format(tableName=config.get_config()['database']["bigData"]['tableName'])
 
     results = hive_db.execute_query(query_string)
 
@@ -137,21 +166,38 @@ def query_hive_segments_ids():
     form_logical_expression = json.loads(request.data)['logical_expression']
     query_logical_expression = atp_classes.LogicalExpression(form_logical_expression)
 
-    query_string = '''SELECT COUNT(1) total_idp,
-        SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_seg_idp,
-        COLLECT_LIST(CASE WHEN {expression} THEN id ELSE NULL END) id_list
+    if config.get_config()['database']["bigData"]['partitionCondition'] != '':
+        query_string = '''SELECT id, total_idp, total_seg_idp
+        FROM (SELECT SUM(CASE WHEN {partitionCondition} THEN 1 ELSE 0 END) total_idp,
+                SUM(CASE WHEN {expression} AND {partitionCondition} THEN 1 ELSE 0 END) total_seg_idp,
+                COLLECT_LIST(CASE WHEN {expression} AND {partitionCondition} THEN id ELSE NULL END) id_list
+                FROM {tableName}) aggregateTable
+        LATERAL VIEW explode(id_list) idTable as id
         ''' \
-        .format(expression=query_logical_expression.convert_to_string())
+        .format(expression=query_logical_expression.convert_to_string(),
+                tableName=config.get_config()['database']["bigData"]['tableName'],
+                partitionCondition=config.get_config()['database']["bigData"]['partitionCondition'])
+    else:
+        query_string = '''SELECT id, total_idp, total_seg_idp
+            FROM (SELECT COUNT(1) total_idp,
+                    SUM(CASE WHEN {expression} THEN 1 ELSE 0 END) total_seg_idp,
+                    COLLECT_LIST(CASE WHEN {expression} THEN id ELSE NULL END) id_list
+                    FROM {tableName}) aggregateTable
+            LATERAL VIEW explode(id_list) idTable as id
+            ''' \
+            .format(expression=query_logical_expression.convert_to_string(),
+                    tableName=config.get_config()['database']["bigData"]['tableName'])
 
-    query_string += '''FROM {tableName}'''\
-        .format(tableName=config.get_config()['database']["bigData"]['tableName'])
+    # Function to pass to generator to format data from results returned by Hive
+    def result_formatter(row, index, filename=''):
+        if index == 1:
+            format_string = '{{"total_idp":{idp_count},"total_seg_idp":{seg_count},"filename":"{output_file}"}}'\
+                .format(idp_count=row['total_idp'], seg_count=row['total_seg_idp'], firstId=row['id'], output_file=filename)
+            return format_string, str(row['id'])
+        else:
+            return None, "\n" + str(row['id'])
 
-    results = hive_db.execute_query(query_string)
-
-    if not isinstance(results, list):
-        raise Exception(results)
-
-    return json.dumps(results[0])
+    return Response(hive_db.to_file_generator_execute_query(query_string, result_formatter, 3000000))
 
 
 @app.route('/getAttributesList/')
@@ -162,7 +208,7 @@ def get_attributes():
     for attribute in get_attributes_from_db():
         attribute_list.append({"id": attribute._id, "name": attribute.name})
 
-    return json.dumps(attribute_list,default=atp_classes.JSONHandler.JSONHandler)
+    return json.dumps(attribute_list, default=atp_classes.JSONHandler.JSONHandler)
 
 
 @app.route('/admin/getAttributesList/')
@@ -254,6 +300,35 @@ def remove_user():
         return json.dumps({"status": True})
     else:
         return json.dumps({"status": False})
+
+
+@app.route("/downloadIDs/<filename>")
+@app_login.required_login
+def download_ids(filename):
+    def read_file():
+        tmp_dir = os.environ['TMPDIR'] or './tmp'
+
+        for file_part in glob.glob(tmp_dir + '/' + filename + '*.txt.gz'):
+            f = gzip.open(file_part, 'rb')
+            while True:
+                piece = f.read(1024)
+                if not piece:
+                    break
+                yield piece
+            f.close()
+
+    return Response(stream_with_context(read_file()))
+
+
+@app.route("/downloadIDsStatus/<filename>")
+@app_login.required_login
+def download_ids_status(filename):
+    tmp_dir = os.environ['TMPDIR'] or './tmp'
+
+    if os.path.isfile(tmp_dir + '/' + filename + '.txt.build'):
+        return 'processing'
+    else:
+        return 'done'
 
 
 @app.errorhandler(Exception)

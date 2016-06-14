@@ -16,8 +16,8 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
   });
 }])
 
-.controller('QuerySegmentsCtrl', ['$scope', '$http', 'LogicalExpressionService', '$sce', '$compile', 'FileService', 'ngDialog',
- function($scope, $http, LogicalExpressionService, $sce, $compile, FileService, ngDialog) {
+.controller('QuerySegmentsCtrl', ['$scope', '$http', 'LogicalExpressionService', '$sce', '$compile', 'FileService', 'ngDialog', '$interval',
+ function($scope, $http, LogicalExpressionService, $sce, $compile, FileService, ngDialog, $interval) {
       $scope.queryAttributes = [];
       $scope.initiated = false;
       $scope.booleanOperators = [
@@ -52,7 +52,8 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
       $scope.totals = {
         total_idp: 0,
         total_seg_idp: 0,
-        seg_idp_percent: 0
+        seg_idp_percent: 0,
+        id_list: ''
       };
       $scope.draggingObject = {};
       $scope.queryWithIDs = false;
@@ -74,6 +75,13 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
         $scope.returnedErrorMessage = '';
         $scope.expressionString = LogicalExpressionService.convertToString($scope.topLogicalExpression);
 
+        $scope.totals = {
+            total_idp: 0,
+            total_seg_idp: 0,
+            seg_idp_percent: 0,
+            id_list: ''
+        };
+
         ngDialog.open({
             template:'static/partials/segments_table.html',
             scope: $scope
@@ -86,13 +94,28 @@ angular.module('myApp.query_segments', ['ngRoute', 'ServicesModule', 'ngSanitize
         }
 
         $http.post(postURL,{logical_expression: $scope.topLogicalExpression}).then(function(res){
+            res.data = angular.fromJson(res.data);
             $scope.totals.total_idp = res.data.total_idp;
             $scope.totals.total_seg_idp = res.data.total_seg_idp;
-            $scope.totals.id_list = (typeof res.data.id_list == 'undefined') ? '' : res.data.id_list.replace(/(\[|\])/g,'').replace(/,/g,"\n");
+            $scope.totals.id_zip = res.data.filename;
             $scope.totals.seg_idp_percent = (parseInt($scope.totals.total_seg_idp) / parseInt($scope.totals.total_idp));
             $scope.isQuerying = false;
             $scope.showResults = true;
             $scope.searchButtonText = 'Run Query';
+
+            if($scope.totals.id_zip){
+                var checkStatus = $interval(function(){
+                    $http.get('/downloadIDsStatus/' + $scope.totals.id_zip).then(function(res){
+                        console.log("check and got " + res.data);
+                        if(res.data == 'done'){
+                            $scope.isQuerying = false;
+                            $scope.showResults = true;
+                            $scope.searchButtonText = 'Run Query';
+                            $interval.cancel(checkStatus);
+                        }
+                    })
+                }, 5000)
+            }
         },function(res){
             $scope.searchButtonText = 'Run Query';
             $scope.isQuerying = false;
