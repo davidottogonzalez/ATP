@@ -9,6 +9,7 @@
                 "timeout": 3600,
                 "database": "merkle",
                 "tableName": "table",
+                "partitionCondition": "quarter = 201603",
                 "username": "username",
                 "password": "password",
                 "authMech": "LDAP"
@@ -33,6 +34,7 @@
                 "timeout": 3600,
                 "database": "merkle",
                 "tableName": "table",
+                "partitionCondition": "quarter = 201603",
                 "username": "username",
                 "password": "password",
                 "authMech": "LDAP"
@@ -57,6 +59,7 @@
                 "timeout": 3600,
                 "database": "merkle",
                 "tableName": "table",
+                "partitionCondition": "quarter = 201603",
                 "username": "username",
                 "password": "password",
                 "authMech": "LDAP"
