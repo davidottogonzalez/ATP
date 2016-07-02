@@ -192,6 +192,15 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
         $scope.formTitle = 'Edit Attribute';
       };
 
+      $scope.copyAttribute = function(attribute) {
+        var attributeCopy = angular.copy(attribute);
+        attributeCopy.name = attributeCopy.name + " Copy";
+        attributeCopy.id = 0;
+        attributeCopy.logical_expression = LogicalExpressionService.createNew(attributeCopy.logical_expression);
+        $scope.editingAttribute = attributeCopy;
+        $scope.showAddAttribute(false);
+      };
+
       $scope.removeAttribute = function(attribute) {
         $scope.deletingGeneralLabel = 'attribute';
         $scope.deletingSpecificLabel = '"' + attribute.name + '" attribute';

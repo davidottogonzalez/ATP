@@ -176,6 +176,8 @@
                     <div class="submitButtons">
                         <button type="submit" class="btn btn-primary" ng-click="saveEditingAttribute()">{{saveAttributeButton}}
                         </button>
+                        <button ng-show="editingAttribute.id != 0" type="submit" class="btn btn-primary" ng-click="copyAttribute(editingAttribute)">Copy Attribute
+                        </button>
                         <button type="submit" class="btn btn-danger" ng-click="cancelEditing()">Cancel</button>
                     </div>
                 </div>
