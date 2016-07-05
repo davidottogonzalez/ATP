@@ -196,6 +196,7 @@ angular.module('myApp.attribute_builder', ['ngRoute', 'ServicesModule', 'ngSanit
         var attributeCopy = angular.copy(attribute);
         attributeCopy.name = attributeCopy.name + " Copy";
         attributeCopy.id = 0;
+        delete attributeCopy['_id'];
         attributeCopy.logical_expression = LogicalExpressionService.createNew(attributeCopy.logical_expression);
         $scope.editingAttribute = attributeCopy;
         $scope.showAddAttribute(false);
